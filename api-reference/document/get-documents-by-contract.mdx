@@ -1,0 +1,54 @@
+---
+title: "Get Documents by Contract"
+description: "Retrieve all documents linked to a specific contract."
+---
+
+# GET `/api/document/contract/{addr}`
+
+Fetch all documents associated with a given contract address.
+
+## Path Parameters
+
+| Name   | Type     | Required | Description         |
+|--------|----------|----------|-------------------|
+| `addr` | `string` | yes      | Contract address    |
+
+## Responses
+
+### 200 — OK
+
+Returns a list of document objects linked to the contract.
+
+```json
+[
+  {
+    "tokenId": 123,
+    "owner": "0x123abc...",
+    "fileHash": "Qmabcdef...",
+    "uri": "https://storage.example.com/docs/doc-123.pdf",
+    "docType": "Invoice",
+    "linkedContracts": [
+      "0xcontract1",
+      "0xcontract2"
+    ],
+    "status": "Draft",
+    "signer": "0xsigner...",
+    "createdAt": 1699286400000,
+    "updatedAt": 1699372800000,
+    "name": "Invoice #123",
+    "description": "Invoice for trade #456",
+    "metadataUrl": "https://metadata.example.com/doc-123.json"
+  }
+]
+```
+
+## Authentication
+
+This endpoint requires a **Bearer Token**.
+
+## Example Request
+
+```bash
+curl -X GET "https://api.zephyra.dev/api/document/contract/0xcontract1" \
+  -H "Authorization: Bearer <token>"
+```

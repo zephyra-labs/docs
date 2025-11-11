@@ -1,0 +1,51 @@
+---
+title: "Get All Aggregated Activities"
+description: "Retrieve a list of all aggregated activity entries in the system."
+---
+
+# GET `/api/aggregated`
+
+Fetch all aggregated activity logs recorded in the system.  
+This endpoint does not require any query parameters.
+
+## Responses
+
+### 200 — OK
+
+Returns a list of aggregated activity objects.
+
+```json
+[
+  {
+    "id": "string",
+    "timestamp": 0,
+    "type": "onChain",
+    "action": "string",
+    "account": "string",
+    "txHash": "string",
+    "contractAddress": "string",
+    "extra": {
+      "additionalProp1": {}
+    },
+    "onChainInfo": {
+      "status": "string",
+      "blockNumber": 0,
+      "confirmations": 0
+    },
+    "tags": [
+      "string"
+    ]
+  }
+]
+```
+
+## Authentication
+
+This endpoint requires authentication using a **Bearer Token**.
+
+## Example Request
+
+```bash
+curl -X GET "https://api.zephyra.dev/api/aggregated" \
+  -H "Authorization: Bearer <token>"
+```

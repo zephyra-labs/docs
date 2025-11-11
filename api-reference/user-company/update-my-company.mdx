@@ -1,0 +1,97 @@
+---
+title: "Update My Company Profile"
+description: "Update the company profile associated with the currently authenticated user."
+---
+
+# PUT `/api/user-company/my-company`
+
+Update the company profile of the currently authenticated user.
+
+## Request Body
+
+| Name | Type | Required | Description |
+|------|------|-----------|-------------|
+| `role` | `string` | no | Role of the user in the company (`owner`, `staff`, etc.) |
+| `status` | `string` | no | Status of the company association (`pending`, `approved`, etc.) |
+| `txHash` | `string` | no | Transaction hash if updated on-chain |
+| `updatedAt` | `number` | no | Timestamp of the update |
+| `onchainJoinedAt` | `number` | no | Timestamp of the on-chain association |
+
+> Content-Type: `application/json`
+
+### Example Request Body
+
+```json
+{
+  "role": "owner",
+  "status": "pending",
+  "txHash": "string",
+  "updatedAt": 0,
+  "onchainJoinedAt": 0
+}
+```
+
+## Responses
+
+### 200 — OK
+
+Company profile successfully updated.
+
+```json
+{}
+```
+
+### 400 — Bad Request
+
+Returned when the request body contains invalid fields.
+
+```json
+{
+  "error": "Invalid update payload"
+}
+```
+
+### 401 — Unauthorized
+
+Returned if the user is not authenticated.
+
+```json
+{
+  "error": "Unauthorized"
+}
+```
+
+### 404 — Not Found
+
+Returned if the current user does not have an associated company.
+
+```json
+{
+  "error": "Company profile not found"
+}
+```
+
+## Authentication
+
+This endpoint requires a **Bearer Token** for authentication.
+
+## Example Request
+
+```bash
+curl -X PUT "https://api.zephyra.dev/api/user-company/my-company" \
+  -H "Authorization: Bearer <token>" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "role": "owner",
+    "status": "pending",
+    "txHash": "string",
+    "updatedAt": 0,
+    "onchainJoinedAt": 0
+  }'
+```
+
+## Example Response
+
+```json
+{}
+```

@@ -1,0 +1,52 @@
+---
+title: "Get All Documents"
+description: "Retrieve a list of all documents in the system."
+---
+
+# GET `/api/document`
+
+Fetch all documents stored in the system.
+
+## Query Parameters
+
+This endpoint does not accept any query parameters.
+
+## Responses
+
+### 200 — OK
+
+Returns a list of document objects.
+
+```json
+[
+  {
+    "tokenId": 123,
+    "owner": "0x123abc...",
+    "fileHash": "Qmabcdef...",
+    "uri": "https://storage.example.com/docs/doc-123.pdf",
+    "docType": "Invoice",
+    "linkedContracts": [
+      "0xcontract1",
+      "0xcontract2"
+    ],
+    "status": "Draft",
+    "signer": "0xsigner...",
+    "createdAt": 1699286400000,
+    "updatedAt": 1699372800000,
+    "name": "Invoice #123",
+    "description": "Invoice for trade #456",
+    "metadataUrl": "https://metadata.example.com/doc-123.json"
+  }
+]
+```
+
+## Authentication
+
+This endpoint requires a **Bearer Token**.
+
+## Example Request
+
+```bash
+curl -X GET "https://api.zephyra.dev/api/document" \
+  -H "Authorization: Bearer <token>"
+```

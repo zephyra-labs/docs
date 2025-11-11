@@ -1,0 +1,100 @@
+---
+title: "Add Contract Log"
+description: "Add a new contract log and update the contract's state."
+---
+
+# POST `/api/contract/log`
+
+Add a new log entry for a contract and update its current state accordingly.
+
+## Request Body
+
+| Field           | Type     | Required | Description                                      |
+|-----------------|---------|---------|--------------------------------------------------|
+| `action`        | `string` | yes     | Action performed (e.g., `"UPDATE_STATUS"`)      |
+| `txHash`        | `string` | yes     | Transaction hash associated with this log       |
+| `account`       | `string` | yes     | Wallet address performing the action            |
+| `exporter`      | `string` | yes     | Exporter involved in the contract               |
+| `importer`      | `string` | yes     | Importer involved in the contract               |
+| `logistics`     | `array[string]` | no      | Array of logistics addresses or entities       |
+| `insurance`     | `string` | no      | Insurance entity involved                        |
+| `inspector`     | `string` | no      | Inspector entity involved                        |
+| `requiredAmount`| `string` | no      | Amount required for this step                    |
+| `extra`         | `object` | no      | Additional contextual data                       |
+| `timestamp`     | `number` | yes     | Unix timestamp of the log entry                  |
+| `onChainInfo`   | `object` | no      | Blockchain transaction info (status, blockNumber, confirmations) |
+
+### Example Request Body
+
+```json
+{
+  "action": "UPDATE_STATUS",
+  "txHash": "0xDEF456",
+  "account": "0xABC123",
+  "exporter": "ExporterCo",
+  "importer": "ImporterCo",
+  "logistics": ["LogisticsCo1", "LogisticsCo2"],
+  "insurance": "InsuranceCo",
+  "inspector": "InspectorCo",
+  "requiredAmount": "1000",
+  "extra": {"note": "Shipment delayed"},
+  "timestamp": 1731245678,
+  "onChainInfo": {
+    "status": "confirmed",
+    "blockNumber": 123456,
+    "confirmations": 5
+  }
+}
+```
+
+## Responses
+
+### 201 — Created
+
+Returns the newly created contract log.
+
+```json
+{
+  "action": "UPDATE_STATUS",
+  "txHash": "0xDEF456",
+  "account": "0xABC123",
+  "exporter": "ExporterCo",
+  "importer": "ImporterCo",
+  "logistics": ["LogisticsCo1", "LogisticsCo2"],
+  "insurance": "InsuranceCo",
+  "inspector": "InspectorCo",
+  "requiredAmount": "1000",
+  "extra": {"note": "Shipment delayed"},
+  "timestamp": 1731245678,
+  "onChainInfo": {
+    "status": "confirmed",
+    "blockNumber": 123456,
+    "confirmations": 5
+  }
+}
+```
+
+## Authentication
+
+This endpoint requires a **Bearer Token**.
+
+## Example Request
+
+```bash
+curl -X POST "https://api.zephyra.dev/api/contract/log" \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer <token>" \
+  -d '{
+    "action": "UPDATE_STATUS",
+    "txHash": "0xDEF456",
+    "account": "0xABC123",
+    "exporter": "ExporterCo",
+    "importer": "ImporterCo",
+    "logistics": ["LogisticsCo1", "LogisticsCo2"],
+    "insurance": "InsuranceCo",
+    "inspector": "InspectorCo",
+    "requiredAmount": "1000",
+    "extra": {"note": "Shipment delayed"},
+    "timestamp": 1731245678
+  }'
+```

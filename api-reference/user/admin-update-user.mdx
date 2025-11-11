@@ -1,0 +1,136 @@
+---
+title: "Update User"
+description: "Update a user's profile information and metadata. This operation is restricted to admin users."
+---
+
+# PATCH `/api/user/{address}`
+
+Update user data by wallet address. Only administrators are allowed to perform this action.
+
+## Path Parameters
+
+| Name | Type | Required | Description |
+|------|------|-----------|--------------|
+| `address` | `string` | yes | Wallet address of the user to update |
+
+## Request Body
+
+| Name | Type | Required | Description |
+|------|------|-----------|--------------|
+| `role` | `string` | no | User role to assign (`admin` or `user`) |
+| `metadata` | `object` | no | Custom metadata object containing additional user details |
+| `lastLoginAt` | `number` | no | Unix timestamp of the user's last login |
+| `kycStatus` | `string` | no | KYC status (`pending`, `verified`, or `rejected`) |
+
+> Content-Type: `application/json`
+
+### Example Request Body
+
+```json
+{
+  "role": "user",
+  "metadata": {
+    "name": "John Doe",
+    "email": "john@example.com"
+  },
+  "lastLoginAt": 1699372800000,
+  "kycStatus": "pending"
+}
+```
+
+## Responses
+
+### 200 — OK
+
+User profile successfully updated.
+
+```json
+{
+  "address": "0x123abc...",
+  "role": "user",
+  "createdAt": 1699286400000,
+  "lastLoginAt": 1699372800000,
+  "metadata": {
+    "name": "John Doe",
+    "email": "john@example.com",
+    "kycStatus": "pending"
+  }
+}
+```
+
+### 400 — Bad Request
+
+Returned when the request body contains invalid data.
+
+```json
+{
+  "error": "Invalid user update payload"
+}
+```
+
+### 401 — Unauthorized
+
+Returned if the user is not authenticated.
+
+```json
+{
+  "error": "Unauthorized"
+}
+```
+
+### 403 — Forbidden
+
+Returned if a non-admin user attempts to update another user.
+
+```json
+{
+  "error": "Forbidden: Admin privileges required"
+}
+```
+
+### 404 — Not Found
+
+Returned when the target user address does not exist.
+
+```json
+{
+  "error": "User not found"
+}
+```
+
+## Authentication
+
+This endpoint requires a **Bearer Token** for authentication (admin only).
+
+## Example Request
+
+```bash
+curl -X PATCH "https://api.zephyra.dev/api/user/0x123abc..." \
+  -H "Authorization: Bearer <token>" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "role": "user",
+    "metadata": {
+      "name": "John Doe",
+      "email": "john@example.com"
+    },
+    "lastLoginAt": 1699372800000,
+    "kycStatus": "pending"
+  }'
+```
+
+## Example Response
+
+```json
+{
+  "address": "0x123abc...",
+  "role": "user",
+  "createdAt": 1699286400000,
+  "lastLoginAt": 1699372800000,
+  "metadata": {
+    "name": "John Doe",
+    "email": "john@example.com",
+    "kycStatus": "pending"
+  }
+}
+```

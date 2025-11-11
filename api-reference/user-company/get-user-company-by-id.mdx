@@ -1,0 +1,91 @@
+---
+title: "Get User-Company Record by ID"
+description: "Retrieve a specific user-company record by its unique ID."
+---
+
+# GET `/api/user-company/{id}`
+
+Fetch a single user-company record using its unique identifier.
+
+## Path Parameters
+
+| Name | Type | Required | Description |
+|------|------|-----------|-------------|
+| `id` | `string` | yes | Unique identifier of the user-company record |
+
+## Responses
+
+### 200 — OK
+
+Returns the user-company record with the specified ID.
+
+```json
+{
+  "id": "string",
+  "userAddress": "string",
+  "companyId": "string",
+  "role": "owner",
+  "status": "pending",
+  "joinedAt": 0,
+  "updatedAt": 0,
+  "txHash": "string",
+  "onchainJoinedAt": 0
+}
+```
+
+### 400 — Bad Request
+
+Returned when the provided ID is invalid.
+
+```json
+{
+  "error": "Invalid record ID"
+}
+```
+
+### 401 — Unauthorized
+
+Returned if the request is missing or contains an invalid authentication token.
+
+```json
+{
+  "error": "Unauthorized"
+}
+```
+
+### 404 — Not Found
+
+Returned if no record exists with the specified ID.
+
+```json
+{
+  "error": "User-company record not found"
+}
+```
+
+## Authentication
+
+This endpoint requires a **Bearer Token** for authentication.
+
+## Example Request
+
+```bash
+curl -X GET "https://api.zephyra.dev/api/user-company/record_123" \
+  -H "Authorization: Bearer <token>"
+```
+
+## Example Response
+
+```json
+{
+  "id": "string",
+  "userAddress": "string",
+  "companyId": "string",
+  "role": "owner",
+  "status": "pending",
+  "joinedAt": 0,
+  "updatedAt": 0,
+  "txHash": "string",
+  "onchainJoinedAt": 0
+}
+```

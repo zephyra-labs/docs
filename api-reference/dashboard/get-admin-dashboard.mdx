@@ -1,0 +1,69 @@
+---
+title: "Admin Dashboard"
+description: "Retrieve system-wide dashboard metrics for admin users."
+---
+
+# GET `/api/dashboard/admin`
+
+Fetch system-wide metrics and recent activities for the admin dashboard.  
+Accessible by admin users only.
+
+## Responses
+
+### 200 — OK
+
+Returns dashboard metrics including total wallets, contracts, documents, and recent activities.
+
+```json
+{
+  "totalWallets": 0,
+  "totalContracts": 0,
+  "totalDocuments": 0,
+  "wallets": [
+    {
+      "address": "0xabc123...",
+      "balance": 1000000000
+    }
+  ],
+  "recentContracts": [
+    {
+      "address": "string",
+      "owner": "string",
+      "createdAt": "2025-11-10T22:48:01.974Z",
+      "lastAction": {
+        "action": "string",
+        "account": "string",
+        "timestamp": 0
+      }
+    }
+  ],
+  "recentDocuments": [
+    {
+      "id": "string",
+      "tokenId": 0,
+      "owner": "string",
+      "title": "string",
+      "docType": "string",
+      "status": "string",
+      "createdAt": 0,
+      "updatedAt": 0,
+      "lastAction": {
+        "action": "string",
+        "account": "string",
+        "timestamp": 0
+      }
+    }
+  ]
+}
+```
+
+## Authentication
+
+This endpoint requires a **Bearer Token** with admin privileges.
+
+## Example Request
+
+```bash
+curl -X GET "https://api.zephyra.dev/api/dashboard/admin" \
+  -H "Authorization: Bearer <admin-token>"
+```

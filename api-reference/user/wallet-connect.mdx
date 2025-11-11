@@ -1,0 +1,99 @@
+---
+title: "Wallet Connect / Auto Register"
+description: "Connect a user's wallet and automatically register them if they don't exist."
+---
+
+# POST `/api/user/wallet-connect`
+
+Connects a user's crypto wallet to the system.  
+If the wallet address is not registered, a new user record will be automatically created.
+
+## Parameters
+
+None.
+
+## Request Body
+
+### Content Type: `application/json`
+
+```json
+{
+  "address": "0x123abc..."
+}
+```
+
+| Field     | Type     | Required | Description                 |
+| --------- | -------- | -------- | --------------------------- |
+| `address` | `string` | ✅        | Wallet address of the user. |
+
+## Responses
+
+### 200 — OK
+
+Returns user data and a JWT token upon successful wallet connection or registration.
+
+```json
+{
+  "data": {
+    "address": "0x123abc...",
+    "role": "user",
+    "createdAt": 1699286400000,
+    "lastLoginAt": 1699372800000,
+    "metadata": {
+      "name": "John Doe",
+      "email": "john@example.com",
+      "kycStatus": "pending"
+    }
+  },
+  "token": "string"
+}
+```
+
+### 400 — Bad Request
+
+Returned if the wallet address is missing or invalid.
+
+```json
+{
+  "error": "Invalid wallet address"
+}
+```
+
+### 500 — Internal Server Error
+
+Returned if the server fails to process the wallet connection.
+
+```json
+{
+  "error": "Internal server error"
+}
+```
+
+## Example Request
+
+```bash
+curl -X POST "https://api.zephyra.dev/api/user/wallet-connect" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "address": "0x123abc..."
+  }'
+```
+
+## Example Response
+
+```json
+{
+  "data": {
+    "address": "0x123abc...",
+    "role": "user",
+    "createdAt": 1699286400000,
+    "lastLoginAt": 1699372800000,
+    "metadata": {
+      "name": "John Doe",
+      "email": "john@example.com",
+      "kycStatus": "pending"
+    }
+  },
+  "token": "string"
+}
+```

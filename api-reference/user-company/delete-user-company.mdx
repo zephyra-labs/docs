@@ -1,0 +1,85 @@
+---
+title: "Delete User-Company Record"
+description: "Delete a specific user-company record by ID. This operation is restricted to admin users."
+---
+
+# DELETE `/api/user-company/{id}`
+
+Permanently delete a user-company record identified by its ID. Only administrators can perform this action.
+
+## Path Parameters
+
+| Name | Type | Required | Description |
+|------|------|-----------|-------------|
+| `id` | `string` | yes | Unique identifier of the user-company record |
+
+## Responses
+
+### 200 — OK
+
+User-company record successfully deleted.
+
+```json
+{
+  "message": "Relation deleted successfully"
+}
+```
+
+### 400 — Bad Request
+
+Returned when the provided ID is invalid.
+
+```json
+{
+  "error": "Invalid record ID"
+}
+```
+
+### 401 — Unauthorized
+
+Returned if the request is missing or contains an invalid authentication token.
+
+```json
+{
+  "error": "Unauthorized"
+}
+```
+
+### 403 — Forbidden
+
+Returned if a non-admin user attempts to delete the record.
+
+```json
+{
+  "error": "Forbidden: Admin privileges required"
+}
+```
+
+### 404 — Not Found
+
+Returned if no record exists with the specified ID.
+
+```json
+{
+  "error": "User-company record not found"
+}
+```
+
+## Authentication
+
+This endpoint requires a **Bearer Token** for authentication (admin only).
+
+## Example Request
+
+```bash
+curl -X DELETE "https://api.zephyra.dev/api/user-company/record_123" \
+  -H "Authorization: Bearer <token>"
+```
+
+## Example Response
+
+```json
+{
+  "message": "Relation deleted successfully"
+}
+```

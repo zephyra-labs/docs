@@ -1,0 +1,95 @@
+---
+title: "Create KYC Record"
+description: "Upload and register a new KYC (Know Your Customer) record with its associated metadata and file."
+---
+
+# POST `/api/kyc`
+
+Create a new KYC record by uploading a KYC document file and its related metadata.
+
+## Request Body
+
+| Name | Type | Required | Description |
+|------|------|-----------|--------------|
+| `owner` | `string` | yes | Wallet address of the KYC owner |
+| `file` | `string($binary)` | yes | KYC document file to upload |
+| `fileHash` | `string` | yes | Hash of the uploaded KYC file (e.g., IPFS CID) |
+| `metadataUrl` | `string` | yes | Metadata URL pointing to file details on IPFS or storage |
+
+> Content-Type: `multipart/form-data`
+
+## Responses
+
+### 201 — Created
+
+KYC record successfully created and stored.
+
+```json
+{
+  "tokenId": "kyc-uuid-123",
+  "owner": "0x123abc...",
+  "fileHash": "Qmabcdef...",
+  "metadataUrl": "https://ipfs.io/ipfs/Qmabcdef...",
+  "documentUrl": "https://storage.example.com/docs/kyc-123.pdf",
+  "name": "NFT-123",
+  "description": "KYC for user 0x123abc...",
+  "txHash": "0xabc123...",
+  "createdAt": 1699286400000,
+  "updatedAt": 1699372800000,
+  "status": "Pending"
+}
+```
+
+### 400 — Bad Request
+
+Returned when the request is missing required fields or invalid file data.
+
+```json
+{
+  "error": "Invalid KYC submission data"
+}
+```
+
+### 401 — Unauthorized
+
+Returned if the user is not authenticated.
+
+```json
+{
+  "error": "Unauthorized"
+}
+```
+
+## Authentication
+
+This endpoint requires a **Bearer Token** for authentication.
+
+## Example Request
+
+```bash
+curl -X POST "https://api.zephyra.dev/api/kyc" \
+  -H "Authorization: Bearer <token>" \
+  -H "Accept: application/json" \
+  -F "owner=0x123abc..." \
+  -F "file=@/path/to/kyc.pdf" \
+  -F "fileHash=Qmabcdef..." \
+  -F "metadataUrl=https://ipfs.io/ipfs/Qmabcdef..."
+```
+
+## Example Response
+
+```json
+{
+  "tokenId": "kyc-uuid-123",
+  "owner": "0x123abc...",
+  "fileHash": "Qmabcdef...",
+  "metadataUrl": "https://ipfs.io/ipfs/Qmabcdef...",
+  "documentUrl": "https://storage.example.com/docs/kyc-123.pdf",
+  "name": "NFT-123",
+  "description": "KYC for user 0x123abc...",
+  "txHash": "0xabc123...",
+  "createdAt": 1699286400000,
+  "updatedAt": 1699372800000,
+  "status": "Pending"
+}
+```

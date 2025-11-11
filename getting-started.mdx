@@ -1,0 +1,152 @@
+---
+title: "Getting Started"
+description: "Set up Zephyra locally and start building with our backend services in minutes."
+---
+
+## Zephyra Introduction
+
+Welcome to **Zephyra** — a modular backend platform built for modern enterprise and decentralized systems.  
+This guide will walk you through installing dependencies, configuring your environment, and running the project locally.
+
+---
+
+## Requirements
+
+Before you start, make sure you have these installed:
+
+- [Node.js 22+](https://nodejs.org/)
+- [pnpm](https://pnpm.io/installation)
+- [Firebase CLI](https://firebase.google.com/docs/cli)
+- [Git](https://git-scm.com/)
+- A **Firebase project** with:
+  - Firestore Database
+  - Firebase Authentication
+  - Service Account credentials (Admin SDK)
+
+---
+
+## Quick Setup
+
+<Steps>
+
+### Clone the repository
+
+```bash
+git clone https://github.com/zephyra-labs/backend.git
+cd backend
+```
+
+### Install dependencies
+
+```bash
+pnpm install
+```
+
+### Set up environment variables
+
+Create a `.env` file in the root folder with the following content:
+
+```bash
+FIREBASE_ADMIN_JSON=./serviceAccountKey.json
+NODE_ENV=development
+PORT=5000
+```
+
+Place your Firebase **Admin SDK JSON** credentials in the project root under `serviceAccountKey.json`.
+
+### Run the development server
+
+```bash
+pnpm dev
+```
+
+By default, Zephyra runs on **[http://localhost:5000](http://localhost:5000)**
+
+</Steps>
+
+---
+
+## Authentication Setup
+
+Zephyra uses **Firebase Authentication**.
+You can log in with a test account or generate a token manually using the Firebase Admin SDK.
+
+```bash
+firebase auth:sign-in-with-email user@example.com
+```
+
+Once you have a valid Bearer token, you can call any authenticated API endpoint:
+
+```bash
+curl -X GET http://localhost:5000/api/users \
+  -H "Authorization: Bearer <token>"
+```
+
+---
+
+## Available Services
+
+| Service      | Description                                            |
+| ------------ | ------------------------------------------------------ |
+| **Auth**     | Handle registration, login, and verification of users. |
+| **User**     | Manage user profiles, roles, and permissions.          |
+| **KYC**      | Perform and track Know Your Customer verifications.    |
+| **Contract** | Manage contract metadata and associated logs.          |
+| **Activity** | Record internal and external user activities.          |
+
+You can explore each service in the **API Reference** section.
+
+---
+
+## Testing
+
+Zephyra includes full **Jest** test coverage for DTOs, models, and services.
+
+Run the test suite with:
+
+```bash
+pnpm test
+```
+
+You’ll see output similar to:
+
+```
+ PASS  src/models/__tests__/userModel.test.ts
+ PASS  src/dtos/__tests__/kycDTO.test.ts
+Test Suites: 2 passed, 2 total
+Tests:       10 passed, 10 total
+```
+
+---
+
+## Build and Production
+
+To build and run Zephyra in production mode:
+
+```bash
+pnpm build
+pnpm start
+```
+
+This will compile TypeScript to JavaScript in the `dist/` folder and start the server using compiled code.
+
+---
+
+## Next Steps
+
+<Columns cols={2}>
+  <Card
+    title="Configure your environment"
+    icon="gear"
+    href="/setup/environment"
+  >
+    Set up Firebase credentials and environment variables properly.
+  </Card>
+  <Card
+    title="Explore API Endpoints"
+    icon="terminal"
+    href="/api-reference/auth/register"
+  >
+    Start exploring Zephyra API endpoints and request examples.
+  </Card>
+</Columns>

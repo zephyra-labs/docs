@@ -1,0 +1,84 @@
+---
+title: "Get All Trades"
+description: "Retrieve a list of all trade records."
+---
+
+# GET `/api/trade`
+
+Get all trade records. No parameters required.
+
+## Parameters
+
+None.
+
+## Responses
+
+### 200 — OK
+
+Returns a list of trade records.
+
+```json
+[
+  {
+    "id": "trade-uuid-123",
+    "contractAddress": "0xcontract...",
+    "participants": [
+      {
+        "address": "0xabc123...",
+        "role": "exporter",
+        "kycVerified": false,
+        "walletConnected": true
+      }
+    ],
+    "status": "draft",
+    "currentStage": 1,
+    "createdAt": 1699286400000,
+    "updatedAt": 1699372800000
+  }
+]
+```
+
+### 401 — Unauthorized
+
+Returned if the user is not authenticated.
+
+```json
+{
+  "error": "Unauthorized"
+}
+```
+
+## Authentication
+
+This endpoint requires a **Bearer Token** for authentication.
+
+## Example Request
+
+```bash
+curl -X GET "https://api.zephyra.dev/api/trade" \
+  -H "Authorization: Bearer <token>" \
+  -H "Accept: application/json"
+```
+
+## Example Response
+
+```json
+[
+  {
+    "id": "trade-uuid-123",
+    "contractAddress": "0xcontract...",
+    "participants": [
+      {
+        "address": "0xabc123...",
+        "role": "exporter",
+        "kycVerified": false,
+        "walletConnected": true
+      }
+    ],
+    "status": "draft",
+    "currentStage": 1,
+    "createdAt": 1699286400000,
+    "updatedAt": 1699372800000
+  }
+]
+```

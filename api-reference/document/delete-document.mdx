@@ -1,0 +1,65 @@
+---
+title: "Delete Document"
+description: "Remove a document from the system using its token ID."
+---
+
+# DELETE `/api/document/{tokenId}`
+
+Delete a document permanently from the system by providing its token ID.
+
+## Path Parameters
+
+| Name | Type | Required | Description |
+|------|------|-----------|--------------|
+| `tokenId` | `integer` | yes | Document token ID |
+
+## Responses
+
+### 200 — OK
+
+Returns a confirmation message after successful deletion.
+
+```json
+{
+  "message": "Document deleted"
+}
+```
+
+### 404 — Not Found
+
+Returned if the document does not exist.
+
+```json
+{
+  "error": "Document not found"
+}
+```
+
+### 401 — Unauthorized
+
+Returned if the request lacks valid authentication credentials.
+
+```json
+{
+  "error": "Unauthorized"
+}
+```
+
+## Authentication
+
+This endpoint requires a **Bearer Token**.
+
+## Example Request
+
+```bash
+curl -X DELETE "https://api.zephyra.dev/api/document/123" \
+  -H "Authorization: Bearer <token>"
+```
+
+## Example Response
+
+```json
+{
+  "message": "Document deleted"
+}
+```

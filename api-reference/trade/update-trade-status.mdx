@@ -1,0 +1,115 @@
+---
+title: "Update Trade Status"
+description: "Update the status of a specific trade."
+---
+
+# PATCH `/api/trade/{id}/status`
+
+Update the status of a trade.
+
+## Parameters
+
+| Name | Type | Required | Description |
+|------|------|----------|-------------|
+| `id` | `string` | yes | Trade ID (path parameter) |
+
+## Request Body
+
+> Content-Type: `application/json`
+
+```json
+{
+  "status": "completed"
+}
+```
+
+## Responses
+
+### 200 — OK
+
+Returns the updated trade record with the new status.
+
+```json
+{
+  "id": "trade-uuid-123",
+  "contractAddress": "0xcontract...",
+  "participants": [
+    {
+      "address": "0xabc123...",
+      "role": "exporter",
+      "kycVerified": false,
+      "walletConnected": true
+    }
+  ],
+  "status": "completed",
+  "currentStage": 1,
+  "createdAt": 1699286400000,
+  "updatedAt": 1699372800000
+}
+```
+
+### 400 — Bad Request
+
+Returned if the status value is invalid.
+
+```json
+{
+  "error": "Invalid status value"
+}
+```
+
+### 401 — Unauthorized
+
+Returned if the user is not authenticated.
+
+```json
+{
+  "error": "Unauthorized"
+}
+```
+
+### 404 — Not Found
+
+Returned if the trade with the specified ID does not exist.
+
+```json
+{
+  "error": "Trade not found"
+}
+```
+
+## Authentication
+
+This endpoint requires a **Bearer Token** for authentication.
+
+## Example Request
+
+```bash
+curl -X PATCH "https://api.zephyra.dev/api/trade/trade-uuid-123/status" \
+  -H "Authorization: Bearer <token>" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "status": "completed"
+  }'
+```
+
+## Example Response
+
+```json
+{
+  "id": "trade-uuid-123",
+  "contractAddress": "0xcontract...",
+  "participants": [
+    {
+      "address": "0xabc123...",
+      "role": "exporter",
+      "kycVerified": false,
+      "walletConnected": true
+    }
+  ],
+  "status": "completed",
+  "currentStage": 1,
+  "createdAt": 1699286400000,
+  "updatedAt": 1699372800000
+}
+```

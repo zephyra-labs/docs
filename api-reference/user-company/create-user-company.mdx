@@ -1,0 +1,103 @@
+---
+title: "Create User-Company Record"
+description: "Create a new association between a user and a company, including role and status."
+---
+
+# POST `/api/user-company`
+
+Create a new user-company record by linking a user wallet to a company.
+
+## Request Body
+
+| Name | Type | Required | Description |
+|------|------|-----------|-------------|
+| `userAddress` | `string` | yes | Wallet address of the user |
+| `companyId` | `string` | yes | Identifier of the company |
+| `role` | `string` | yes | Role of the user in the company (`owner`, `staff`, etc.) |
+| `status` | `string` | yes | Status of the association (`pending`, `approved`, etc.) |
+| `txHash` | `string` | no | Transaction hash if the action is recorded on-chain |
+| `joinedAt` | `number` | no | Timestamp when the user joined the company |
+| `onchainJoinedAt` | `number` | no | Timestamp when the association was recorded on-chain |
+
+> Content-Type: `application/json`
+
+### Example Request Body
+
+```json
+{
+  "userAddress": "0x123abc...",
+  "companyId": "company_01",
+  "role": "staff",
+  "status": "pending",
+  "txHash": "0xabc123...",
+  "joinedAt": 1699286400000,
+  "onchainJoinedAt": 0
+}
+```
+
+## Responses
+
+### 201 — Created
+
+User-company record successfully created.
+
+```json
+{
+  "id": "string",
+  "userAddress": "string",
+  "companyId": "string",
+  "role": "owner",
+  "status": "pending",
+  "joinedAt": 0,
+  "updatedAt": 0,
+  "txHash": "string",
+  "onchainJoinedAt": 0
+}
+```
+
+### 400 — Bad Request
+
+Returned when validation fails or required fields are missing.
+
+```json
+{
+  "error": "Validation error"
+}
+```
+
+## Authentication
+
+This endpoint requires a **Bearer Token** for authentication.
+
+## Example Request
+
+```bash
+curl -X POST "https://api.zephyra.dev/api/user-company" \
+  -H "Authorization: Bearer <token>" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "userAddress": "0x123abc...",
+    "companyId": "company_01",
+    "role": "staff",
+    "status": "pending",
+    "txHash": "0xabc123...",
+    "joinedAt": 1699286400000,
+    "onchainJoinedAt": 0
+  }'
+```
+
+## Example Response
+
+```json
+{
+  "id": "string",
+  "userAddress": "string",
+  "companyId": "string",
+  "role": "owner",
+  "status": "pending",
+  "joinedAt": 0,
+  "updatedAt": 0,
+  "txHash": "string",
+  "onchainJoinedAt": 0
+}
+```

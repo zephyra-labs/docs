@@ -1,0 +1,82 @@
+---
+title: "Get Current Authenticated User"
+description: "Retrieve the profile information of the currently authenticated user."
+---
+
+# GET `/api/user/me`
+
+Fetches the profile data of the currently authenticated user.  
+Requires a valid JWT token in the `Authorization` header.
+
+## Parameters
+
+None.
+
+## Headers
+
+| Name | Type | Required | Description |
+|------|------|-----------|-------------|
+| `Authorization` | `string` | ✅ | Bearer token obtained from `/api/user/wallet-connect`. |
+
+## Responses
+
+### 200 — OK
+
+Returns the authenticated user's profile information.
+
+```json
+{
+  "address": "0x123abc...",
+  "role": "user",
+  "createdAt": 1699286400000,
+  "lastLoginAt": 1699372800000,
+  "metadata": {
+    "name": "John Doe",
+    "email": "john@example.com",
+    "kycStatus": "pending"
+  }
+}
+```
+
+### 401 — Unauthorized
+
+Returned if the JWT token is missing or invalid.
+
+```json
+{
+  "error": "Unauthorized"
+}
+```
+
+### 500 — Internal Server Error
+
+Returned if the server encounters an error while fetching user data.
+
+```json
+{
+  "error": "Internal server error"
+}
+```
+
+## Example Request
+
+```bash
+curl -X GET "https://api.zephyra.dev/api/user/me" \
+  -H "Authorization: Bearer <your-jwt-token>"
+```
+
+## Example Response
+
+```json
+{
+  "address": "0x123abc...",
+  "role": "user",
+  "createdAt": 1699286400000,
+  "lastLoginAt": 1699372800000,
+  "metadata": {
+    "name": "John Doe",
+    "email": "john@example.com",
+    "kycStatus": "pending"
+  }
+}
+```

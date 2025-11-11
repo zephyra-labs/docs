@@ -1,0 +1,73 @@
+---
+title: "Get Wallet State by Account"
+description: "Retrieve the current state of a specific wallet account."
+---
+
+# GET `/api/wallet/{account}/state`
+
+Fetch the current state of a wallet, including provider, chain, session, and last activity timestamp.
+
+## Path Parameters
+
+| Name | Type | Required | Description |
+|------|------|-----------|-------------|
+| `account` | `string` | yes | Wallet address of the user |
+
+## Responses
+
+### 200 — OK
+
+Returns the current state of the wallet account.
+
+```json
+{
+  "account": "string",
+  "chainId": 0,
+  "provider": "string",
+  "sessionId": "string",
+  "lastActiveAt": 0
+}
+```
+
+### 401 — Unauthorized
+
+Returned if the request is missing or contains an invalid authentication token.
+
+```json
+{
+  "error": "Unauthorized"
+}
+```
+
+### 404 — Not Found
+
+Returned if the wallet state is not found for the given account.
+
+```json
+{
+  "error": "State not found"
+}
+```
+
+## Authentication
+
+This endpoint requires a **Bearer Token** for authentication.
+
+## Example Request
+
+```bash
+curl -X GET "https://api.zephyra.dev/api/wallet/0x123abc/state" \
+  -H "Authorization: Bearer <token>"
+```
+
+## Example Response
+
+```json
+{
+  "account": "string",
+  "chainId": 0,
+  "provider": "string",
+  "sessionId": "string",
+  "lastActiveAt": 0
+}
+```

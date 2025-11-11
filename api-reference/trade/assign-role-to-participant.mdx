@@ -1,0 +1,101 @@
+---
+title: "Assign Role to Participant"
+description: "Update the role of a participant in a trade."
+---
+
+# PATCH `/api/trade/{id}/role`
+
+Assign or update a participant's role in a trade.
+
+## Parameters
+
+| Name | Type | Required | Description |
+|------|------|----------|-------------|
+| `id` | `string` | yes | Trade ID (path parameter) |
+
+## Request Body
+
+> Content-Type: `application/json`
+
+```json
+{
+  "participantAddress": "0xabc123...",
+  "role": "buyer"
+}
+```
+
+## Responses
+
+### 200 — OK
+
+Returns the updated list of participants with their roles.
+
+```json
+[
+  {
+    "address": "0xabc123...",
+    "role": "exporter",
+    "kycVerified": false,
+    "walletConnected": true
+  }
+]
+```
+
+### 400 — Bad Request
+
+Returned if the request body fails validation.
+
+```json
+{
+  "error": "Validation error"
+}
+```
+
+### 401 — Unauthorized
+
+Returned if the user is not authenticated.
+
+```json
+{
+  "error": "Unauthorized"
+}
+```
+
+### 404 — Not Found
+
+Returned if the trade or participant does not exist.
+
+```json
+{
+  "error": "Trade or participant not found"
+}
+```
+
+## Authentication
+
+This endpoint requires a **Bearer Token** for authentication.
+
+## Example Request
+
+```bash
+curl -X PATCH "https://api.zephyra.dev/api/trade/trade-uuid-123/role" \
+  -H "Authorization: Bearer <token>" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "participantAddress": "0xabc123...",
+    "role": "buyer"
+  }'
+```
+
+## Example Response
+
+```json
+[
+  {
+    "address": "0xabc123...",
+    "role": "exporter",
+    "kycVerified": false,
+    "walletConnected": true
+  }
+]
+```

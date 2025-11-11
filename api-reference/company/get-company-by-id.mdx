@@ -1,0 +1,53 @@
+---
+title: "Get Company by ID"
+description: "Retrieve details of a specific company using its unique ID."
+---
+
+# GET `/api/company/{id}`
+
+Fetch a specific company by its unique ID.
+
+## Path Parameters
+
+| Name | Type   | Required | Description      |
+|------|--------|----------|----------------|
+| `id` | `string` | yes      | Company ID       |
+
+## Responses
+
+### 200 — OK
+
+Returns the company object.
+
+```json
+{
+  "id": "string",
+  "name": "string",
+  "address": "string",
+  "city": "string",
+  "stateOrProvince": "string",
+  "postalCode": "string",
+  "country": "string",
+  "email": "string",
+  "phone": "string",
+  "taxId": "string",
+  "registrationNumber": "string",
+  "businessType": "string",
+  "website": "string",
+  "walletAddress": "string",
+  "verified": true,
+  "createdAt": 0,
+  "updatedAt": 0
+}
+```
+
+## Authentication
+
+This endpoint requires a **Bearer Token**.
+
+## Example Request
+
+```bash
+curl -X GET "https://api.zephyra.dev/api/company/<companyId>" \
+  -H "Authorization: Bearer <token>"
+```

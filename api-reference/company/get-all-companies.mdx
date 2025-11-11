@@ -1,0 +1,50 @@
+---
+title: "Get All Companies"
+description: "Retrieve a list of all companies in the system."
+---
+
+# GET `/api/company`
+
+Fetch all companies registered in the system.  
+No parameters are required.
+
+## Responses
+
+### 200 — OK
+
+Returns a list of company objects.
+
+```json
+[
+  {
+    "id": "string",
+    "name": "string",
+    "address": "string",
+    "city": "string",
+    "stateOrProvince": "string",
+    "postalCode": "string",
+    "country": "string",
+    "email": "string",
+    "phone": "string",
+    "taxId": "string",
+    "registrationNumber": "string",
+    "businessType": "string",
+    "website": "string",
+    "walletAddress": "string",
+    "verified": true,
+    "createdAt": 0,
+    "updatedAt": 0
+  }
+]
+```
+
+## Authentication
+
+This endpoint requires a **Bearer Token**.
+
+## Example Request
+
+```bash
+curl -X GET "https://api.zephyra.dev/api/company" \
+  -H "Authorization: Bearer <token>"
+```

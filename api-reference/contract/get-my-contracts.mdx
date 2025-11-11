@@ -1,0 +1,65 @@
+---
+title: "Get My Contracts"
+description: "Retrieve all contracts owned by the authenticated user."
+---
+
+# GET `/api/contract/my`
+
+Fetch all contracts associated with the currently authenticated user.
+
+## Responses
+
+### 200 — OK
+
+Returns a list of contracts owned by the user.
+
+```json
+[
+  {
+    "contractAddress": "string",
+    "state": {
+      "exporter": "string",
+      "importer": "string",
+      "logistics": ["string"],
+      "insurance": "string",
+      "inspector": "string",
+      "status": "string",
+      "currentStage": "string",
+      "lastUpdated": 0
+    },
+    "history": [
+      {
+        "action": "string",
+        "txHash": "string",
+        "account": "string",
+        "exporter": "string",
+        "importer": "string",
+        "logistics": ["string"],
+        "insurance": "string",
+        "inspector": "string",
+        "requiredAmount": "string",
+        "extra": {
+          "additionalProp1": {}
+        },
+        "timestamp": 0,
+        "onChainInfo": {
+          "status": "string",
+          "blockNumber": 0,
+          "confirmations": 0
+        }
+      }
+    ]
+  }
+]
+```
+
+## Authentication
+
+This endpoint requires a **Bearer Token**.
+
+## Example Request
+
+```bash
+curl -X GET "https://api.zephyra.dev/api/contract/my" \
+  -H "Authorization: Bearer <token>"
+```

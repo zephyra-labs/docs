@@ -1,0 +1,92 @@
+---
+title: "Get Trade by ID"
+description: "Retrieve a specific trade record by its ID."
+---
+
+# GET `/api/trade/{id}`
+
+Get a trade by its ID.
+
+## Parameters
+
+| Name | Type | Required | Description |
+|------|------|----------|-------------|
+| `id` | `string` | yes | Trade ID (path parameter) |
+
+## Responses
+
+### 200 — OK
+
+Returns the requested trade record.
+
+```json
+{
+  "id": "trade-uuid-123",
+  "contractAddress": "0xcontract...",
+  "participants": [
+    {
+      "address": "0xabc123...",
+      "role": "exporter",
+      "kycVerified": false,
+      "walletConnected": true
+    }
+  ],
+  "status": "draft",
+  "currentStage": 1,
+  "createdAt": 1699286400000,
+  "updatedAt": 1699372800000
+}
+```
+
+### 401 — Unauthorized
+
+Returned if the user is not authenticated.
+
+```json
+{
+  "error": "Unauthorized"
+}
+```
+
+### 404 — Not Found
+
+Returned if the trade with the specified ID does not exist.
+
+```json
+{
+  "error": "Trade not found"
+}
+```
+
+## Authentication
+
+This endpoint requires a **Bearer Token** for authentication.
+
+## Example Request
+
+```bash
+curl -X GET "https://api.zephyra.dev/api/trade/trade-uuid-123" \
+  -H "Authorization: Bearer <token>" \
+  -H "Accept: application/json"
+```
+
+## Example Response
+
+```json
+{
+  "id": "trade-uuid-123",
+  "contractAddress": "0xcontract...",
+  "participants": [
+    {
+      "address": "0xabc123...",
+      "role": "exporter",
+      "kycVerified": false,
+      "walletConnected": true
+    }
+  ],
+  "status": "draft",
+  "currentStage": 1,
+  "createdAt": 1699286400000,
+  "updatedAt": 1699372800000
+}
+```

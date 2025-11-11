@@ -1,0 +1,85 @@
+---
+title: "Delete User"
+description: "Delete a user account by wallet address. This operation is restricted to admin users."
+---
+
+# DELETE `/api/user/{address}`
+
+Permanently delete a user record from the system. Only administrators are allowed to perform this action.
+
+## Path Parameters
+
+| Name | Type | Required | Description |
+|------|------|-----------|--------------|
+| `address` | `string` | yes | Wallet address of the user to delete |
+
+## Responses
+
+### 200 — OK
+
+User successfully deleted.
+
+```json
+{
+  "message": "Wallet data deleted"
+}
+```
+
+### 400 — Bad Request
+
+Returned when the provided address is invalid.
+
+```json
+{
+  "error": "Invalid wallet address"
+}
+```
+
+### 401 — Unauthorized
+
+Returned if the request is missing or contains an invalid authentication token.
+
+```json
+{
+  "error": "Unauthorized"
+}
+```
+
+### 403 — Forbidden
+
+Returned if a non-admin user attempts to delete another user.
+
+```json
+{
+  "error": "Forbidden: Admin privileges required"
+}
+```
+
+### 404 — Not Found
+
+Returned if the user with the specified address does not exist.
+
+```json
+{
+  "error": "User not found"
+}
+```
+
+## Authentication
+
+This endpoint requires a **Bearer Token** for authentication (admin only).
+
+## Example Request
+
+```bash
+curl -X DELETE "https://api.zephyra.dev/api/user/0x123abc..." \
+  -H "Authorization: Bearer <token>"
+```
+
+## Example Response
+
+```json
+{
+  "message": "Wallet data deleted"
+}
+```

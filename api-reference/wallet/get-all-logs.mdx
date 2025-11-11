@@ -1,0 +1,63 @@
+---
+title: "Get All Wallet Logs"
+description: "Retrieve all wallet login and disconnect events for users."
+---
+
+# GET `/api/wallet/logs`
+
+Fetch all wallet log entries, including login and disconnect events.
+
+## Responses
+
+### 200 — OK
+
+Returns a list of wallet log records.
+
+```json
+[
+  {
+    "account": "0x123abc...",
+    "action": "connect",
+    "timestamp": 1699286400000,
+    "meta": {
+      "additionalProp1": {}
+    }
+  }
+]
+```
+
+### 401 — Unauthorized
+
+Returned if the request is missing or contains an invalid authentication token.
+
+```json
+{
+  "error": "Unauthorized"
+}
+```
+
+## Authentication
+
+This endpoint requires a **Bearer Token** for authentication.
+
+## Example Request
+
+```bash
+curl -X GET "https://api.zephyra.dev/api/wallet/logs" \
+  -H "Authorization: Bearer <token>"
+```
+
+## Example Response
+
+```json
+[
+  {
+    "account": "0x123abc...",
+    "action": "connect",
+    "timestamp": 1699286400000,
+    "meta": {
+      "additionalProp1": {}
+    }
+  }
+]
+```

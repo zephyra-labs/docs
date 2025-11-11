@@ -1,0 +1,133 @@
+---
+title: "Update User-Company Record"
+description: "Update a specific user-company record by ID. This operation is restricted to admin users."
+---
+
+# PUT `/api/user-company/{id}`
+
+Update a user-company record identified by its ID. Only administrators can perform this action.
+
+## Path Parameters
+
+| Name | Type | Required | Description |
+|------|------|-----------|-------------|
+| `id` | `string` | yes | Unique identifier of the user-company record |
+
+## Request Body
+
+| Name | Type | Required | Description |
+|------|------|-----------|-------------|
+| `role` | `string` | no | Role of the user in the company (`owner`, `staff`, etc.) |
+| `status` | `string` | no | Status of the user-company association (`pending`, `approved`, etc.) |
+| `txHash` | `string` | no | Transaction hash if updated on-chain |
+| `updatedAt` | `number` | no | Timestamp of the update |
+| `onchainJoinedAt` | `number` | no | Timestamp of the on-chain association |
+
+> Content-Type: `application/json`
+
+### Example Request Body
+
+```json
+{
+  "role": "owner",
+  "status": "pending",
+  "txHash": "string",
+  "updatedAt": 0,
+  "onchainJoinedAt": 0
+}
+```
+
+## Responses
+
+### 200 — OK
+
+User-company record successfully updated.
+
+```json
+{
+  "id": "string",
+  "userAddress": "string",
+  "companyId": "string",
+  "role": "owner",
+  "status": "pending",
+  "joinedAt": 0,
+  "updatedAt": 0,
+  "txHash": "string",
+  "onchainJoinedAt": 0
+}
+```
+
+### 400 — Bad Request
+
+Returned when the request body contains invalid fields.
+
+```json
+{
+  "error": "Invalid update payload"
+}
+```
+
+### 401 — Unauthorized
+
+Returned if the request is missing or contains an invalid authentication token.
+
+```json
+{
+  "error": "Unauthorized"
+}
+```
+
+### 403 — Forbidden
+
+Returned if a non-admin user attempts to update the record.
+
+```json
+{
+  "error": "Forbidden: Admin privileges required"
+}
+```
+
+### 404 — Not Found
+
+Returned if no record exists with the specified ID.
+
+```json
+{
+  "error": "User-company record not found"
+}
+```
+
+## Authentication
+
+This endpoint requires a **Bearer Token** for authentication (admin only).
+
+## Example Request
+
+```bash
+curl -X PUT "https://api.zephyra.dev/api/user-company/record_123" \
+  -H "Authorization: Bearer <token>" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "role": "owner",
+    "status": "pending",
+    "txHash": "string",
+    "updatedAt": 0,
+    "onchainJoinedAt": 0
+  }'
+```
+
+## Example Response
+
+```json
+{
+  "id": "string",
+  "userAddress": "string",
+  "companyId": "string",
+  "role": "owner",
+  "status": "pending",
+  "joinedAt": 0,
+  "updatedAt": 0,
+  "txHash": "string",
+  "onchainJoinedAt": 0
+}
+```

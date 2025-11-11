@@ -1,0 +1,37 @@
+---
+title: "Delete Company by ID"
+description: "Delete an existing company by its unique ID (Admin only)."
+---
+
+# DELETE `/api/company/{id}`
+
+Delete a company from the system. This endpoint is restricted to admin users.
+
+## Path Parameters
+
+| Name | Type   | Required | Description |
+|------|--------|----------|-------------|
+| `id` | `string` | yes      | Company ID  |
+
+## Responses
+
+### 200 — OK
+
+Returns a success message confirming deletion.
+
+```json
+{
+  "message": "Company deleted successfully"
+}
+```
+
+## Authentication
+
+This endpoint requires an **Admin Bearer Token**.
+
+## Example Request
+
+```bash
+curl -X DELETE "https://api.zephyra.dev/api/company/<companyId>" \
+  -H "Authorization: Bearer <admin-token>"
+```

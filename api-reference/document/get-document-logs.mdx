@@ -1,0 +1,90 @@
+---
+title: "Get Document Logs"
+description: "Retrieve all activity logs associated with a specific document."
+---
+
+# GET `/api/document/{tokenId}/logs`
+
+Fetch all recorded activity logs related to a specific document identified by its token ID.
+
+## Path Parameters
+
+| Name | Type | Required | Description |
+|------|------|-----------|--------------|
+| `tokenId` | `integer` | yes | Document token ID |
+
+## Responses
+
+### 200 — OK
+
+Returns a list of activity logs related to the document.
+
+```json
+[
+  {
+    "action": "UPDATED_STATUS",
+    "performedBy": "0xabc123...",
+    "timestamp": 1699372800000,
+    "details": {
+      "previousStatus": "Draft",
+      "newStatus": "Approved"
+    }
+  },
+  {
+    "action": "SIGNED",
+    "performedBy": "0xsigner123...",
+    "timestamp": 1699459200000,
+    "details": {
+      "signatureHash": "Qmabcdef..."
+    }
+  }
+]
+```
+
+### 404 — Not Found
+
+Returned if the document or its logs cannot be found.
+
+```json
+{
+  "error": "Document logs not found"
+}
+```
+
+### 401 — Unauthorized
+
+Returned if the request lacks valid authentication credentials.
+
+```json
+{
+  "error": "Unauthorized"
+}
+```
+
+## Authentication
+
+This endpoint requires a **Bearer Token**.
+
+## Example Request
+
+```bash
+curl -X GET "https://api.zephyra.dev/api/document/123/logs" \
+  -H "Authorization: Bearer <token>" \
+  -H "Accept: application/json"
+```
+
+## Example Response
+
+```json
+[
+  {
+    "action": "UPDATED_STATUS",
+    "performedBy": "0xabc123...",
+    "timestamp": 1699372800000,
+    "details": {
+      "previousStatus": "Draft",
+      "newStatus": "Approved"
+    }
+  }
+]
+```

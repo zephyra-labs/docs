@@ -1,0 +1,171 @@
+---
+title: "Deployment"
+description: "Learn how to deploy Zephyra backend to production environments like Firebase, Cloud Run, or Vercel."
+---
+
+## Deployment Guide
+
+Zephyra can be deployed flexibly depending on your infrastructure preference —  
+from **Firebase Hosting** with Cloud Functions to **Dockerized** deployments via **Cloud Run** or **Vercel**.
+
+---
+
+## Pre-deployment Checklist
+
+Before deploying, ensure the following:
+
+<Columns cols={2}>
+  <Card title="Environment Variables" icon="settings">
+    Verify `.env` file is configured with all required keys like:
+    <CodeBlock>
+      FIREBASE_ADMIN_JSON=./serviceAccountKey.json  
+      NODE_ENV=production  
+      PORT=8080
+    </CodeBlock>
+  </Card>
+
+  <Card title="Build the Project" icon="box">
+    Run:
+    ```bash
+    pnpm build
+    ```
+    This compiles your TypeScript files into the `dist/` directory.
+  </Card>
+
+  <Card title="Test Before Deploy" icon="flask">
+    Always confirm everything works locally:
+    ```bash
+    pnpm test
+    ```
+  </Card>
+
+  <Card title="Choose Deployment Target" icon="globe">
+    Zephyra supports Firebase Hosting, Cloud Run, and Vercel.
+  </Card>
+</Columns>
+
+---
+
+## Deploy to Firebase Hosting
+
+<Steps>
+Install Firebase CLI
+```bash
+pnpm dlx firebase-tools login
+```
+Initialize Firebase
+```bash
+pnpm dlx firebase-tools init
+```
+Select:
+* **Hosting** → Use existing project
+* **Functions** → Yes (if you deploy via Cloud Functions)
+Deploy
+```bash
+pnpm dlx firebase-tools deploy
+```
+This uploads your compiled files and hosts your backend under Firebase Hosting.
+</Steps>
+
+---
+
+## Deploy via Cloud Run (Docker)
+
+Use **Cloud Run** if you prefer full containerization.
+
+<Steps>
+Build Docker Image
+```bash
+docker build -t gcr.io/<your-project-id>/zephyra-backend .
+```
+Push to Google Container Registry
+```bash
+docker push gcr.io/<your-project-id>/zephyra-backend
+```
+Deploy to Cloud Run
+```bash
+gcloud run deploy zephyra-backend \
+  --image gcr.io/<your-project-id>/zephyra-backend \
+  --platform managed \
+  --region asia-southeast1 \
+  --allow-unauthenticated
+```
+After deployment, Cloud Run will give you a public HTTPS endpoint.
+</Steps>
+
+---
+
+## ▲ Deploy to Vercel
+
+If your backend is serverless (Express + Firebase SDK), it can be deployed easily to **Vercel**.
+
+<Steps>
+Install Vercel CLI
+```bash
+pnpm dlx vercel login
+```
+Deploy
+```bash
+pnpm dlx vercel --prod
+```
+You’ll receive a deployment URL such as:
+```
+https://zephyra-backend.vercel.app
+```
+Configure Environment Variables
+In your Vercel dashboard → Project Settings → Environment Variables,
+add the same keys as in your `.env` file (like `FIREBASE_ADMIN_JSON`).
+</Steps>
+
+---
+
+## CI/CD (Optional)
+
+Zephyra supports **GitHub Actions** for automated deployment.
+
+Example `.github/workflows/deploy.yml`:
+
+```yaml
+name: Deploy to Firebase
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v3
+        with:
+          version: 8
+      - run: pnpm install
+      - run: pnpm build
+      - uses: FirebaseExtended/action-hosting-deploy@v0.10.0
+        with:
+          repoToken: ${{ secrets.GITHUB_TOKEN }}
+          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+          channelId: live
+          projectId: zephyra-prod
+```
+
+---
+
+## Summary
+
+| Platform             | Type       | Notes                              |
+| -------------------- | ---------- | ---------------------------------- |
+| **Firebase Hosting** | Serverless | Easy, scalable, minimal setup      |
+| **Cloud Run**        | Container  | Full control, supports any runtime |
+| **Vercel**           | Serverless | Fast CI/CD, ideal for small APIs   |
+| **GitHub Actions**   | CI/CD      | Automate deployment process        |
+
+---
+
+<Card
+    title="Next: API Reference"
+    icon="book"
+    href="/api-reference/introduction"
+>
+    Learn how to explore and test Zephyra’s endpoints with Swagger and Postman.
+</Card>

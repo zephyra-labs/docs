@@ -1,0 +1,101 @@
+---
+title: "Environment Setup"
+description: "Configure your local environment and set up required variables for Zephyra backend."
+---
+
+## Environment Setup
+
+This guide explains how to configure your local environment to run Zephyra successfully.
+
+---
+
+## Requirements
+
+Before starting, ensure you have:
+
+- Node.js 22+ installed
+- pnpm package manager installed
+- Firebase CLI installed
+- Access to the Firebase project and Admin SDK JSON
+
+---
+
+## Set up Environment Variables
+
+<Steps>
+
+### Create a `.env` file
+
+In the root folder of your Zephyra backend project, create a file named `.env`:
+
+```bash
+touch .env
+```
+
+### Add required variables
+
+Add the following content:
+
+```bash
+# Path to Firebase Admin SDK JSON
+FIREBASE_ADMIN_JSON=./serviceAccountKey.json
+
+# Node environment
+NODE_ENV=development
+
+# Backend server port
+PORT=5000
+
+# Optional: enable debug logging
+DEBUG=true
+```
+
+### Place Firebase Admin SDK
+
+Make sure your Firebase **Admin SDK JSON** is in the project root as:
+
+```
+serviceAccountKey.json
+```
+
+### Verify environment variables
+
+You can quickly check that Node reads the variables:
+
+```bash
+node -e "console.log(process.env.FIREBASE_ADMIN_JSON)"
+```
+
+It should print the path to your JSON file.
+
+</Steps>
+
+---
+
+## Notes
+
+* **Do not commit `.env` or `serviceAccountKey.json`** to Git — they contain sensitive credentials.
+* For **production**, you can use environment variables set on the hosting platform (Firebase Hosting, Vercel, etc.).
+* You can create multiple `.env` files for different environments (`.env.development`, `.env.production`) and load them accordingly.
+
+---
+
+## Next Steps
+
+<Columns cols={2}>
+  <Card
+    title="Run Zephyra locally"
+    icon="server"
+    href="/getting-started"
+  >
+    Once your environment is set up, start the development server with `pnpm dev`.
+  </Card>
+
+    <Card
+        title="Configure Firebase"
+        icon="fire"
+        href="/setup/firebase"
+    >
+        Make sure Firestore, Authentication, and other Firebase services are ready.
+    </Card>
+</Columns>

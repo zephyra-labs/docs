@@ -1,0 +1,55 @@
+---
+title: "Add Tag to Aggregated Activity"
+description: "Add a new tag to an existing aggregated activity by ID."
+---
+
+# POST `/api/aggregated/{id}/tag`
+
+Add a tag to an existing aggregated activity.
+
+## Path Parameters
+
+| Name | Type   | Required | Description                  |
+|------|--------|----------|------------------------------|
+| `id` | `string` | yes      | Aggregated activity ID       |
+
+## Request Body
+
+| Field | Type   | Required | Description       |
+|-------|--------|----------|-----------------|
+| `tag` | `string` | yes        | Tag to add       |
+
+### Example
+
+```json
+{
+  "tag": "smart-contract"
+}
+```
+
+## Responses
+
+### 200 — OK
+
+Tag added successfully.
+
+```json
+{
+  "message": "Tag added successfully"
+}
+```
+
+## Authentication
+
+This endpoint requires a **Bearer Token**.
+
+## Example Request
+
+```bash
+curl -X POST "https://api.zephyra.dev/api/aggregated/agg-001/tag" \
+  -H "Authorization: Bearer <token>" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "tag": "smart-contract"
+  }'
+```

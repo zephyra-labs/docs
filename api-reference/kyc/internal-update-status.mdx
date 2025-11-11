@@ -1,0 +1,107 @@
+---
+title: "Internal Update KYC Status"
+description: "Update the status of a KYC record internally (Admin only)."
+---
+
+# PATCH `/api/kyc/internal/{tokenId}/status`
+
+Perform an **internal update** of a KYC record's status.  
+Only accessible by **administrative or system-level accounts**.
+
+## Path Parameters
+
+| Name | Type | Required | Description |
+|------|------|-----------|--------------|
+| `tokenId` | `string` | yes | KYC token ID |
+
+## Request Body
+
+| Field | Type | Required | Description |
+|--------|--------|-----------|--------------|
+| `status` | `string` | yes | The new KYC status to set (e.g., `Approved`, `Rejected`, `Pending`). |
+
+### Example Request Body
+
+```json
+{
+  "status": "Approved"
+}
+```
+
+## Responses
+
+### 200 — OK
+
+Returns the updated KYC record.
+
+```json
+{
+  "tokenId": "kyc-uuid-123",
+  "owner": "0x123abc...",
+  "fileHash": "Qmabcdef...",
+  "metadataUrl": "https://ipfs.io/ipfs/Qmabcdef...",
+  "documentUrl": "https://storage.example.com/docs/kyc-123.pdf",
+  "name": "NFT-123",
+  "description": "KYC for user 0x123abc...",
+  "txHash": "0xabc123...",
+  "createdAt": 1699286400000,
+  "updatedAt": 1699372800000,
+  "status": "Approved"
+}
+```
+
+### 400 — Bad Request
+
+Returned if the request body is invalid or missing required fields.
+
+```json
+{
+  "error": "Invalid status value"
+}
+```
+
+### 403 — Forbidden
+
+Returned if a non-admin user attempts to access this endpoint.
+
+```json
+{
+  "error": "Access denied"
+}
+```
+
+### 404 — Not Found
+
+Returned if the specified KYC record could not be found.
+
+```json
+{
+  "error": "KYC record not found"
+}
+```
+
+## Authentication
+
+This endpoint requires **Admin privileges** and a valid **Bearer Token**.
+
+## Example Request
+
+```bash
+curl -X PATCH "https://api.zephyra.dev/api/kyc/internal/kyc-uuid-123/status" \
+  -H "Authorization: Bearer <admin-token>" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "status": "Approved"
+  }'
+```
+
+## Example Response
+
+```json
+{
+  "tokenId": "kyc-uuid-123",
+  "owner": "0x123abc...",
+  "status": "Approved",
+  "updatedAt": 1699372800000
+}
+```

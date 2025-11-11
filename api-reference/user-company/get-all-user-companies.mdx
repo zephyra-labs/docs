@@ -1,0 +1,96 @@
+---
+title: "Get All User-Company Records"
+description: "Retrieve a paginated list of all user-company records, with optional filtering and search."
+---
+
+# GET `/api/user-company`
+
+Fetch all user-company associations with optional pagination, search, and filters.
+
+## Query Parameters
+
+| Name | Type | Required | Description |
+|------|------|-----------|-------------|
+| `page` | `integer` | no | Page number (default: 1) |
+| `limit` | `integer` | no | Number of records per page (default: 10) |
+| `search` | `string` | no | Search string to filter by user or company |
+| `role` | `string` | no | Filter by user role (`owner`, `staff`, etc.) |
+| `status` | `string` | no | Filter by status (`pending`, `approved`, etc.) |
+| `companyId` | `string` | no | Filter by company ID |
+
+## Responses
+
+### 200 — OK
+
+Returns a paginated list of user-company records.
+
+```json
+{
+  "data": [
+    {
+      "id": "string",
+      "userAddress": "string",
+      "companyId": "string",
+      "role": "owner",
+      "status": "pending",
+      "joinedAt": 0,
+      "updatedAt": 0,
+      "txHash": "string",
+      "onchainJoinedAt": 0
+    }
+  ],
+  "total": 0
+}
+```
+
+### 400 — Bad Request
+
+Returned when query parameters are invalid.
+
+```json
+{
+  "error": "Invalid query parameters"
+}
+```
+
+### 401 — Unauthorized
+
+Returned if the request is missing or contains an invalid authentication token.
+
+```json
+{
+  "error": "Unauthorized"
+}
+```
+
+## Authentication
+
+This endpoint requires a **Bearer Token** for authentication.
+
+## Example Request
+
+```bash
+curl -X GET "https://api.zephyra.dev/api/user-company?page=1&limit=10&search=staff&role=owner&status=pending&companyId=company_01" \
+  -H "Authorization: Bearer <token>"
+```
+
+## Example Response
+
+```json
+{
+  "data": [
+    {
+      "id": "string",
+      "userAddress": "string",
+      "companyId": "string",
+      "role": "owner",
+      "status": "pending",
+      "joinedAt": 0,
+      "updatedAt": 0,
+      "txHash": "string",
+      "onchainJoinedAt": 0
+    }
+  ],
+  "total": 0
+}
+```

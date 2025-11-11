@@ -1,33 +1,103 @@
 ---
-title: 'Introduction'
-description: 'Example section for showcasing API endpoints'
+title: "Introduction"
+description: "Overview of the Zephyra REST API, authentication, and conventions."
 ---
 
 <Note>
-  If you're not looking to build API reference documentation, you can delete
-  this section by removing the api-reference folder.
+  Welcome to the official **Zephyra API Reference**.  
+  This section provides a detailed overview of all REST endpoints,  
+  authentication methods, and data formats used throughout the Zephyra backend.
 </Note>
 
-## Welcome
+## Base URL
 
-There are two ways to build API documentation: [OpenAPI](https://mintlify.com/docs/api-playground/openapi/setup) and [MDX components](https://mintlify.com/docs/api-playground/mdx/configuration). For the starter kit, we are using the following OpenAPI specification.
+All Zephyra API requests should be sent to the following base URL:
 
-<Card
-  title="Plant Store Endpoints"
-  icon="leaf"
-  href="https://github.com/mintlify/starter/blob/main/api-reference/openapi.json"
->
-  View the OpenAPI specification file
-</Card>
+```bash
+https://api.zephyra.dev/v1
+```
+
+---
 
 ## Authentication
 
-All API endpoints are authenticated using Bearer tokens and picked up from the specification file.
+Zephyra APIs use **Firebase Authentication** with Bearer tokens.
+
+<Columns cols={2}>
+  <Card title="Client Side" icon="user">
+    The frontend (e.g., Nuxt, React, or mobile app) signs in a user using Firebase SDK and retrieves an **ID Token**.
+  </Card>
+
+  <Card title="Server Side" icon="server">
+    The backend verifies the token via **Firebase Admin SDK** before granting access to protected routes.
+  </Card>
+</Columns>
+
+Each request to a protected endpoint must include the token in the header:
+
+```bash
+Authorization: Bearer <YOUR_ID_TOKEN>
+```
+
+---
+
+## Response Format
+
+All API responses follow a consistent structure:
 
 ```json
-"security": [
-  {
-    "bearerAuth": []
-  }
-]
+{
+  "success": true,
+  "data": {},
+  "message": "Operation successful"
+}
 ```
+
+| Field     | Type    | Description                                  |
+| --------- | ------- | -------------------------------------------- |
+| `success` | boolean | Indicates if the request was successful      |
+| `data`    | object  | Contains the returned payload or record data |
+| `message` | string  | A short message describing the result        |
+
+---
+
+## Error Handling
+
+Error responses follow a unified format as well:
+
+```json
+{
+  "success": false,
+  "message": "Invalid or expired token"
+}
+```
+
+Common error codes:
+
+| Code | Description                             |
+| ---- | --------------------------------------- |
+| 400  | Bad Request — Invalid parameters        |
+| 401  | Unauthorized — Missing or invalid token |
+| 403  | Forbidden — Insufficient permissions    |
+| 404  | Not Found — Resource doesn’t exist      |
+| 500  | Internal Server Error                   |
+
+---
+
+## OpenAPI Specification
+
+Zephyra provides a full **Swagger/OpenAPI** specification for developers.
+
+<Card
+  title="Zephyra API Specification"
+  icon="file"
+  href="https://github.com/zephyra-labs/backend/blob/main/openapi.json"
+>
+  View the official OpenAPI 3.0 spec file used for the API playground and documentation. 
+</Card>
+
+---
+
+## Next Steps
+
+Explore endpoints by category in the sidebar — including **Auth**, **User**, **KYC**, **Contract**, and **Activity** services.

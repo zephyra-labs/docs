@@ -1,0 +1,90 @@
+---
+title: "Get KYC Records by Owner"
+description: "Retrieve all KYC (Know Your Customer) records for a specific owner wallet address."
+---
+
+# GET `/api/kyc/owner/{owner}`
+
+Get all KYC records for a specific owner.
+
+## Parameters
+
+| Name | Type | Required | Description |
+|------|------|----------|-------------|
+| `owner` | `string` | yes | Owner wallet address (path parameter) |
+
+## Responses
+
+### 200 — OK
+
+Returns a list of KYC records for the specified owner.
+
+```json
+[
+  {
+    "tokenId": "kyc-uuid-123",
+    "owner": "0x123abc...",
+    "fileHash": "Qmabcdef...",
+    "metadataUrl": "https://ipfs.io/ipfs/Qmabcdef...",
+    "documentUrl": "https://storage.example.com/docs/kyc-123.pdf",
+    "name": "NFT-123",
+    "description": "KYC for user 0x123abc...",
+    "txHash": "0xabc123...",
+    "createdAt": 1699286400000,
+    "updatedAt": 1699372800000,
+    "status": "Pending"
+  }
+]
+```
+
+### 401 — Unauthorized
+
+Returned if the user is not authenticated.
+
+```json
+{
+  "error": "Unauthorized"
+}
+```
+
+### 404 — Not Found
+
+Returned if no KYC records are found for the specified owner.
+
+```json
+{
+  "error": "No KYC records found for this owner"
+}
+```
+
+## Authentication
+
+This endpoint requires a **Bearer Token** for authentication.
+
+## Example Request
+
+```bash
+curl -X GET "https://api.zephyra.dev/api/kyc/owner/0x123abc..." \
+  -H "Authorization: Bearer <token>" \
+  -H "Accept: application/json"
+```
+
+## Example Response
+
+```json
+[
+  {
+    "tokenId": "kyc-uuid-123",
+    "owner": "0x123abc...",
+    "fileHash": "Qmabcdef...",
+    "metadataUrl": "https://ipfs.io/ipfs/Qmabcdef...",
+    "documentUrl": "https://storage.example.com/docs/kyc-123.pdf",
+    "name": "NFT-123",
+    "description": "KYC for user 0x123abc...",
+    "txHash": "0xabc123...",
+    "createdAt": 1699286400000,
+    "updatedAt": 1699372800000,
+    "status": "Pending"
+  }
+]
+```

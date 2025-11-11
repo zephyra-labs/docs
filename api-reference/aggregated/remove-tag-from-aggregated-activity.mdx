@@ -1,0 +1,43 @@
+---
+title: "Remove Tag from Aggregated Activity"
+description: "Remove an existing tag from an aggregated activity by ID."
+---
+
+# DELETE `/api/aggregated/{id}/tag`
+
+Remove a tag from an existing aggregated activity.
+
+## Path Parameters
+
+| Name | Type   | Required | Description                  |
+|------|--------|----------|------------------------------|
+| `id` | `string` | yes       | Aggregated activity ID       |
+
+## Query Parameters
+
+| Name | Type   | Required | Description                  |
+|------|--------|----------|------------------------------|
+| `tag` | `string` | yes       | Tag to remove                |
+
+## Responses
+
+### 200 — OK
+
+Tag removed successfully.
+
+```json
+{
+  "message": "Tag removed successfully"
+}
+```
+
+## Authentication
+
+This endpoint requires a **Bearer Token**.
+
+## Example Request
+
+```bash
+curl -X DELETE "https://api.zephyra.dev/api/aggregated/agg-001/tag?tag=smart-contract" \
+  -H "Authorization: Bearer <token>"
+```

@@ -1,0 +1,67 @@
+---
+title: "Get All Contracts"
+description: "Retrieve a list of all deployed contracts in the system."
+---
+
+# GET `/api/contract`
+
+Fetch all deployed contracts in the system along with their current state and history.
+
+## Query Parameters
+
+This endpoint does not accept any query parameters.
+
+## Responses
+
+### 200 — OK
+
+Returns a list of all deployed contracts.
+
+```json
+[
+  {
+    "contractAddress": "string",
+    "state": {
+      "exporter": "string",
+      "importer": "string",
+      "logistics": ["string"],
+      "insurance": "string",
+      "inspector": "string",
+      "status": "string",
+      "currentStage": "string",
+      "lastUpdated": 0
+    },
+    "history": [
+      {
+        "action": "string",
+        "txHash": "string",
+        "account": "string",
+        "exporter": "string",
+        "importer": "string",
+        "logistics": ["string"],
+        "insurance": "string",
+        "inspector": "string",
+        "requiredAmount": "string",
+        "extra": {"additionalProp1": {}},
+        "timestamp": 0,
+        "onChainInfo": {
+          "status": "string",
+          "blockNumber": 0,
+          "confirmations": 0
+        }
+      }
+    ]
+  }
+]
+```
+
+## Authentication
+
+This endpoint requires a **Bearer Token**.
+
+## Example Request
+
+```bash
+curl -X GET "https://api.zephyra.dev/api/contract" \
+  -H "Authorization: Bearer <token>"
+```

@@ -1,0 +1,69 @@
+---
+title: "Get Contract Details"
+description: "Retrieve detailed information about a specific contract by its address."
+---
+
+# GET `/api/contract/{address}/details`
+
+Fetch detailed information for a specific contract, including its current state and history.
+
+## Path Parameters
+
+| Name      | Type     | Required | Description        |
+|-----------|----------|----------|------------------|
+| `address` | `string` | yes      | Contract address  |
+
+## Responses
+
+### 200 — OK
+
+Returns the detailed contract object.
+
+```json
+{
+  "contractAddress": "string",
+  "state": {
+    "exporter": "string",
+    "importer": "string",
+    "logistics": ["string"],
+    "insurance": "string",
+    "inspector": "string",
+    "status": "string",
+    "currentStage": "string",
+    "lastUpdated": 0
+  },
+  "history": [
+    {
+      "action": "string",
+      "txHash": "string",
+      "account": "string",
+      "exporter": "string",
+      "importer": "string",
+      "logistics": ["string"],
+      "insurance": "string",
+      "inspector": "string",
+      "requiredAmount": "string",
+      "extra": {
+        "additionalProp1": {}
+      },
+      "timestamp": 0,
+      "onChainInfo": {
+        "status": "string",
+        "blockNumber": 0,
+        "confirmations": 0
+      }
+    }
+  ]
+}
+```
+
+## Authentication
+
+This endpoint requires a **Bearer Token**.
+
+## Example Request
+
+```bash
+curl -X GET "https://api.zephyra.dev/api/contract/0xABC123/details" \
+  -H "Authorization: Bearer <token>"
+```

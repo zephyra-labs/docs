@@ -1,0 +1,114 @@
+---
+title: "Command Line Interface (CLI)"
+description: "Manage and run Zephyra backend efficiently using CLI commands."
+---
+
+## Zephyra CLI
+
+Zephyra provides several **CLI commands** to streamline development, testing, and deployment.  
+All commands are executed using **pnpm** for consistency and speed.
+
+---
+
+## Common Commands
+
+<Steps>
+
+Run development server
+```bash
+pnpm dev
+```
+Build for production
+```bash
+pnpm build
+```
+Start production server
+```bash
+pnpm start
+```
+Lint and format code
+```bash
+pnpm lint
+pnpm format
+```
+Run tests
+```bash
+pnpm test
+```
+Generate documentation
+If you’re using **Swagger** for API documentation:
+```bash
+pnpm swagger:generate
+```
+</Steps>
+
+---
+
+## Utility Scripts
+
+<Columns cols={2}>
+  <Card
+    title="Reset Database"
+    icon="database"
+  >
+    Run a cleanup or reseed operation for your Firestore development environment.
+  </Card>
+
+  <Card
+    title="Run Firebase Emulator"
+    icon="fire"
+  >
+    Launch Firebase local emulator suite for testing Firestore, Auth, and Functions.
+  </Card>
+
+  <Card
+    title="Check TypeScript Types"
+    icon="code"
+  >
+    Verify all TypeScript files without compiling:
+    ```bash
+    pnpm tsc --noEmit
+    ```
+  </Card>
+
+  <Card
+    title="Pre-commit Hook"
+    icon="code-compare"
+  >
+    Runs lint + type check before every commit using **Husky** and **lint-staged**.
+  </Card>
+</Columns>
+
+---
+
+## CLI Environment
+
+Ensure that your `.env` file is loaded before running any CLI command.
+If you’re using multiple environments (e.g., `staging`, `production`), you can specify it:
+
+```bash
+NODE_ENV=staging pnpm start
+```
+
+---
+
+## Summary
+
+| Command                 | Description              |
+| ----------------------- | ------------------------ |
+| `pnpm dev`              | Run development server   |
+| `pnpm build`            | Compile TypeScript to JS |
+| `pnpm start`            | Start production server  |
+| `pnpm lint`             | Check code style         |
+| `pnpm test`             | Run Jest tests           |
+| `pnpm swagger:generate` | Regenerate API docs      |
+
+---
+
+<Card
+    title="Next: API Reference"
+    icon="book"
+    href="/api-reference/introduction"
+>
+    Explore the automatically generated API documentation.
+</Card>

@@ -1,0 +1,66 @@
+---
+title: "Delete KYC Record"
+description: "Delete an existing KYC (Know Your Customer) record by token ID."
+---
+
+# DELETE `/api/kyc/{tokenId}`
+
+Delete a KYC record.
+
+## Parameters
+
+| Name | Type | Required | Description |
+|------|------|----------|-------------|
+| `tokenId` | `string` | yes | KYC token ID (path parameter) |
+
+## Responses
+
+### 200 — OK
+
+KYC record successfully deleted.
+
+```json
+{
+  "message": "KYC deleted"
+}
+```
+
+### 401 — Unauthorized
+
+Returned if the user is not authenticated.
+
+```json
+{
+  "error": "Unauthorized"
+}
+```
+
+### 404 — Not Found
+
+Returned if the KYC record with the specified token ID does not exist.
+
+```json
+{
+  "error": "KYC record not found"
+}
+```
+
+## Authentication
+
+This endpoint requires a **Bearer Token** for authentication.
+
+## Example Request
+
+```bash
+curl -X DELETE "https://api.zephyra.dev/api/kyc/kyc-uuid-123" \
+  -H "Authorization: Bearer <token>" \
+  -H "Accept: application/json"
+```
+
+## Example Response
+
+```json
+{
+  "message": "KYC deleted"
+}
+```

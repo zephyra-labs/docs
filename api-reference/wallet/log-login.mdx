@@ -1,0 +1,92 @@
+---
+title: "Record Wallet Login"
+description: "Create a log entry for a wallet login event for a user."
+---
+
+# POST `/api/wallet/log-login`
+
+Record a wallet login event for a specific user account.
+
+## Request Body
+
+| Name | Type | Required | Description |
+|------|------|-----------|-------------|
+| `account` | `string` | yes | Wallet address of the user |
+| `action` | `string` | yes | Action performed (`connect`, `disconnect`, etc.) |
+| `timestamp` | `number` | yes | Unix timestamp of the login event |
+| `meta` | `object` | no | Additional metadata for the login event |
+
+> Content-Type: `application/json`
+
+### Example Request Body
+
+```json
+{
+  "account": "0x123abc...",
+  "action": "connect",
+  "timestamp": 1699286400000,
+  "meta": {
+    "additionalProp1": {}
+  }
+}
+```
+
+## Responses
+
+### 201 — Created
+
+Wallet login log successfully created.
+
+```json
+{
+  "account": "0x123abc...",
+  "action": "connect",
+  "timestamp": 1699286400000,
+  "meta": {
+    "additionalProp1": {}
+  }
+}
+```
+
+### 400 — Bad Request
+
+Returned when the request body contains invalid or missing fields.
+
+```json
+{
+  "error": "Invalid request"
+}
+```
+
+## Authentication
+
+This endpoint requires a **Bearer Token** for authentication.
+
+## Example Request
+
+```bash
+curl -X POST "https://api.zephyra.dev/api/wallet/log-login" \
+  -H "Authorization: Bearer <token>" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "account": "0x123abc...",
+    "action": "connect",
+    "timestamp": 1699286400000,
+    "meta": {
+      "additionalProp1": {}
+    }
+  }'
+```
+
+## Example Response
+
+```json
+{
+  "account": "0x123abc...",
+  "action": "connect",
+  "timestamp": 1699286400000,
+  "meta": {
+    "additionalProp1": {}
+  }
+}
+```

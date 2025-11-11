@@ -1,0 +1,44 @@
+---
+title: "Get Contract Current Step"
+description: "Retrieve the current lifecycle step/status of a specific contract."
+---
+
+# GET `/api/contract/{address}/step`
+
+Fetch the current lifecycle stage and status for a given contract address.
+
+## Path Parameters
+
+| Name      | Type     | Required | Description       |
+|-----------|----------|----------|-----------------|
+| `address` | `string` | yes      | Contract address |
+
+## Responses
+
+### 200 — OK
+
+Returns the current state of the contract.
+
+```json
+{
+  "exporter": "string",
+  "importer": "string",
+  "logistics": ["string"],
+  "insurance": "string",
+  "inspector": "string",
+  "status": "string",
+  "currentStage": "string",
+  "lastUpdated": 0
+}
+```
+
+## Authentication
+
+This endpoint requires a **Bearer Token**.
+
+## Example Request
+
+```bash
+curl -X GET "https://api.zephyra.dev/api/contract/0xABC123/step" \
+  -H "Authorization: Bearer <token>"
+```

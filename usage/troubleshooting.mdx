@@ -1,0 +1,188 @@
+---
+title: "Troubleshooting"
+description: "Solve common issues when developing or deploying Zephyra backend."
+---
+
+# Troubleshooting Guide
+
+Even with the best setup, things can sometimes go wrong.  
+This guide covers **common problems** encountered during development and deployment of **Zephyra backend**,  
+and how to **fix them quickly**.
+
+---
+
+## Development Issues
+
+<Columns cols={2}>
+  <Card title="Firebase Admin SDK not initialized" icon="triangle-exclamation">
+    **Error Message:**  
+    `Error: The default Firebase app does not exist.`  
+    
+    **Fix:**  
+    Make sure your `.env` contains the correct path to your service key:
+    ```bash
+    FIREBASE_ADMIN_JSON=./serviceAccountKey.json
+    ```
+    And the file exists in your project root.
+  </Card>
+
+  <Card title="Permission denied (Firestore)" icon="lock">
+    **Error Message:**  
+    `PERMISSION_DENIED: Missing or insufficient permissions.`  
+    
+    **Fix:**  
+    Ensure that your Firebase **Firestore Rules** allow the intended access  
+    or that the authenticated user has the correct custom claims.
+  </Card>
+
+  <Card title="TypeScript compilation errors" icon="file-shield">
+    **Error Message:**  
+    `TS2307: Cannot find module` or `TS7006: Parameter implicitly has 'any' type.`  
+    
+    **Fix:**  
+    - Verify `tsconfig.json` includes `src/**/*.ts`  
+    - Run type checks manually:
+      ```bash
+      pnpm tsc --noEmit
+      ```
+  </Card>
+
+  <Card title="Port already in use" icon="plug-circle-exclamation">
+    **Error Message:**  
+    `Error: listen EADDRINUSE: address already in use :5000`  
+    
+    **Fix:**  
+    Stop the process using that port:
+    ```bash
+    npx kill-port 5000
+    ```
+    or modify `.env`:
+    ```bash
+    PORT=5050
+    ```
+  </Card>
+</Columns>
+
+---
+
+## Firebase & Auth Issues
+
+<Steps>
+Invalid or expired ID Token
+**Symptom:**  
+Every API request returns `401 Unauthorized`.
+**Fix:**
+Ensure the frontend sends the token correctly in headers:
+```
+Authorization: Bearer <ID_TOKEN>
+```
+Tokens expire after 1 hour — sign in again to get a new one.
+Confirm `authMiddleware` is properly applied to protected routes.
+### Missing `serviceAccountKey.json`
+**Symptom:**  
+`Error: ENOENT: no such file or directory, open './serviceAccountKey.json'`
+**Fix:**
+- Ensure you’ve downloaded your **Firebase Admin SDK** credentials.
+- Save it in your project root and update `.env`:
+```bash
+FIREBASE_ADMIN_JSON=./serviceAccountKey.json
+```
+### Emulator not starting
+**Symptom:**
+`Error: Firebase Emulator not found or port already in use`
+**Fix:**
+* Run:
+  ```bash
+  firebase emulators:start
+  ```
+* If that fails, check for active background processes:
+  ```bash
+  npx kill-port 8080 9099 5001
+  ```
+</Steps>
+
+---
+
+## Deployment Issues
+
+<Columns cols={2}>
+  <Card title="Firebase deploy error" icon="upload">
+    **Error Message:**  
+    `Failed to authenticate, have you run firebase login?`  
+    **Fix:**  
+    ```bash
+    pnpm dlx firebase-tools login
+    ```
+    Then try again:
+    ```bash
+    pnpm dlx firebase-tools deploy
+    ```
+  </Card>
+
+  <Card title="GitHub Action failed" icon="github">
+    **Fix:**  
+    - Check your repository secrets.  
+    - Ensure `FIREBASE_SERVICE_ACCOUNT` is added under GitHub → **Settings → Secrets → Actions**.  
+    - Verify your branch name matches the one in `.github/workflows/deploy.yml`.
+  </Card>
+
+  <Card title="CORS error in frontend" icon="shield-halved">
+    **Fix:**  
+    Configure CORS middleware in your Express app:
+    ```ts
+    import cors from "cors";
+    app.use(cors({ origin: "*" }));
+    ```
+    Adjust the origin for production for better security.
+  </Card>
+
+  <Card title="Vercel serverless timeouts" icon="hourglass">
+    **Fix:**  
+    Vercel functions have a max timeout (10s).  
+    Optimize your API logic or migrate long-running tasks to **Cloud Run**.
+  </Card>
+</Columns>
+
+---
+
+## Debugging Tips
+
+<Steps>
+Enable verbose logging
+```bash
+DEBUG=zephyra:* pnpm dev
+```
+Use Postman or Thunder Client
+Manually test your endpoints using **Postman** with your Firebase ID token.
+This helps isolate frontend vs backend issues.
+
+Check Firestore connection
+Run this script to verify database access:
+```ts
+import { db } from "./src/config/firebase";
+db.listCollections().then(c => console.log("Collections:", c.map(x => x.id)));
+```
+</Steps>
+
+---
+
+## Summary
+
+| Category | Common Cause        | Quick Fix                         |
+| -------- | ------------------- | --------------------------------- |
+| Auth     | Invalid token       | Re-sign-in or verify header       |
+| Firebase | Missing credentials | Add `serviceAccountKey.json`      |
+| Port     | Conflict            | `npx kill-port 5000`              |
+| Build    | TS errors           | Run `pnpm tsc --noEmit`           |
+| Deploy   | Wrong setup         | Verify Firebase login and secrets |
+
+---
+
+<Card
+    title="Next: API Reference"
+    icon="book"
+    href="/api-reference/introduction"
+>
+    Learn how to explore and test Zephyra API endpoints.
+</Card>
+

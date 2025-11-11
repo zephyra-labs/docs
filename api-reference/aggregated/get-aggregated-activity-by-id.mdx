@@ -1,0 +1,54 @@
+---
+title: "Get Aggregated Activity by ID"
+description: "Retrieve a single aggregated activity entry using its unique ID."
+---
+
+# GET `/api/aggregated/{id}`
+
+Fetch a specific aggregated activity by its unique ID.
+
+## Path Parameters
+
+| Name | Type   | Required | Description                  |
+|------|--------|----------|------------------------------|
+| `id` | `string` | yes        | Aggregated activity ID       |
+
+## Responses
+
+### 200 — OK
+
+Returns the aggregated activity object.
+
+```json
+{
+  "id": "string",
+  "timestamp": 0,
+  "type": "onChain",
+  "action": "string",
+  "account": "string",
+  "txHash": "string",
+  "contractAddress": "string",
+  "extra": {
+    "additionalProp1": {}
+  },
+  "onChainInfo": {
+    "status": "string",
+    "blockNumber": 0,
+    "confirmations": 0
+  },
+  "tags": [
+    "string"
+  ]
+}
+```
+
+## Authentication
+
+This endpoint requires a **Bearer Token**.
+
+## Example Request
+
+```bash
+curl -X GET "https://api.zephyra.dev/api/aggregated/agg-001" \
+  -H "Authorization: Bearer <token>"
+```

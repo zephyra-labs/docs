@@ -1,0 +1,121 @@
+---
+title: "Testing Zephyra Backend"
+description: "Run unit tests and ensure backend stability using Jest."
+---
+
+## Testing Zephyra Backend
+
+Zephyra backend uses **Jest** for unit and integration testing.  
+This guide explains how to run tests, interpret results, and add new tests for your modules.
+
+---
+
+## Prerequisites
+
+Before testing, ensure you have:
+
+- Node.js 22+ installed  
+- pnpm installed  
+- All dependencies installed (`pnpm install`)  
+- Firebase emulators or mock setup if tests rely on Firestore/Auth
+
+---
+
+## Running Tests
+
+<Steps>
+
+Run all tests
+
+In the backend folder:
+
+```bash
+pnpm test
+```
+
+This runs all test files matching Jest configuration (`jest.config.cjs` or `.test.ts` files).
+
+```bash
+pnpm test src/models/__tests__/userModel.test.ts
+```
+
+This is useful when developing a single module.
+
+Watch mode
+
+```bash
+pnpm test -- --watch
+```
+
+Automatically reruns tests on file changes, ideal for development.
+
+Test coverage
+
+```bash
+pnpm test -- --coverage
+```
+
+Generates a coverage report showing how much of your code is tested.
+
+Mocking Firebase
+
+Use mocks for Firestore and Auth to avoid hitting real Firebase services in tests.
+Example setup is in `src/__mocks__/firebase.ts`.
+
+</Steps>
+
+---
+
+## Tips for Writing Tests
+
+<Columns cols={2}>
+  <Card
+    title="Structure"
+    icon="folder"
+  >
+    Place test files under `__tests__` folder and name them as `*.test.ts`.
+  </Card>
+
+  <Card
+    title="Use Mocks"
+    icon="box"
+  >
+    Mock external dependencies (Firebase, APIs) to make tests reliable and fast.
+  </Card>
+  
+  <Card
+    title="Assert Carefully"
+    icon="check-circle"
+  >
+    Always assert the expected results clearly using Jest `expect`.
+  </Card>
+  
+  <Card
+    title="Run Frequently"
+    icon="repeat"
+  >
+    Run tests often to catch regressions early during development.
+  </Card>
+</Columns>
+
+---
+
+## Next Steps
+
+<Columns cols={2}>
+  <Card
+    title="Continuous Integration"
+    icon="code-branch"
+    href="/ci"
+  >
+    Integrate tests into your CI/CD pipeline to automate quality checks.
+  </Card>
+
+  <Card
+    title="Mocking Advanced Services"
+    icon="server"
+    href="/testing/mocks"
+  >
+    Learn advanced mocking for Firebase and other backend services.
+  </Card>
+</Columns>

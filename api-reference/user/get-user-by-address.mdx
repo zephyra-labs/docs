@@ -1,0 +1,83 @@
+---
+title: "Get User by Wallet Address"
+description: "Retrieve a specific user profile using their wallet address."
+---
+
+# GET `/api/user/{address}`
+
+Fetches the profile details of a specific user identified by their wallet address.
+
+## Parameters
+
+| Name | Type | Required | Description |
+|------|------|-----------|-------------|
+| `address` | `string` | ✅ | Wallet address of the user to retrieve. |
+
+## Headers
+
+| Name | Type | Required | Description |
+|------|------|-----------|-------------|
+| `Authorization` | `string` | ✅ | Bearer token for authentication. |
+
+## Responses
+
+### 200 — OK
+
+Returns the user profile associated with the given wallet address.
+
+```json
+{
+  "address": "0x123abc...",
+  "role": "user",
+  "createdAt": 1699286400000,
+  "lastLoginAt": 1699372800000,
+  "metadata": {
+    "name": "John Doe",
+    "email": "john@example.com",
+    "kycStatus": "pending"
+  }
+}
+```
+
+### 404 — Not Found
+
+Returned if the specified wallet address does not exist in the system.
+
+```json
+{
+  "error": "User not found"
+}
+```
+
+### 500 — Internal Server Error
+
+Returned if there’s a problem retrieving the user information.
+
+```json
+{
+  "error": "Internal server error"
+}
+```
+
+## Example Request
+
+```bash
+curl -X GET "https://api.zephyra.dev/api/user/0x123abc..." \
+  -H "Authorization: Bearer <token>"
+```
+
+## Example Response
+
+```json
+{
+  "address": "0x123abc...",
+  "role": "user",
+  "createdAt": 1699286400000,
+  "lastLoginAt": 1699372800000,
+  "metadata": {
+    "name": "John Doe",
+    "email": "john@example.com",
+    "kycStatus": "pending"
+  }
+}
+```

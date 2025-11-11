@@ -1,0 +1,55 @@
+---
+title: "Get My Company Profile"
+description: "Retrieve the company profile associated with the currently authenticated user."
+---
+
+# GET `/api/user-company/my-company`
+
+Fetch the company profile of the currently authenticated user.
+
+## Responses
+
+### 200 — OK
+
+Returns the company profile of the current user.
+
+```json
+{}
+```
+
+### 401 — Unauthorized
+
+Returned if the user is not authenticated.
+
+```json
+{
+  "error": "Unauthorized"
+}
+```
+
+### 404 — Not Found
+
+Returned if the current user does not have an associated company.
+
+```json
+{
+  "error": "Company profile not found"
+}
+```
+
+## Authentication
+
+This endpoint requires a **Bearer Token** for authentication.
+
+## Example Request
+
+```bash
+curl -X GET "https://api.zephyra.dev/api/user-company/my-company" \
+  -H "Authorization: Bearer <token>"
+```
+
+## Example Response
+
+```json
+{}
+```

@@ -1,0 +1,109 @@
+---
+title: "Update Current User Profile"
+description: "Update the authenticated user's profile information, including role, metadata, and KYC status."
+---
+
+# PATCH `/api/user/update/me`
+
+Update the profile details of the currently authenticated user.  
+This endpoint allows modification of user metadata, role, and KYC-related fields.
+
+## Request Body
+
+| Name | Type | Required | Description |
+|------|------|-----------|-------------|
+| `role` | `string` | no | The user's role (e.g., `user`, `admin`) |
+| `metadata` | `object` | no | Custom metadata for the user (e.g., name, email, KYC info) |
+| `lastLoginAt` | `number` | no | Timestamp of the user's last login |
+| `kycStatus` | `string` | no | Current KYC status (`pending`, `verified`, `rejected`) |
+
+> Content-Type: `application/json`
+
+### Example
+
+```json
+{
+  "role": "user",
+  "metadata": {
+    "name": "John Doe",
+    "email": "john@example.com"
+  },
+  "lastLoginAt": 1699372800000,
+  "kycStatus": "pending"
+}
+```
+
+## Responses
+
+### 200 — OK
+
+Profile successfully updated.
+
+```json
+{
+  "address": "0x123abc...",
+  "role": "user",
+  "createdAt": 1699286400000,
+  "lastLoginAt": 1699372800000,
+  "metadata": {
+    "name": "John Doe",
+    "email": "john@example.com",
+    "kycStatus": "pending"
+  }
+}
+```
+
+### 400 — Bad Request
+
+Returned if the input data is invalid.
+
+```json
+{
+  "error": "Invalid user data"
+}
+```
+
+### 401 — Unauthorized
+
+Returned if the request is made without a valid authentication token.
+
+```json
+{
+  "error": "Unauthorized"
+}
+```
+
+## Authentication
+
+This endpoint requires a **Bearer Token** for authentication.
+
+## Example Request
+
+```bash
+curl -X PATCH "https://api.zephyra.dev/api/user/update/me" \
+  -H "Authorization: Bearer <token>" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "metadata": {
+      "name": "John Doe",
+      "email": "john@example.com"
+    },
+    "kycStatus": "verified"
+  }'
+```
+
+## Example Response
+
+```json
+{
+  "address": "0x123abc...",
+  "role": "user",
+  "createdAt": 1699286400000,
+  "lastLoginAt": 1699372800000,
+  "metadata": {
+    "name": "John Doe",
+    "email": "john@example.com",
+    "kycStatus": "verified"
+  }
+}
+```

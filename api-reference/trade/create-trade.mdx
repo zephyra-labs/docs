@@ -1,0 +1,129 @@
+---
+title: "Create Trade"
+description: "Create a new trade record."
+---
+
+# POST `/api/trade`
+
+Create a new trade.
+
+## Parameters
+
+None.
+
+## Request Body
+
+> Content-Type: `application/json`
+
+```json
+{
+  "id": "trade-uuid-123",
+  "contractAddress": "0xcontract...",
+  "participants": [
+    {
+      "address": "0xabc123...",
+      "role": "exporter",
+      "kycVerified": false,
+      "walletConnected": true
+    }
+  ],
+  "status": "draft",
+  "currentStage": 1,
+  "createdAt": 1699286400000,
+  "updatedAt": 1699372800000
+}
+```
+
+## Responses
+
+### 201 — Created
+
+Trade successfully created.
+
+```json
+{
+  "id": "trade-uuid-123",
+  "contractAddress": "0xcontract...",
+  "participants": [
+    {
+      "address": "0xabc123...",
+      "role": "exporter",
+      "kycVerified": false,
+      "walletConnected": true
+    }
+  ],
+  "status": "draft",
+  "currentStage": 1,
+  "createdAt": 1699286400000,
+  "updatedAt": 1699372800000
+}
+```
+
+### 400 — Bad Request
+
+Returned if the request body fails validation.
+
+```json
+{
+  "error": "Validation error"
+}
+```
+
+### 401 — Unauthorized
+
+Returned if the user is not authenticated.
+
+```json
+{
+  "error": "Unauthorized"
+}
+```
+
+## Authentication
+
+This endpoint requires a **Bearer Token** for authentication.
+
+## Example Request
+
+```bash
+curl -X POST "https://api.zephyra.dev/api/trade" \
+  -H "Authorization: Bearer <token>" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "id": "trade-uuid-123",
+    "contractAddress": "0xcontract...",
+    "participants": [
+      {
+        "address": "0xabc123...",
+        "role": "exporter",
+        "kycVerified": false,
+        "walletConnected": true
+      }
+    ],
+    "status": "draft",
+    "currentStage": 1,
+    "createdAt": 1699286400000,
+    "updatedAt": 1699372800000
+  }'
+```
+
+## Example Response
+
+```json
+{
+  "id": "trade-uuid-123",
+  "contractAddress": "0xcontract...",
+  "participants": [
+    {
+      "address": "0xabc123...",
+      "role": "exporter",
+      "kycVerified": false,
+      "walletConnected": true
+    }
+  ],
+  "status": "draft",
+  "currentStage": 1,
+  "createdAt": 1699286400000,
+  "updatedAt": 1699372800000
+}
+```

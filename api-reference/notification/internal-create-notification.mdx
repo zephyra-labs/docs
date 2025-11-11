@@ -1,0 +1,111 @@
+---
+title: "Create Internal Notification"
+description: "Internal route to create a notification (system use only)."
+---
+
+# POST `/api/notification/internal`
+
+Create a new notification internally for system purposes.
+
+## Parameters
+
+None.
+
+## Request Body
+
+> Content-Type: `application/json`
+
+```json
+{
+  "id": "notif-uuid-123",
+  "userId": "user-uuid-456",
+  "executorId": "user-uuid-789",
+  "type": "system",
+  "title": "New Trade Completed",
+  "message": "Your trade #123 has been completed successfully.",
+  "read": false,
+  "createdAt": 1699286400000,
+  "updatedAt": 1699372800000,
+  "extraData": {
+    "additionalProp1": {}
+  }
+}
+```
+
+## Responses
+
+### 201 — Created
+
+Notification successfully created.
+
+```json
+{
+  "id": "notif-uuid-123",
+  "userId": "user-uuid-456",
+  "executorId": "user-uuid-789",
+  "type": "system",
+  "title": "New Trade Completed",
+  "message": "Your trade #123 has been completed successfully.",
+  "read": false,
+  "createdAt": 1699286400000,
+  "updatedAt": 1699372800000,
+  "extraData": {
+    "additionalProp1": {}
+  }
+}
+```
+
+### 401 — Unauthorized
+
+Returned if the request is not authenticated (if required).
+
+```json
+{
+  "error": "Unauthorized"
+}
+```
+
+## Authentication
+
+This endpoint may require a **Bearer Token** if internal authentication is enforced.
+
+## Example Request
+
+```bash
+curl -X POST "https://api.zephyra.dev/api/notification/internal" \
+  -H "Authorization: Bearer <token>" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "id": "notif-uuid-123",
+    "userId": "user-uuid-456",
+    "executorId": "user-uuid-789",
+    "type": "system",
+    "title": "New Trade Completed",
+    "message": "Your trade #123 has been completed successfully.",
+    "read": false,
+    "createdAt": 1699286400000,
+    "updatedAt": 1699372800000,
+    "extraData": {
+      "additionalProp1": {}
+    }
+  }'
+```
+
+## Example Response
+
+```json
+{
+  "id": "notif-uuid-123",
+  "userId": "user-uuid-456",
+  "executorId": "user-uuid-789",
+  "type": "system",
+  "title": "New Trade Completed",
+  "message": "Your trade #123 has been completed successfully.",
+  "read": false,
+  "createdAt": 1699286400000,
+  "updatedAt": 1699372800000,
+  "extraData": {
+    "additionalProp1": {}
+  }
+}
+```

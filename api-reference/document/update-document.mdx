@@ -1,0 +1,84 @@
+---
+title: "Update Document"
+description: "Update the metadata or status of an existing document using its token ID."
+---
+
+# PATCH `/api/document/{tokenId}`
+
+Update a document’s information such as name, description, status, or linked contracts.
+
+## Path Parameters
+
+| Name | Type | Required | Description |
+|------|------|-----------|--------------|
+| `tokenId` | `integer` | yes | Document token ID |
+
+## Request Body
+
+Provide a JSON object containing the updated fields.
+
+```json
+{
+  "tokenId": 123,
+  "owner": "0x123abc...",
+  "fileHash": "Qmabcdef...",
+  "uri": "https://storage.example.com/docs/doc-123.pdf",
+  "docType": "Invoice",
+  "linkedContracts": [
+    "0xcontract1",
+    "0xcontract2"
+  ],
+  "status": "Draft",
+  "signer": "0xsigner...",
+  "createdAt": 1699286400000,
+  "updatedAt": 1699372800000,
+  "name": "Invoice #123",
+  "description": "Invoice for trade #456",
+  "metadataUrl": "https://metadata.example.com/doc-123.json"
+}
+```
+
+> Only fields you include in the body will be updated. Unspecified fields will remain unchanged.
+
+## Responses
+
+### 200 — OK
+
+Returns the updated document object.
+
+```json
+{
+  "tokenId": 123,
+  "owner": "0x123abc...",
+  "fileHash": "Qmabcdef...",
+  "uri": "https://storage.example.com/docs/doc-123.pdf",
+  "docType": "Invoice",
+  "linkedContracts": [
+    "0xcontract1",
+    "0xcontract2"
+  ],
+  "status": "Draft",
+  "signer": "0xsigner...",
+  "createdAt": 1699286400000,
+  "updatedAt": 1699372800000,
+  "name": "Invoice #123",
+  "description": "Invoice for trade #456",
+  "metadataUrl": "https://metadata.example.com/doc-123.json"
+}
+```
+
+## Authentication
+
+This endpoint requires a **Bearer Token**.
+
+## Example Request
+
+```bash
+curl -X PATCH "https://api.zephyra.dev/api/document/123" \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer <token>" \
+  -d '{
+    "status": "Approved",
+    "description": "Updated invoice after review"
+  }'
+```

@@ -1,0 +1,66 @@
+---
+title: "Get KYC Activity Logs"
+description: "Retrieve the activity logs for a specific KYC (Know Your Customer) record by token ID."
+---
+
+# GET `/api/kyc/{tokenId}/logs`
+
+Get KYC activity logs for a specific record.
+
+## Parameters
+
+| Name | Type | Required | Description |
+|------|------|----------|-------------|
+| `tokenId` | `string` | yes | KYC token ID (path parameter) |
+
+## Responses
+
+### 200 — OK
+
+Returns a list of activity logs for the specified KYC record.
+
+```json
+[
+  {}
+]
+```
+
+### 401 — Unauthorized
+
+Returned if the user is not authenticated.
+
+```json
+{
+  "error": "Unauthorized"
+}
+```
+
+### 404 — Not Found
+
+Returned if the KYC record with the specified token ID does not exist.
+
+```json
+{
+  "error": "KYC record not found"
+}
+```
+
+## Authentication
+
+This endpoint requires a **Bearer Token** for authentication.
+
+## Example Request
+
+```bash
+curl -X GET "https://api.zephyra.dev/api/kyc/kyc-uuid-123/logs" \
+  -H "Authorization: Bearer <token>" \
+  -H "Accept: application/json"
+```
+
+## Example Response
+
+```json
+[
+  {}
+]
+```

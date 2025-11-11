@@ -1,0 +1,66 @@
+---
+title: "Delete Notification"
+description: "Delete a specific notification by its ID."
+---
+
+# DELETE `/api/notification/{id}`
+
+Delete a notification.
+
+## Parameters
+
+| Name | Type | Required | Description |
+|------|------|----------|-------------|
+| `id` | `string` | yes | Notification ID (path parameter) |
+
+## Responses
+
+### 200 — OK
+
+Notification successfully deleted.
+
+```json
+{
+  "message": "Notification deleted"
+}
+```
+
+### 401 — Unauthorized
+
+Returned if the user is not authenticated.
+
+```json
+{
+  "error": "Unauthorized"
+}
+```
+
+### 404 — Not Found
+
+Returned if the notification with the specified ID does not exist.
+
+```json
+{
+  "error": "Notification not found"
+}
+```
+
+## Authentication
+
+This endpoint requires a **Bearer Token** for authentication.
+
+## Example Request
+
+```bash
+curl -X DELETE "https://api.zephyra.dev/api/notification/notif-uuid-123" \
+  -H "Authorization: Bearer <token>" \
+  -H "Accept: application/json"
+```
+
+## Example Response
+
+```json
+{
+  "message": "Notification deleted"
+}
+```

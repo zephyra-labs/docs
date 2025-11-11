@@ -1,0 +1,92 @@
+---
+title: "Get Notifications by User"
+description: "Retrieve all notifications for a specific user by their user ID."
+---
+
+# GET `/api/notification/user/{userId}`
+
+Get notifications for a specific user.
+
+## Parameters
+
+| Name | Type | Required | Description |
+|------|------|----------|-------------|
+| `userId` | `string` | yes | User ID (path parameter) |
+
+## Responses
+
+### 200 — OK
+
+Returns a list of notifications for the specified user.
+
+```json
+[
+  {
+    "id": "notif-uuid-123",
+    "userId": "user-uuid-456",
+    "executorId": "user-uuid-789",
+    "type": "system",
+    "title": "New Trade Completed",
+    "message": "Your trade #123 has been completed successfully.",
+    "read": false,
+    "createdAt": 1699286400000,
+    "updatedAt": 1699372800000,
+    "extraData": {
+      "additionalProp1": {}
+    }
+  }
+]
+```
+
+### 401 — Unauthorized
+
+Returned if the user is not authenticated.
+
+```json
+{
+  "error": "Unauthorized"
+}
+```
+
+### 404 — Not Found
+
+Returned if the user does not exist or has no notifications.
+
+```json
+{
+  "error": "No notifications found for this user"
+}
+```
+
+## Authentication
+
+This endpoint requires a **Bearer Token** for authentication.
+
+## Example Request
+
+```bash
+curl -X GET "https://api.zephyra.dev/api/notification/user/user-uuid-456" \
+  -H "Authorization: Bearer <token>" \
+  -H "Accept: application/json"
+```
+
+## Example Response
+
+```json
+[
+  {
+    "id": "notif-uuid-123",
+    "userId": "user-uuid-456",
+    "executorId": "user-uuid-789",
+    "type": "system",
+    "title": "New Trade Completed",
+    "message": "Your trade #123 has been completed successfully.",
+    "read": false,
+    "createdAt": 1699286400000,
+    "updatedAt": 1699372800000,
+    "extraData": {
+      "additionalProp1": {}
+    }
+  }
+]
+```

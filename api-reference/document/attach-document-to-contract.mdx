@@ -1,0 +1,109 @@
+---
+title: "Attach Document to Contract"
+description: "Attach a new document to a specific contract by its address."
+---
+
+# POST `/api/document/contract/{addr}/docs`
+
+Attach a new document to a given contract.
+
+## Path Parameters
+
+| Name | Type   | Required | Description        |
+|------|--------|----------|------------------|
+| `addr` | `string` | yes      | Contract address  |
+
+## Request Body
+
+| Field | Type | Required | Description |
+|-------|------|----------|------------|
+| `tokenId` | `number` | yes | Unique token ID of the document |
+| `owner` | `string` | yes | Wallet address of the document owner |
+| `fileHash` | `string` | yes | IPFS file hash of the document |
+| `uri` | `string` | yes | URL to access the document |
+| `docType` | `string` | yes | Type of document (e.g., Invoice, Contract) |
+| `linkedContracts` | `array[string]` | no | List of related contract addresses |
+| `status` | `string` | yes | Current status of the document (e.g., Draft, Signed) |
+| `signer` | `string` | no | Wallet address of signer |
+| `createdAt` | `number` | yes | Timestamp of creation |
+| `updatedAt` | `number` | yes | Timestamp of last update |
+| `name` | `string` | yes | Name/title of the document |
+| `description` | `string` | no | Description of the document |
+| `metadataUrl` | `string` | no | URL for document metadata |
+
+### Example Request Body
+
+```json
+{
+  "tokenId": 123,
+  "owner": "0x123abc...",
+  "fileHash": "Qmabcdef...",
+  "uri": "https://storage.example.com/docs/doc-123.pdf",
+  "docType": "Invoice",
+  "linkedContracts": [
+    "0xcontract1",
+    "0xcontract2"
+  ],
+  "status": "Draft",
+  "signer": "0xsigner...",
+  "createdAt": 1699286400000,
+  "updatedAt": 1699372800000,
+  "name": "Invoice #123",
+  "description": "Invoice for trade #456",
+  "metadataUrl": "https://metadata.example.com/doc-123.json"
+}
+```
+
+## Responses
+
+### 201 — Created
+
+Returns the newly attached document object.
+
+```json
+{
+  "tokenId": 123,
+  "owner": "0x123abc...",
+  "fileHash": "Qmabcdef...",
+  "uri": "https://storage.example.com/docs/doc-123.pdf",
+  "docType": "Invoice",
+  "linkedContracts": [
+    "0xcontract1",
+    "0xcontract2"
+  ],
+  "status": "Draft",
+  "signer": "0xsigner...",
+  "createdAt": 1699286400000,
+  "updatedAt": 1699372800000,
+  "name": "Invoice #123",
+  "description": "Invoice for trade #456",
+  "metadataUrl": "https://metadata.example.com/doc-123.json"
+}
+```
+
+## Authentication
+
+This endpoint requires a **Bearer Token**.
+
+## Example Request
+
+```bash
+curl -X POST "https://api.zephyra.dev/api/document/contract/0xabc123/docs" \
+  -H "Authorization: Bearer <token>" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "tokenId": 123,
+    "owner": "0x123abc...",
+    "fileHash": "Qmabcdef...",
+    "uri": "https://storage.example.com/docs/doc-123.pdf",
+    "docType": "Invoice",
+    "linkedContracts": ["0xcontract1", "0xcontract2"],
+    "status": "Draft",
+    "signer": "0xsigner...",
+    "createdAt": 1699286400000,
+    "updatedAt": 1699372800000,
+    "name": "Invoice #123",
+    "description": "Invoice for trade #456",
+    "metadataUrl": "https://metadata.example.com/doc-123.json"
+  }'
+```

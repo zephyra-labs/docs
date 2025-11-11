@@ -1,0 +1,91 @@
+---
+title: "Create Aggregated Activity"
+description: "Create a new aggregated activity entry combining multiple related actions or events."
+---
+
+# POST `/api/aggregated`
+
+Create a new aggregated activity record that groups related on-chain and off-chain actions under one entity.
+
+## Request Body
+
+| Field | Type | Required | Description |
+|--------|------|-----------|-------------|
+| `id` | `string` | No | Optional unique ID for the aggregated entry |
+| `timestamp` | `number` | Yes | Unix timestamp for when the activity occurred |
+| `type` | `string` | Yes | Type of activity (e.g., `onChain`, `offChain`) |
+| `action` | `string` | Yes | Description of the action performed |
+| `account` | `string` | Yes | Wallet address associated with the activity |
+| `txHash` | `string` | No | Transaction hash if applicable |
+| `contractAddress` | `string` | No | Address of the related smart contract |
+| `extra` | `object` | No | Additional metadata or details |
+| `onChainInfo` | `object` | No | Blockchain transaction info (status, blockNumber, confirmations) |
+| `tags` | `array[string]` | No | Tags or labels for categorizing activities |
+
+### Example
+
+```json
+{
+  "id": "agg-001",
+  "timestamp": 1731241234,
+  "type": "onChain",
+  "action": "Deployed Contract",
+  "account": "0xABC123",
+  "txHash": "0xDEF456",
+  "contractAddress": "0x789XYZ",
+  "extra": {
+    "note": "Smart contract deployment on testnet"
+  },
+  "onChainInfo": {
+    "status": "confirmed",
+    "blockNumber": 123456,
+    "confirmations": 5
+  },
+  "tags": ["deployment", "smart-contract"]
+}
+```
+
+## Responses
+
+### 201 — Created
+
+Returns the created aggregated activity object.
+
+```json
+{
+  "id": "agg-001",
+  "timestamp": 1731241234,
+  "type": "onChain",
+  "action": "Deployed Contract",
+  "account": "0xABC123",
+  "txHash": "0xDEF456",
+  "contractAddress": "0x789XYZ",
+  "extra": {
+    "note": "Smart contract deployment on testnet"
+  },
+  "onChainInfo": {
+    "status": "confirmed",
+    "blockNumber": 123456,
+    "confirmations": 5
+  },
+  "tags": ["deployment", "smart-contract"]
+}
+```
+
+## Authentication
+
+This endpoint requires authentication using a **Bearer Token**.
+
+## Example Request
+
+```bash
+curl -X POST "https://api.zephyra.dev/api/aggregated" \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer <token>" \
+  -d '{
+    "timestamp": 1731241234,
+    "type": "onChain",
+    "action": "Deployed Contract",
+    "account": "0xABC123"
+  }'
+```

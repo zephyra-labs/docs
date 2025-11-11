@@ -1,0 +1,86 @@
+---
+title: "Get All Users"
+description: "Retrieve a list of all registered users."
+---
+
+# GET `/api/user`
+
+Fetches all user profiles registered in the system.  
+This endpoint is typically restricted to admin or system-level access.
+
+## Parameters
+
+None.
+
+## Headers
+
+| Name | Type | Required | Description |
+|------|------|-----------|-------------|
+| `Authorization` | `string` | ✅ | Bearer token with admin or system privileges. |
+
+## Responses
+
+### 200 — OK
+
+Returns a list of all users in the system.
+
+```json
+[
+  {
+    "address": "0x123abc...",
+    "role": "user",
+    "createdAt": 1699286400000,
+    "lastLoginAt": 1699372800000,
+    "metadata": {
+      "name": "John Doe",
+      "email": "john@example.com",
+      "kycStatus": "pending"
+    }
+  }
+]
+```
+
+### 403 — Forbidden
+
+Returned if the authenticated user does not have permission to view all users.
+
+```json
+{
+  "error": "Forbidden"
+}
+```
+
+### 500 — Internal Server Error
+
+Returned if the server encounters an error while retrieving the user list.
+
+```json
+{
+  "error": "Internal server error"
+}
+```
+
+## Example Request
+
+```bash
+curl -X GET "https://api.zephyra.dev/api/user" \
+  -H "Authorization: Bearer <admin-jwt-token>"
+```
+
+## Example Response
+
+```json
+[
+  {
+    "address": "0x123abc...",
+    "role": "user",
+    "createdAt": 1699286400000,
+    "lastLoginAt": 1699372800000,
+    "metadata": {
+      "name": "John Doe",
+      "email": "john@example.com",
+      "kycStatus": "pending"
+    }
+  }
+]
+```

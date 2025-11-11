@@ -1,68 +1,187 @@
 {
   "$schema": "https://mintlify.com/docs.json",
   "theme": "mint",
-  "name": "Mint Starter Kit",
+  "name": "Zephyra API Docs",
   "colors": {
-    "primary": "#16A34A",
-    "light": "#07C983",
-    "dark": "#15803D"
+    "primary": "#2563EB",
+    "light": "#93C5FD",
+    "dark": "#1E3A8A"
   },
   "favicon": "/favicon.svg",
+  "logo": {
+    "light": "/logo/light.svg",
+    "dark": "/logo/dark.svg"
+  },
+
   "navigation": {
     "tabs": [
       {
         "tab": "Guides",
         "groups": [
           {
-            "group": "Getting started",
+            "group": "Guides",
             "pages": [
               "index",
-              "quickstart",
-              "development"
+              "getting-started",
+              "authentication"
             ]
           },
           {
-            "group": "Customization",
+            "group": "Development",
             "pages": [
-              "essentials/settings",
-              "essentials/navigation"
+              "setup/environment",
+              "setup/firebase",
+              "setup/swagger",
+              "setup/testing"
             ]
           },
           {
-            "group": "Writing content",
+            "group": "Usage",
             "pages": [
-              "essentials/markdown",
-              "essentials/code",
-              "essentials/images",
-              "essentials/reusable-snippets"
-            ]
-          },
-          {
-            "group": "AI tools",
-            "pages": [
-              "ai-tools/cursor",
-              "ai-tools/claude-code",
-              "ai-tools/windsurf"
+              "usage/cli",
+              "usage/deploy",
+              "usage/troubleshooting"
             ]
           }
         ]
       },
       {
-        "tab": "API reference",
+        "tab": "API Reference",
         "groups": [
           {
-            "group": "API documentation",
+            "group": "Overview",
+            "pages": ["api-reference/introduction"]
+          },
+          {
+            "group": "Activities",
             "pages": [
-              "api-reference/introduction"
+              "api-reference/activity/create-activity-log",
+              "api-reference/activity/get-all-activity-logs",
+              "api-reference/activity/get-activities-by-account-address"
             ]
           },
           {
-            "group": "Endpoint examples",
+            "group": "Aggregated Activities",
             "pages": [
-              "api-reference/endpoint/get",
-              "api-reference/endpoint/create",
-              "api-reference/endpoint/delete",
-              "api-reference/endpoint/webhook"
+              "api-reference/aggregated/create-aggregated-activity",
+              "api-reference/aggregated/get-all-aggregated-activities",
+              "api-reference/aggregated/get-aggregated-activity-by-id",
+              "api-reference/aggregated/add-tag-to-aggregated-activity",
+              "api-reference/aggregated/remove-tag-from-aggregated-activity"
+            ]
+          },
+          {
+            "group": "Companies",
+            "pages": [
+              "api-reference/company/create-company",
+              "api-reference/company/get-all-companies",
+              "api-reference/company/get-company-by-id",
+              "api-reference/company/update-company",
+              "api-reference/company/delete-company"
+            ]
+          },
+          {
+            "group": "Contracts",
+            "pages": [
+              "api-reference/contract/get-my-contracts",
+              "api-reference/contract/get-contract-details",
+              "api-reference/contract/get-contract-step",
+              "api-reference/contract/get-all-contracts",
+              "api-reference/contract/add-contract-log"
+            ]
+          },
+          {
+            "group": "Dashboard",
+            "pages": [
+              "api-reference/dashboard/get-admin-dashboard",
+              "api-reference/dashboard/get-user-dashboard"
+            ]
+          },
+          {
+            "group": "Documents",
+            "pages": [
+              "api-reference/document/attach-document-to-contract",
+              "api-reference/document/get-all-documents",
+              "api-reference/document/get-documents-by-owner",
+              "api-reference/document/get-documents-by-contract",
+              "api-reference/document/get-document-by-token-id",
+              "api-reference/document/update-document",
+              "api-reference/document/delete-document",
+              "api-reference/document/get-document-logs"
+            ]
+          },
+          {
+            "group": "KYC",
+            "pages": [
+              "api-reference/kyc/internal-update-status",
+              "api-reference/kyc/create-kyc-record",
+              "api-reference/kyc/get-all-kyc-records",
+              "api-reference/kyc/update-kyc-record",
+              "api-reference/kyc/delete-kyc-record",
+              "api-reference/kyc/get-kyc-by-id",
+              "api-reference/kyc/get-kyc-by-owner",
+              "api-reference/kyc/get-kyc-logs"
+            ]
+          },
+          {
+            "group": "Notifications",
+            "pages": [
+              "api-reference/notification/get-all-notifications",
+              "api-reference/notification/get-notifications-by-user",
+              "api-reference/notification/get-notification-by-id",
+              "api-reference/notification/delete-notification",
+              "api-reference/notification/mark-notification-as-read",
+              "api-reference/notification/internal-create-notification"
+            ]
+          },
+          {
+            "group": "Trades",
+            "pages": [
+              "api-reference/trade/get-all-trades",
+              "api-reference/trade/create-trade",
+              "api-reference/trade/get-trade-by-id",
+              "api-reference/trade/add-participant-to-trade",
+              "api-reference/trade/assign-role-to-participant",
+              "api-reference/trade/update-trade-status",
+              "api-reference/trade/get-my-trades"
+            ]
+          },
+          {
+            "group": "User Companies",
+            "pages": [
+              "api-reference/user-company/create-user-company",
+              "api-reference/user-company/get-all-user-companies",
+              "api-reference/user-company/get-companies-by-user",
+              "api-reference/user-company/get-users-by-company",
+              "api-reference/user-company/get-my-company",
+              "api-reference/user-company/update-my-company",
+              "api-reference/user-company/get-user-company-by-id",
+              "api-reference/user-company/update-user-company",
+              "api-reference/user-company/delete-user-company"
+            ]
+          },
+          {
+            "group": "Users",
+            "pages": [
+              "api-reference/user/wallet-connect",
+              "api-reference/user/get-my-profile",
+              "api-reference/user/get-all-users",
+              "api-reference/user/get-user-by-address",
+              "api-reference/user/update-my-profile",
+              "api-reference/user/admin-update-user",
+              "api-reference/user/admin-delete-user"
+            ]
+          },
+          {
+            "group": "Wallet",
+            "pages": [
+              "api-reference/wallet/log-login",
+              "api-reference/wallet/log-disconnect",
+              "api-reference/wallet/get-all-logs",
+              "api-reference/wallet/get-logs-by-account",
+              "api-reference/wallet/get-wallet-state",
+              "api-reference/wallet/update-wallet-state",
+              "api-reference/wallet/delete-wallet-data"
             ]
           }
         ]
@@ -71,52 +190,50 @@
     "global": {
       "anchors": [
         {
-          "anchor": "Documentation",
-          "href": "https://mintlify.com/docs",
-          "icon": "book-open-cover"
+          "anchor": "Website",
+          "href": "https://zephyra.dev",
+          "icon": "globe"
         },
         {
-          "anchor": "Blog",
-          "href": "https://mintlify.com/blog",
-          "icon": "newspaper"
+          "anchor": "GitHub",
+          "href": "https://github.com/zephyra-labs/zephyra",
+          "icon": "github"
         }
       ]
     }
   },
-  "logo": {
-    "light": "/logo/light.svg",
-    "dark": "/logo/dark.svg"
-  },
+
   "navbar": {
     "links": [
       {
         "label": "Support",
-        "href": "mailto:hi@mintlify.com"
+        "href": "mailto:support@zephyra.dev"
       }
     ],
     "primary": {
       "type": "button",
       "label": "Dashboard",
-      "href": "https://dashboard.mintlify.com"
+      "href": "https://dashboard.zephyra.dev"
     }
   },
+
   "contextual": {
     "options": [
-     "copy",
-     "view",
-     "chatgpt",
-     "claude",
-     "perplexity",
-     "mcp",
-     "cursor",
-     "vscode"
-   ]
+      "copy",
+      "view",
+      "chatgpt",
+      "claude",
+      "perplexity",
+      "cursor",
+      "vscode"
+    ]
   },
+
   "footer": {
     "socials": {
-      "x": "https://x.com/mintlify",
-      "github": "https://github.com/mintlify",
-      "linkedin": "https://linkedin.com/company/mintlify"
+      "x": "https://x.com/zephyra_dev",
+      "github": "https://github.com/zephyra-labs",
+      "linkedin": "https://linkedin.com/company/zephyra"
     }
   }
 }

@@ -1,0 +1,68 @@
+---
+title: "User Dashboard"
+description: "Retrieve personalized dashboard metrics for the authenticated user."
+---
+
+# GET `/api/dashboard/user`
+
+Fetch personalized metrics and recent activities for the currently authenticated user.
+
+## Responses
+
+### 200 — OK
+
+Returns dashboard metrics including total wallets, contracts, documents, and recent activities specific to the user.
+
+```json
+{
+  "totalWallets": 0,
+  "totalContracts": 0,
+  "totalDocuments": 0,
+  "wallets": [
+    {
+      "address": "0xabc123...",
+      "balance": 1000000000
+    }
+  ],
+  "recentContracts": [
+    {
+      "address": "string",
+      "owner": "string",
+      "createdAt": "2025-11-10T22:48:59.062Z",
+      "lastAction": {
+        "action": "string",
+        "account": "string",
+        "timestamp": 0
+      }
+    }
+  ],
+  "recentDocuments": [
+    {
+      "id": "string",
+      "tokenId": 0,
+      "owner": "string",
+      "title": "string",
+      "docType": "string",
+      "status": "string",
+      "createdAt": 0,
+      "updatedAt": 0,
+      "lastAction": {
+        "action": "string",
+        "account": "string",
+        "timestamp": 0
+      }
+    }
+  ]
+}
+```
+
+## Authentication
+
+This endpoint requires a **Bearer Token**.
+
+## Example Request
+
+```bash
+curl -X GET "https://api.zephyra.dev/api/dashboard/user" \
+  -H "Authorization: Bearer <token>"
+```

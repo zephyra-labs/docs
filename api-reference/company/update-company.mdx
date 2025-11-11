@@ -1,0 +1,105 @@
+---
+title: "Update Company by ID"
+description: "Update an existing company by its unique ID (Admin only)."
+---
+
+# PUT `/api/company/{id}`
+
+Update a company's information. This endpoint is restricted to admin users.
+
+## Path Parameters
+
+| Name | Type   | Required | Description |
+|------|--------|----------|-------------|
+| `id` | `string` | yes      | Company ID  |
+
+## Request Body
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `id` | `string` | no | Company unique identifier |
+| `name` | `string` | yes | Name of the company |
+| `address` | `string` | yes | Street address |
+| `city` | `string` | yes | City |
+| `stateOrProvince` | `string` | yes | State or province |
+| `postalCode` | `string` | yes | Postal code |
+| `country` | `string` | yes | Country |
+| `email` | `string` | no | Contact email |
+| `phone` | `string` | no | Contact phone number |
+| `taxId` | `string` | no | Tax ID |
+| `registrationNumber` | `string` | no | Business registration number |
+| `businessType` | `string` | no | Type of business |
+| `website` | `string` | no | Website URL |
+| `walletAddress` | `string` | no | Associated wallet address |
+| `verified` | `boolean` | no | Verification status |
+| `createdAt` | `number` | no | Timestamp of creation |
+| `updatedAt` | `number` | no | Timestamp of last update |
+
+### Example
+
+```json
+{
+  "name": "Zephyra Labs",
+  "address": "123 Blockchain St",
+  "city": "Bangkok",
+  "stateOrProvince": "Bangkok",
+  "postalCode": "10110",
+  "country": "Thailand",
+  "email": "contact@zephyra.dev",
+  "phone": "+66 1234 5678",
+  "walletAddress": "0xABC123...",
+  "verified": true
+}
+```
+
+## Responses
+
+### 200 — OK
+
+Returns the updated company object.
+
+```json
+{
+  "id": "string",
+  "name": "Zephyra Labs",
+  "address": "123 Blockchain St",
+  "city": "Bangkok",
+  "stateOrProvince": "Bangkok",
+  "postalCode": "10110",
+  "country": "Thailand",
+  "email": "contact@zephyra.dev",
+  "phone": "+66 1234 5678",
+  "taxId": "string",
+  "registrationNumber": "string",
+  "businessType": "string",
+  "website": "string",
+  "walletAddress": "0xABC123...",
+  "verified": true,
+  "createdAt": 0,
+  "updatedAt": 0
+}
+```
+
+## Authentication
+
+This endpoint requires an **Admin Bearer Token**.
+
+## Example Request
+
+```bash
+curl -X PUT "https://api.zephyra.dev/api/company/<companyId>" \
+  -H "Authorization: Bearer <admin-token>" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "Zephyra Labs",
+    "address": "123 Blockchain St",
+    "city": "Bangkok",
+    "stateOrProvince": "Bangkok",
+    "postalCode": "10110",
+    "country": "Thailand",
+    "email": "contact@zephyra.dev",
+    "phone": "+66 1234 5678",
+    "walletAddress": "0xABC123...",
+    "verified": true
+  }'
+```

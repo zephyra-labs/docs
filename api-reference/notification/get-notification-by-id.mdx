@@ -1,0 +1,88 @@
+---
+title: "Get Notification by ID"
+description: "Retrieve a single notification by its ID."
+---
+
+# GET `/api/notification/{id}`
+
+Get a notification by ID.
+
+## Parameters
+
+| Name | Type | Required | Description |
+|------|------|----------|-------------|
+| `id` | `string` | yes | Notification ID (path parameter) |
+
+## Responses
+
+### 200 — OK
+
+Returns the requested notification.
+
+```json
+{
+  "id": "notif-uuid-123",
+  "userId": "user-uuid-456",
+  "executorId": "user-uuid-789",
+  "type": "system",
+  "title": "New Trade Completed",
+  "message": "Your trade #123 has been completed successfully.",
+  "read": false,
+  "createdAt": 1699286400000,
+  "updatedAt": 1699372800000,
+  "extraData": {
+    "additionalProp1": {}
+  }
+}
+```
+
+### 401 — Unauthorized
+
+Returned if the user is not authenticated.
+
+```json
+{
+  "error": "Unauthorized"
+}
+```
+
+### 404 — Not Found
+
+Returned if the notification with the specified ID does not exist.
+
+```json
+{
+  "error": "Notification not found"
+}
+```
+
+## Authentication
+
+This endpoint requires a **Bearer Token** for authentication.
+
+## Example Request
+
+```bash
+curl -X GET "https://api.zephyra.dev/api/notification/notif-uuid-123" \
+  -H "Authorization: Bearer <token>" \
+  -H "Accept: application/json"
+```
+
+## Example Response
+
+```json
+{
+  "id": "notif-uuid-123",
+  "userId": "user-uuid-456",
+  "executorId": "user-uuid-789",
+  "type": "system",
+  "title": "New Trade Completed",
+  "message": "Your trade #123 has been completed successfully.",
+  "read": false,
+  "createdAt": 1699286400000,
+  "updatedAt": 1699372800000,
+  "extraData": {
+    "additionalProp1": {}
+  }
+}
+```

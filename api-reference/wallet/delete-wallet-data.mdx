@@ -1,0 +1,65 @@
+---
+title: "Delete Wallet Data"
+description: "Permanently purge all logs and state associated with a wallet account."
+---
+
+# DELETE `/api/wallet/{account}`
+
+Delete all wallet logs and current state for a specific wallet account.
+
+## Path Parameters
+
+| Name | Type | Required | Description |
+|------|------|-----------|-------------|
+| `account` | `string` | yes | Wallet address of the user |
+
+## Responses
+
+### 200 — OK
+
+Wallet logs and state successfully deleted.
+
+```json
+{
+  "message": "Wallet data deleted"
+}
+```
+
+### 401 — Unauthorized
+
+Returned if the request is missing or contains an invalid authentication token.
+
+```json
+{
+  "error": "Unauthorized"
+}
+```
+
+### 404 — Not Found
+
+Returned if no wallet data exists for the given account.
+
+```json
+{
+  "error": "Account not found"
+}
+```
+
+## Authentication
+
+This endpoint requires a **Bearer Token** for authentication (admin only).
+
+## Example Request
+
+```bash
+curl -X DELETE "https://api.zephyra.dev/api/wallet/0x123abc" \
+  -H "Authorization: Bearer <token>"
+```
+
+## Example Response
+
+```json
+{
+  "message": "Wallet data deleted"
+}
+```

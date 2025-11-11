@@ -1,97 +1,141 @@
 ---
 title: "Introduction"
-description: "Welcome to the new home for your documentation"
+description: "Welcome to Zephyra API Documentation — your central hub for backend, services, and integration guides."
 ---
 
-## Setting up
+## Welcome to Zephyra
 
-Get your documentation site up and running in minutes.
+Zephyra is a modular backend platform designed for modern decentralized systems and enterprise automation.  
+Our services are built with **Node.js + TypeScript + Firebase**, supporting **authentication**, **KYC**, **contract management**, and **activity tracking**.
 
 <Card
-  title="Start here"
+  title="Get started quickly"
   icon="rocket"
-  href="/quickstart"
+  href="/getting-started"
   horizontal
 >
-  Follow our three step quickstart guide.
+  Follow our quickstart guide to run Zephyra locally or integrate it into your existing system.
 </Card>
 
-## Make it yours
+---
 
-Design a docs site that looks great and empowers your users.
+## Development setup
+
+Get your environment ready in minutes and start building on Zephyra.
 
 <Columns cols={2}>
   <Card
-    title="Edit locally"
-    icon="pen-to-square"
-    href="/development"
+    title="Environment setup"
+    icon="server"
+    href="/setup/environment"
   >
-    Edit your docs locally and preview them in real time.
+    Configure Node.js, Firebase credentials, and service accounts.
   </Card>
   <Card
-    title="Customize your site"
-    icon="palette"
-    href="/essentials/settings"
+    title="Using Firebase"
+    icon="fire"
+    href="/setup/firebase"
   >
-    Customize the design and colors of your site to match your brand.
-  </Card>
-    <Card
-    title="Set up navigation"
-    icon="map"
-    href="/essentials/navigation"
-  >
-    Organize your docs to help users find what they need and succeed with your product.
+    Learn how Zephyra uses Firestore, Auth, and Cloud Functions.
   </Card>
   <Card
-    title="API documentation"
+    title="Swagger documentation"
+    icon="book"
+    href="/setup/swagger"
+  >
+    Automatically document API endpoints using OpenAPI + Swagger UI.
+  </Card>
+  <Card
+    title="Unit testing"
+    icon="vial"
+    href="/setup/testing"
+  >
+    Write and run tests for DTOs, models, and services with Jest.
+  </Card>
+</Columns>
+
+---
+
+## Explore the API
+
+Comprehensive reference for every Zephyra microservice.
+
+<Columns cols={2}>
+  <Card
+    title="Authentication"
+    icon="lock"
+    href="/api-reference/auth/register"
+  >
+    Create, verify, and manage authentication tokens for users.
+  </Card>
+  <Card
+    title="User Service"
+    icon="user"
+    href="/api-reference/user/get"
+  >
+    Retrieve, update, and delete user data.
+  </Card>
+  <Card
+    title="KYC Service"
+    icon="id-card"
+    href="/api-reference/kyc/get"
+  >
+    Manage Know Your Customer (KYC) data and logs.
+  </Card>
+  <Card
+    title="Contract Service"
+    icon="file-signature"
+    href="/api-reference/contract/get"
+  >
+    Create and track smart contract metadata and logs.
+  </Card>
+  <Card
+    title="Activity Service"
+    icon="activity"
+    href="/api-reference/activity/get"
+  >
+    Track user and system activities across the Zephyra ecosystem.
+  </Card>
+</Columns>
+
+---
+
+## Guides and Deployment
+
+Everything you need to build, deploy, and maintain Zephyra.
+
+<Columns cols={2}>
+  <Card
+    title="Using the CLI"
     icon="terminal"
-    href="/api-reference/introduction"
+    href="/usage/cli"
   >
-    Auto-generate API documentation from OpenAPI specifications.
+    Manage services and local runs with Zephyra CLI commands.
+  </Card>
+  <Card
+    title="Deployment"
+    icon="cloud-upload"
+    href="/usage/deploy"
+  >
+    Deploy Zephyra to Firebase Hosting or your own infrastructure.
+  </Card>
+  <Card
+    title="Troubleshooting"
+    icon="bug"
+    href="/usage/troubleshooting"
+  >
+    Common issues and how to fix them.
   </Card>
 </Columns>
 
-## Create beautiful pages
+---
 
-Everything you need to create world-class documentation.
-
-<Columns cols={2}>
-  <Card
-    title="Write with MDX"
-    icon="pen-fancy"
-    href="/essentials/markdown"
-  >
-    Use MDX to style your docs pages.
-  </Card>
-  <Card
-    title="Code samples"
-    icon="code"
-    href="/essentials/code"
-  >
-    Add sample code to demonstrate how to use your product.
-  </Card>
-  <Card
-    title="Images"
-    icon="image"
-    href="/essentials/images"
-  >
-    Display images and other media.
-  </Card>
-  <Card
-    title="Reusable snippets"
-    icon="recycle"
-    href="/essentials/reusable-snippets"
-  >
-    Write once and reuse across your docs.
-  </Card>
-</Columns>
-
-## Need inspiration?
+## Learn More
 
 <Card
-  title="See complete examples"
-  icon="stars"
-  href="https://mintlify.com/customers"
+  title="View source on GitHub"
+  icon="github"
+  href="https://github.com/zephyra-labs/zephyra"
 >
-  Browse our showcase of exceptional documentation sites.
+  Browse the Zephyra backend repository for code, issues, and contributions.
 </Card>

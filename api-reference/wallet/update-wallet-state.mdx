@@ -1,0 +1,104 @@
+---
+title: "Update Wallet State"
+description: "Update the current state of a specific wallet account."
+---
+
+# PATCH `/api/wallet/{account}/state`
+
+Update the wallet state, including chain, provider, and session information.
+
+## Path Parameters
+
+| Name | Type | Required | Description |
+|------|------|-----------|-------------|
+| `account` | `string` | yes | Wallet address of the user |
+
+## Request Body
+
+| Name | Type | Required | Description |
+|------|------|-----------|-------------|
+| `account` | `string` | yes | Wallet address of the user |
+| `chainId` | `number` | no | Chain ID of the connected blockchain network |
+| `provider` | `string` | no | Wallet provider (`metamask`, `walletconnect`, etc.) |
+| `sessionId` | `string` | no | Current session identifier |
+
+> Content-Type: `application/json`
+
+### Example Request Body
+
+```json
+{
+  "account": "0x123abc...",
+  "chainId": 31337,
+  "provider": "metamask",
+  "sessionId": "session_001"
+}
+```
+
+## Responses
+
+### 200 — OK
+
+Wallet state successfully updated.
+
+```json
+{
+  "message": "Wallet data updated"
+}
+```
+
+### 400 — Bad Request
+
+Returned when the request body contains invalid fields.
+
+```json
+{
+  "error": "Validation failed"
+}
+```
+
+### 401 — Unauthorized
+
+Returned if the request is missing or contains an invalid authentication token.
+
+```json
+{
+  "error": "Unauthorized"
+}
+```
+
+### 404 — Not Found
+
+Returned if the wallet account does not exist.
+
+```json
+{
+  "error": "Wallet state not found"
+}
+```
+
+## Authentication
+
+This endpoint requires a **Bearer Token** for authentication.
+
+## Example Request
+
+```bash
+curl -X PATCH "https://api.zephyra.dev/api/wallet/0x123abc/state" \
+  -H "Authorization: Bearer <token>" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "account": "0x123abc...",
+    "chainId": 31337,
+    "provider": "metamask",
+    "sessionId": "session_001"
+  }'
+```
+
+## Example Response
+
+```json
+{
+  "message": "Wallet data updated"
+}
+```
