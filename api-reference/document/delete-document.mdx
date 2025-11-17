@@ -10,9 +10,21 @@ Delete a document permanently from the system by providing its token ID.
 
 ## Path Parameters
 
-| Name | Type | Required | Description |
-|------|------|-----------|--------------|
-| `tokenId` | `integer` | yes | Document token ID |
+| Name      | Type    | Required | Description       |
+|-----------|---------|----------|-----------------|
+| `tokenId` | integer | yes      | Document token ID |
+
+## Request Body
+
+Provide a JSON object for logging purposes:
+
+```json
+{
+  "action": "Deleted",
+  "account": "0xSigner1",
+  "txHash": "0xTransactionHash1"
+}
+```
 
 ## Responses
 
@@ -22,27 +34,72 @@ Returns a confirmation message after successful deletion.
 
 ```json
 {
-  "message": "Document deleted"
-}
-```
-
-### 404 — Not Found
-
-Returned if the document does not exist.
-
-```json
-{
-  "error": "Document not found"
+  "success": true,
+  "data": {
+    "message": "Document deleted successfully"
+  }
 }
 ```
 
 ### 401 — Unauthorized
 
-Returned if the request lacks valid authentication credentials.
+Returned if the request lacks a valid Bearer token.
 
 ```json
 {
-  "error": "Unauthorized"
+  "success": false,
+  "message": "Missing or invalid Authorization header"
+}
+```
+
+### 404 — Not Found
+
+Returned if the document with the specified token ID does not exist.
+
+```json
+{
+  "success": false,
+  "message": "Document not found"
+}
+```
+
+### 422 — Unprocessable Entity
+
+Returned if required action fields are missing.
+
+```json
+{
+  "success": false,
+  "message": "Missing action field"
+}
+```
+
+Returned if required account fields are missing.
+
+```json
+{
+  "success": false,
+  "message": "Missing account field"
+}
+```
+
+Returned if the token ID format is invalid.
+
+```json
+{
+  "success": false,
+  "message": "Invalid tokenId format"
+}
+```
+
+### 500 — Server Error
+
+Returned if the server encounters an unexpected error while deleting the document.
+
+```json
+{
+  "success": false,
+  "message": "Failed to delete document"
 }
 ```
 
@@ -54,13 +111,31 @@ This endpoint requires a **Bearer Token**.
 
 ```bash
 curl -X DELETE "https://api.zephyra.dev/api/document/123" \
-  -H "Authorization: Bearer <token>"
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer <token>" \
+  -d '{
+    "action": "Deleted",
+    "account": "0xSigner1",
+    "txHash": "0xTransactionHash1"
+  }'
 ```
 
 ## Example Response
 
 ```json
 {
-  "message": "Document deleted"
+  "success": true,
+  "data": {
+    "message": "Document deleted successfully"
+  }
 }
 ```
+
+## Example Response
+
+{
+  "success": true,
+  "data": {
+    "message": "Document deleted successfully"
+  }
+}

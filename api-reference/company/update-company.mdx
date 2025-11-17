@@ -35,6 +35,7 @@ Update a company's information. This endpoint is restricted to admin users.
 | `verified` | `boolean` | no | Verification status |
 | `createdAt` | `number` | no | Timestamp of creation |
 | `updatedAt` | `number` | no | Timestamp of last update |
+| `executor` | `string` | yes | Admin wallet performing the update |
 
 ### Example
 
@@ -49,7 +50,8 @@ Update a company's information. This endpoint is restricted to admin users.
   "email": "contact@zephyra.dev",
   "phone": "+66 1234 5678",
   "walletAddress": "0xABC123...",
-  "verified": true
+  "verified": true,
+  "executor": "0xAdminWallet..."
 }
 ```
 
@@ -57,27 +59,92 @@ Update a company's information. This endpoint is restricted to admin users.
 
 ### 200 — OK
 
-Returns the updated company object.
+Returned if the company is successfully updated.
 
 ```json
 {
-  "id": "string",
-  "name": "Zephyra Labs",
-  "address": "123 Blockchain St",
-  "city": "Bangkok",
-  "stateOrProvince": "Bangkok",
-  "postalCode": "10110",
-  "country": "Thailand",
-  "email": "contact@zephyra.dev",
-  "phone": "+66 1234 5678",
-  "taxId": "string",
-  "registrationNumber": "string",
-  "businessType": "string",
-  "website": "string",
-  "walletAddress": "0xABC123...",
-  "verified": true,
-  "createdAt": 0,
-  "updatedAt": 0
+  "success": true,
+  "data": {
+    "id": "company-123",
+    "name": "Zephyra Labs",
+    "address": "123 Blockchain St",
+    "city": "Bangkok",
+    "stateOrProvince": "Bangkok",
+    "postalCode": "10110",
+    "country": "Thailand",
+    "email": "contact@zephyra.dev",
+    "phone": "+66 1234 5678",
+    "taxId": "string",
+    "registrationNumber": "string",
+    "businessType": "string",
+    "website": "string",
+    "walletAddress": "0xABC123...",
+    "verified": true,
+    "createdAt": 0,
+    "updatedAt": 0
+  }
+}
+```
+
+### 400 — Bad Request
+
+Returned if required fields (`id` or `executor`) are missing.
+
+```json
+{
+  "success": false,
+  "message": "Executor is required"
+}
+```
+
+```json
+{
+  "success": false,
+  "message": "Company ID is required"
+}
+```
+
+### 401 — Unauthorized
+
+Returned if the request does not include a valid Bearer token.
+
+```json
+{
+  "success": false,
+  "message": "Missing or invalid Authorization header"
+}
+```
+
+### 404 — Not Found
+
+Returned if no company exists with the given ID.
+
+```json
+{
+  "success": false,
+  "message": "Company not found"
+}
+```
+
+### 422 — Unprocessable Entity
+
+Returned if fields fail validation (e.g., `name` not a string).
+
+```json
+{
+  "success": false,
+  "message": "Company name must be a string"
+}
+```
+
+### 500 — Server Error
+
+Returned if the server fails to update the company.
+
+```json
+{
+  "success": false,
+  "message": "Failed to update company"
 }
 ```
 
@@ -85,10 +152,10 @@ Returns the updated company object.
 
 This endpoint requires an **Admin Bearer Token**.
 
-## Example Request
+## Example Request (cURL)
 
 ```bash
-curl -X PUT "https://api.zephyra.dev/api/company/<companyId>" \
+curl -X PUT "https://api.zephyra.dev/api/company/company-123" \
   -H "Authorization: Bearer <admin-token>" \
   -H "Content-Type: application/json" \
   -d '{
@@ -101,6 +168,32 @@ curl -X PUT "https://api.zephyra.dev/api/company/<companyId>" \
     "email": "contact@zephyra.dev",
     "phone": "+66 1234 5678",
     "walletAddress": "0xABC123...",
-    "verified": true
+    "verified": true,
+    "executor": "0xAdminWallet..."
   }'
 ```
+
+## Example Response
+
+{
+  "success": true,
+  "data": {
+    "id": "company-123",
+    "name": "Zephyra Labs",
+    "address": "123 Blockchain St",
+    "city": "Bangkok",
+    "stateOrProvince": "Bangkok",
+    "postalCode": "10110",
+    "country": "Thailand",
+    "email": "contact@zephyra.dev",
+    "phone": "+66 1234 5678",
+    "taxId": "string",
+    "registrationNumber": "string",
+    "businessType": "string",
+    "website": "string",
+    "walletAddress": "0xABC123...",
+    "verified": true,
+    "createdAt": 0,
+    "updatedAt": 0
+  }
+}

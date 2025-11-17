@@ -44,17 +44,25 @@ Wallet state successfully updated.
 
 ```json
 {
-  "message": "Wallet data updated"
+  "success": true,
+  "data": {
+    "account": "0x123abc...",
+    "chainId": 31337,
+    "provider": "metamask",
+    "sessionId": "session_001"
+  },
+  "message": "Wallet state updated"
 }
 ```
 
 ### 400 — Bad Request
 
-Returned when the request body contains invalid fields.
+Returned when the request body contains invalid fields or is missing required parameters.
 
 ```json
 {
-  "error": "Validation failed"
+  "success": false,
+  "message": "Account parameter is required"
 }
 ```
 
@@ -64,7 +72,8 @@ Returned if the request is missing or contains an invalid authentication token.
 
 ```json
 {
-  "error": "Unauthorized"
+  "success": false,
+  "message": "Missing or invalid Authorization header"
 }
 ```
 
@@ -74,7 +83,17 @@ Returned if the wallet account does not exist.
 
 ```json
 {
-  "error": "Wallet state not found"
+  "success": false,
+  "message": "Wallet state not found"
+}
+```
+
+### 500 — Server Error
+
+```json
+{
+  "success": false,
+  "message": "Failed to update wallet state"
 }
 ```
 
@@ -100,6 +119,13 @@ curl -X PATCH "https://api.zephyra.dev/api/wallet/0x123abc/state" \
 
 ```json
 {
-  "message": "Wallet data updated"
+  "success": true,
+  "data": {
+    "account": "0x123abc...",
+    "chainId": 31337,
+    "provider": "metamask",
+    "sessionId": "session_001"
+  },
+  "message": "Wallet state updated"
 }
 ```

@@ -8,17 +8,17 @@ description: "Retrieve a specific user profile using their wallet address."
 
 Fetches the profile details of a specific user identified by their wallet address.
 
-## Parameters
+## Path Parameters
 
 | Name | Type | Required | Description |
 |------|------|-----------|-------------|
-| `address` | `string` | ✅ | Wallet address of the user to retrieve. |
+| `address` | `string` | yes | Wallet address of the user to retrieve. |
 
 ## Headers
 
 | Name | Type | Required | Description |
 |------|------|-----------|-------------|
-| `Authorization` | `string` | ✅ | Bearer token for authentication. |
+| `Authorization` | `string` | yes | Bearer token for authentication. |
 
 ## Responses
 
@@ -28,15 +28,29 @@ Returns the user profile associated with the given wallet address.
 
 ```json
 {
-  "address": "0x123abc...",
-  "role": "user",
-  "createdAt": 1699286400000,
-  "lastLoginAt": 1699372800000,
-  "metadata": {
-    "name": "John Doe",
-    "email": "john@example.com",
-    "kycStatus": "pending"
+  "success": true,
+  "data": {
+    "address": "0x123abc...",
+    "role": "user",
+    "createdAt": 1699286400000,
+    "lastLoginAt": 1699372800000,
+    "metadata": {
+      "name": "John Doe",
+      "email": "john@example.com",
+      "kycStatus": "pending"
+    }
   }
+}
+```
+
+### 401 — Unauthorized
+
+Returned if the JWT token is missing or invalid.
+
+```json
+{
+  "success": false,
+  "message": "Missing or invalid Authorization header"
 }
 ```
 
@@ -46,7 +60,8 @@ Returned if the specified wallet address does not exist in the system.
 
 ```json
 {
-  "error": "User not found"
+  "success": false,
+  "message": "User not found"
 }
 ```
 
@@ -56,7 +71,8 @@ Returned if there’s a problem retrieving the user information.
 
 ```json
 {
-  "error": "Internal server error"
+  "success": false,
+  "message": "Failed to fetch user"
 }
 ```
 
@@ -71,14 +87,17 @@ curl -X GET "https://api.zephyra.dev/api/user/0x123abc..." \
 
 ```json
 {
-  "address": "0x123abc...",
-  "role": "user",
-  "createdAt": 1699286400000,
-  "lastLoginAt": 1699372800000,
-  "metadata": {
-    "name": "John Doe",
-    "email": "john@example.com",
-    "kycStatus": "pending"
+  "success": true,
+  "data": {
+    "address": "0x123abc...",
+    "role": "user",
+    "createdAt": 1699286400000,
+    "lastLoginAt": 1699372800000,
+    "metadata": {
+      "name": "John Doe",
+      "email": "john@example.com",
+      "kycStatus": "pending"
+    }
   }
 }
 ```

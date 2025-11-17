@@ -18,22 +18,22 @@ Mark a notification as read.
 
 ### 200 — OK
 
-Returns the updated notification with the `read` status set.
+Notification marked as read successfully.
 
 ```json
 {
-  "id": "notif-uuid-123",
-  "userId": "user-uuid-456",
-  "executorId": "user-uuid-789",
-  "type": "system",
-  "title": "New Trade Completed",
-  "message": "Your trade #123 has been completed successfully.",
-  "read": true,
-  "createdAt": 1699286400000,
-  "updatedAt": 1699372800000,
-  "extraData": {
-    "additionalProp1": {}
-  }
+  "message": "Notification marked as read"
+}
+```
+
+### 400 — Bad Request
+
+Returned if the `id` parameter is missing.
+
+```json
+{
+  "success": false,
+  "message": "Missing id parameter"
 }
 ```
 
@@ -43,7 +43,8 @@ Returned if the user is not authenticated.
 
 ```json
 {
-  "error": "Unauthorized"
+  "success": false,
+  "message": "Missing or invalid Authorization header"
 }
 ```
 
@@ -53,13 +54,25 @@ Returned if the notification with the specified ID does not exist.
 
 ```json
 {
-  "error": "Notification not found"
+  "success": false,
+  "message": "Notification not found"
+}
+```
+
+### 500 — Server Error
+
+Returned if there is a server error while marking the notification as read.
+
+```json
+{
+  "success": false,
+  "message": "Failed to mark notification as read"
 }
 ```
 
 ## Authentication
 
-This endpoint requires a **Bearer Token** for authentication.
+This endpoint requires a **Bearer Token**.
 
 ## Example Request
 
@@ -73,17 +86,6 @@ curl -X PATCH "https://api.zephyra.dev/api/notification/notif-uuid-123/read" \
 
 ```json
 {
-  "id": "notif-uuid-123",
-  "userId": "user-uuid-456",
-  "executorId": "user-uuid-789",
-  "type": "system",
-  "title": "New Trade Completed",
-  "message": "Your trade #123 has been completed successfully.",
-  "read": true,
-  "createdAt": 1699286400000,
-  "updatedAt": 1699372800000,
-  "extraData": {
-    "additionalProp1": {}
-  }
+  "message": "Notification marked as read"
 }
 ```

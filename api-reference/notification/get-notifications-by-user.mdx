@@ -26,17 +26,40 @@ Returns a list of notifications for the specified user.
     "id": "notif-uuid-123",
     "userId": "user-uuid-456",
     "executorId": "user-uuid-789",
-    "type": "system",
-    "title": "New Trade Completed",
-    "message": "Your trade #123 has been completed successfully.",
+    "type": "kyc",
+    "title": "KYC Approved",
+    "message": "Your KYC request has been approved.",
     "read": false,
     "createdAt": 1699286400000,
     "updatedAt": 1699372800000,
     "extraData": {
-      "additionalProp1": {}
+      "kycId": "kyc-uuid-123"
     }
+  },
+  {
+    "id": "notif-uuid-124",
+    "userId": "user-uuid-456",
+    "executorId": "system",
+    "type": "system",
+    "title": "System Update",
+    "message": "Maintenance scheduled at 2 AM.",
+    "read": true,
+    "createdAt": 1699380000000,
+    "updatedAt": 1699383600000,
+    "extraData": {}
   }
 ]
+```
+
+### 400 — Bad Request
+
+Returned if the `userId` parameter is missing.
+
+```json
+{
+  "success": false,
+  "message": "Missing userId parameter"
+}
 ```
 
 ### 401 — Unauthorized
@@ -45,7 +68,8 @@ Returned if the user is not authenticated.
 
 ```json
 {
-  "error": "Unauthorized"
+  "success": false,
+  "message": "Missing or invalid Authorization header"
 }
 ```
 
@@ -55,13 +79,25 @@ Returned if the user does not exist or has no notifications.
 
 ```json
 {
-  "error": "No notifications found for this user"
+  "success": false,
+  "message": "No notifications found for this user"
+}
+```
+
+### 500 — Server Error
+
+Returned if there is a server error while fetching user notifications.
+
+```json
+{
+  "success": false,
+  "message": "Failed to fetch user notifications"
 }
 ```
 
 ## Authentication
 
-This endpoint requires a **Bearer Token** for authentication.
+This endpoint requires a **Bearer Token**.
 
 ## Example Request
 
@@ -79,15 +115,27 @@ curl -X GET "https://api.zephyra.dev/api/notification/user/user-uuid-456" \
     "id": "notif-uuid-123",
     "userId": "user-uuid-456",
     "executorId": "user-uuid-789",
-    "type": "system",
-    "title": "New Trade Completed",
-    "message": "Your trade #123 has been completed successfully.",
+    "type": "kyc",
+    "title": "KYC Approved",
+    "message": "Your KYC request has been approved.",
     "read": false,
     "createdAt": 1699286400000,
     "updatedAt": 1699372800000,
     "extraData": {
-      "additionalProp1": {}
+      "kycId": "kyc-uuid-123"
     }
+  },
+  {
+    "id": "notif-uuid-124",
+    "userId": "user-uuid-456",
+    "executorId": "system",
+    "type": "system",
+    "title": "System Update",
+    "message": "Maintenance scheduled at 2 AM.",
+    "read": true,
+    "createdAt": 1699380000000,
+    "updatedAt": 1699383600000,
+    "extraData": {}
   }
 ]
 ```

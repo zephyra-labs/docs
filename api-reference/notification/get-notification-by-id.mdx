@@ -6,7 +6,7 @@ description: "Retrieve a single notification by its ID."
 
 # GET `/api/notification/{id}`
 
-Get a notification by ID.
+Get a notification by its ID.
 
 ## Parameters
 
@@ -32,8 +32,19 @@ Returns the requested notification.
   "createdAt": 1699286400000,
   "updatedAt": 1699372800000,
   "extraData": {
-    "additionalProp1": {}
+    "tradeId": "trade-uuid-987"
   }
+}
+```
+
+### 400 — Bad Request
+
+Returned if the `id` parameter is missing.
+
+```json
+{
+  "success": false,
+  "message": "Missing id parameter"
 }
 ```
 
@@ -43,7 +54,8 @@ Returned if the user is not authenticated.
 
 ```json
 {
-  "error": "Unauthorized"
+  "success": false,
+  "message": "Missing or invalid Authorization header"
 }
 ```
 
@@ -53,13 +65,25 @@ Returned if the notification with the specified ID does not exist.
 
 ```json
 {
-  "error": "Notification not found"
+  "success": false,
+  "message": "Notification not found"
+}
+```
+
+### 500 — Server Error
+
+Returned if there is a server error while fetching the notification.
+
+```json
+{
+  "success": false,
+  "message": "Failed to fetch notification"
 }
 ```
 
 ## Authentication
 
-This endpoint requires a **Bearer Token** for authentication.
+This endpoint requires a **Bearer Token**.
 
 ## Example Request
 
@@ -83,7 +107,7 @@ curl -X GET "https://api.zephyra.dev/api/notification/notif-uuid-123" \
   "createdAt": 1699286400000,
   "updatedAt": 1699372800000,
   "extraData": {
-    "additionalProp1": {}
+    "tradeId": "trade-uuid-987"
   }
 }
 ```

@@ -6,47 +6,159 @@ description: "Retrieve a list of all aggregated activity entries in the system."
 
 # GET `/api/aggregated`
 
-Fetch all aggregated activity logs recorded in the system.  
-This endpoint does not require any query parameters.
+Fetch all aggregated activity logs recorded in the system. Supports optional query parameters for filtering and pagination.
+
+## Query Parameters
+
+| Name | Type | Required | Description |
+|------|------|----------|-------------|
+| `account` | `string` | No | Filter by wallet account |
+| `txHash` | `string` | No | Filter by transaction hash |
+| `contractAddress` | `string` | No | Filter by smart contract address |
+| `tags` | `string` | No | Filter by tags (comma-separated) |
+| `limit` | `integer` | No | Maximum number of items to return |
+| `startAfterTimestamp` | `integer` | No | Pagination cursor (start after this timestamp in ms) |
 
 ## Responses
 
-### 200 — OK
+### 200 — OK  
 
-Returns a list of aggregated activity objects.
+Returned when aggregated activities are successfully fetched, with optional filtering and pagination applied.
 
 ```json
-[
-  {
-    "id": "string",
-    "timestamp": 0,
-    "type": "onChain",
-    "action": "string",
-    "account": "string",
-    "txHash": "string",
-    "contractAddress": "string",
-    "extra": {
-      "additionalProp1": {}
-    },
-    "onChainInfo": {
-      "status": "string",
-      "blockNumber": 0,
-      "confirmations": 0
-    },
-    "tags": [
-      "string"
-    ]
+{
+  "success": true,
+  "data": {
+    "count": 2,
+    "items": [
+      {
+        "id": "agg-001",
+        "timestamp": 1731241234,
+        "type": "onChain",
+        "action": "Deployed Contract",
+        "account": "0xABC123",
+        "txHash": "0xDEF456",
+        "contractAddress": "0x789XYZ",
+        "extra": {
+          "note": "Smart contract deployment on testnet"
+        },
+        "onChainInfo": {
+          "status": "confirmed",
+          "blockNumber": 123456,
+          "confirmations": 5
+        },
+        "tags": ["deployment","smart-contract"]
+      },
+      {
+        "id": "agg-002",
+        "timestamp": 1731242234,
+        "type": "backend",
+        "action": "User Signup",
+        "account": "0xABC456",
+        "extra": {
+          "ip": "192.168.1.10",
+          "userAgent": "Mozilla/5.0"
+        },
+        "tags": ["user","signup"]
+      }
+    ],
+    "nextStartAfterTimestamp": 1731242234
   }
-]
+}
+```
+
+### 400 — Bad Request  
+
+Returned when a query parameter contains an invalid type (e.g., `limit` or `startAfterTimestamp` is not a number).
+
+```json
+{
+  "success": false,
+  "message": "limit must be a number"
+}
+```
+
+### 401 — Unauthorized  
+
+Returned when the request does not include a valid Bearer token in the Authorization header.
+
+```json
+{
+  "success": false,
+  "message": "Missing or invalid Authorization header"
+}
+```
+
+### 500 — Server Error  
+
+Returned when the server encounters an unexpected error while fetching aggregated activities.
+
+```json
+{
+  "success": false,
+  "message": "Failed to fetch aggregated activities"
+}
 ```
 
 ## Authentication
 
-This endpoint requires authentication using a **Bearer Token**.
+This endpoint requires a **Bearer Token**.  
+Admin privileges may be required to fetch aggregated system-wide activity logs.
 
-## Example Request
+## Notes
+
+* `nextStartAfterTimestamp` is used for cursor-based pagination to retrieve the next batch.  
+* Filters `account`, `txHash`, `contractAddress`, and `tags` are optional.  
+* `tags` should be passed as a comma-separated string, such as `user,signup`.  
+* If no filters are provided, the endpoint returns all aggregated activities.
+
+## Example Request (cURL)
 
 ```bash
-curl -X GET "https://api.zephyra.dev/api/aggregated" \
+curl -X GET "https://api.zephyra.dev/api/aggregated?account=0xABC123&limit=10" \
   -H "Authorization: Bearer <token>"
 ```
+
+## Example Response
+
+```json
+{
+  "success": true,
+  "data": {
+    "count": 2,
+    "items": [
+      {
+        "id": "agg-001",
+        "timestamp": 1731241234,
+        "type": "onChain",
+        "action": "Deployed Contract",
+        "account": "0xABC123",
+        "txHash": "0xDEF456",
+        "contractAddress": "0x789XYZ",
+        "extra": {
+          "note": "Smart contract deployment on testnet"
+        },
+        "onChainInfo": {
+          "status": "confirmed",
+          "blockNumber": 123456,
+          "confirmations": 5
+        },
+        "tags": ["deployment","smart-contract"]
+      },
+      {
+        "id": "agg-002",
+        "timestamp": 1731242234,
+        "type": "backend",
+        "action": "User Signup",
+        "account": "0xABC456",
+        "extra": {
+          "ip": "192.168.1.10",
+          "userAgent": "Mozilla/5.0"
+        },
+        "tags": ["user","signup"]
+      }
+    ],
+    "nextStartAfterTimestamp": 1731242234
+  },
+  "message": "Aggregated activities retrieved successfully"
+}

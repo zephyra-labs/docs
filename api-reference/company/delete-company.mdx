@@ -6,7 +6,8 @@ description: "Delete an existing company by its unique ID (Admin only)."
 
 # DELETE `/api/company/{id}`
 
-Delete a company from the system. This endpoint is restricted to admin users.
+Delete a company from the system. This endpoint is restricted to admin users.  
+The executor must be provided either in the request body or via the `x-executor` header.
 
 ## Path Parameters
 
@@ -14,15 +15,83 @@ Delete a company from the system. This endpoint is restricted to admin users.
 |------|--------|----------|-------------|
 | `id` | `string` | yes      | Company ID  |
 
+## Request Body (optional)
+
+| Field | Type   | Required | Description |
+|-------|--------|----------|-------------|
+| `executor` | `string` | yes | Wallet address of the admin performing the deletion |
+
+### Example
+
+```json
+{
+  "executor": "0xAdminWallet..."
+}
+```
+
 ## Responses
 
 ### 200 — OK
 
-Returns a success message confirming deletion.
+Returned if the company is successfully deleted.
 
 ```json
 {
-  "message": "Company deleted successfully"
+  "success": true,
+  "data": {
+    "message": "Company deleted successfully"
+  }
+}
+```
+
+### 400 — Bad Request
+
+Returned if the executor or company ID is missing or invalid.
+
+```json
+{
+  "success": false,
+  "message": "Executor is required"
+}
+```
+
+```json
+{
+  "success": false,
+  "message": "Company ID is required"
+}
+```
+
+### 401 — Unauthorized
+
+Returned if the request does not include a valid Bearer token.
+
+```json
+{
+  "success": false,
+  "message": "Missing or invalid Authorization header"
+}
+```
+
+### 404 — Not Found
+
+Returned if the company with the specified ID does not exist.
+
+```json
+{
+  "success": false,
+  "message": "Company not found"
+}
+```
+
+### 500 — Server Error
+
+Returned if the server encounters an unexpected error while deleting the company.
+
+```json
+{
+  "success": false,
+  "message": "Failed to delete company"
 }
 ```
 
@@ -30,9 +99,22 @@ Returns a success message confirming deletion.
 
 This endpoint requires an **Admin Bearer Token**.
 
-## Example Request
+## Example Request (cURL)
 
 ```bash
-curl -X DELETE "https://api.zephyra.dev/api/company/<companyId>" \
-  -H "Authorization: Bearer <admin-token>"
+curl -X DELETE "https://api.zephyra.dev/api/company/company-123" \
+  -H "Authorization: Bearer <admin-token>" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "executor": "0xAdminWallet..."
+  }'
 ```
+
+## Example Response
+
+{
+  "success": true,
+  "data": {
+    "message": "Company deleted successfully"
+  }
+}

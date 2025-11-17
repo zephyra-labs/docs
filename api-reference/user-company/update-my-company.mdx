@@ -6,17 +6,18 @@ description: "Update the company profile associated with the currently authentic
 
 # PUT `/api/user-company/my-company`
 
-Update the company profile of the currently authenticated user.
+Update the company profile of the currently authenticated user.  
+This endpoint allows authenticated users to modify their own company relationship data such as role, status, or transaction metadata.
 
 ## Request Body
 
 | Name | Type | Required | Description |
 |------|------|-----------|-------------|
-| `role` | `string` | no | Role of the user in the company (`owner`, `staff`, etc.) |
-| `status` | `string` | no | Status of the company association (`pending`, `approved`, etc.) |
-| `txHash` | `string` | no | Transaction hash if updated on-chain |
-| `updatedAt` | `number` | no | Timestamp of the update |
-| `onchainJoinedAt` | `number` | no | Timestamp of the on-chain association |
+| `role` | `string` | no | Role of the user in the company (`owner`, `admin`, `manager`, `staff`, `viewer`) |
+| `status` | `string` | no | Status of the company association (`pending`, `active`, `rejected`) |
+| `txHash` | `string` | no | Transaction hash for on-chain record updates |
+| `updatedAt` | `number` | no | Timestamp (ms) of the update |
+| `onchainJoinedAt` | `number` | no | Timestamp (ms) when joined on-chain |
 
 > Content-Type: `application/json`
 
@@ -26,9 +27,9 @@ Update the company profile of the currently authenticated user.
 {
   "role": "owner",
   "status": "pending",
-  "txHash": "string",
-  "updatedAt": 0,
-  "onchainJoinedAt": 0
+  "txHash": "0xabc123...",
+  "updatedAt": 1699372800000,
+  "onchainJoinedAt": 1699286400000
 }
 ```
 
@@ -39,42 +40,81 @@ Update the company profile of the currently authenticated user.
 Company profile successfully updated.
 
 ```json
-{}
+{
+  "success": true,
+  "data": {
+    "id": "user_company_01",
+    "userAddress": "0x123abc...",
+    "companyId": "company_01",
+    "role": "owner",
+    "status": "pending",
+    "joinedAt": 1699286400000,
+    "updatedAt": 1699372800000,
+    "txHash": "0xabc123...",
+    "onchainJoinedAt": 1699286400000
+  }
+}
 ```
 
 ### 400 — Bad Request
 
-Returned when the request body contains invalid fields.
-
 ```json
 {
-  "error": "Invalid update payload"
+  "success": false,
+  "message": "Invalid input data"
 }
 ```
 
 ### 401 — Unauthorized
 
-Returned if the user is not authenticated.
+```json
+{
+  "success": false,
+  "message": "Unauthorized"
+}
+```
+
+### 403 — Forbidden
 
 ```json
 {
-  "error": "Unauthorized"
+  "success": false,
+  "message": "Only company owner can update company data"
 }
 ```
 
 ### 404 — Not Found
 
-Returned if the current user does not have an associated company.
+User relation or company not found.
 
 ```json
 {
-  "error": "Company profile not found"
+  "success": false,
+  "message": "User is not linked to any company"
+}
+```
+
+Or if the company record itself is missing:
+
+```json
+{
+  "success": false,
+  "message": "Company not found"
+}
+```
+
+### 500 — Server Error
+
+```json
+{
+  "success": false,
+  "message": "Failed to update company"
 }
 ```
 
 ## Authentication
 
-This endpoint requires a **Bearer Token** for authentication.
+This endpoint requires a **Bearer Token**.
 
 ## Example Request
 
@@ -85,14 +125,27 @@ curl -X PUT "https://api.zephyra.dev/api/user-company/my-company" \
   -d '{
     "role": "owner",
     "status": "pending",
-    "txHash": "string",
-    "updatedAt": 0,
-    "onchainJoinedAt": 0
+    "txHash": "0xabc123...",
+    "updatedAt": 1699372800000,
+    "onchainJoinedAt": 1699286400000
   }'
 ```
 
 ## Example Response
 
 ```json
-{}
+{
+  "success": true,
+  "data": {
+    "id": "user_company_01",
+    "userAddress": "0x123abc...",
+    "companyId": "company_01",
+    "role": "owner",
+    "status": "pending",
+    "joinedAt": 1699286400000,
+    "updatedAt": 1699372800000,
+    "txHash": "0xabc123...",
+    "onchainJoinedAt": 1699286400000
+  }
+}
 ```

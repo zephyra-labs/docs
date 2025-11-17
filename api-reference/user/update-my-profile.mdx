@@ -11,16 +11,7 @@ This endpoint allows modification of user metadata, role, and KYC-related fields
 
 ## Request Body
 
-| Name | Type | Required | Description |
-|------|------|-----------|-------------|
-| `role` | `string` | no | The user's role (e.g., `user`, `admin`) |
-| `metadata` | `object` | no | Custom metadata for the user (e.g., name, email, KYC info) |
-| `lastLoginAt` | `number` | no | Timestamp of the user's last login |
-| `kycStatus` | `string` | no | Current KYC status (`pending`, `verified`, `rejected`) |
-
 > Content-Type: `application/json`
-
-### Example
 
 ```json
 {
@@ -34,6 +25,13 @@ This endpoint allows modification of user metadata, role, and KYC-related fields
 }
 ```
 
+| Name | Type | Required | Description |
+|------|------|-----------|-------------|
+| `role` | `string` | no | The user's role (e.g., `user`, `admin`) |
+| `metadata` | `object` | no | Custom metadata for the user (e.g., name, email, KYC info) |
+| `lastLoginAt` | `number` | no | Timestamp of the user's last login |
+| `kycStatus` | `string` | no | Current KYC status (`pending`, `approved`, `rejected`) |
+
 ## Responses
 
 ### 200 — OK
@@ -42,14 +40,17 @@ Profile successfully updated.
 
 ```json
 {
-  "address": "0x123abc...",
-  "role": "user",
-  "createdAt": 1699286400000,
-  "lastLoginAt": 1699372800000,
-  "metadata": {
-    "name": "John Doe",
-    "email": "john@example.com",
-    "kycStatus": "pending"
+  "success": true,
+  "data": {
+    "address": "0x123abc...",
+    "role": "user",
+    "createdAt": 1699286400000,
+    "lastLoginAt": 1699372800000,
+    "metadata": {
+      "name": "John Doe",
+      "email": "john@example.com",
+      "kycStatus": "verified"
+    }
   }
 }
 ```
@@ -60,7 +61,8 @@ Returned if the input data is invalid.
 
 ```json
 {
-  "error": "Invalid user data"
+  "success": false,
+  "message": "Failed to update profile"
 }
 ```
 
@@ -70,7 +72,19 @@ Returned if the request is made without a valid authentication token.
 
 ```json
 {
-  "error": "Unauthorized"
+  "success": false,
+  "message": "Missing or invalid Authorization header"
+}
+```
+
+### 404 — Not Found
+
+Returned if the current user could not be found.
+
+```json
+{
+  "success": false,
+  "message": "User not found"
 }
 ```
 
@@ -97,14 +111,17 @@ curl -X PATCH "https://api.zephyra.dev/api/user/update/me" \
 
 ```json
 {
-  "address": "0x123abc...",
-  "role": "user",
-  "createdAt": 1699286400000,
-  "lastLoginAt": 1699372800000,
-  "metadata": {
-    "name": "John Doe",
-    "email": "john@example.com",
-    "kycStatus": "verified"
+  "success": true,
+  "data": {
+    "address": "0x123abc...",
+    "role": "user",
+    "createdAt": 1699286400000,
+    "lastLoginAt": 1699372800000,
+    "metadata": {
+      "name": "John Doe",
+      "email": "john@example.com",
+      "kycStatus": "verified"
+    }
   }
 }
 ```

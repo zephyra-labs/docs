@@ -21,28 +21,32 @@ Fetch all user-company records associated with a specific company.
 Returns a list of user-company records for the specified company.
 
 ```json
-[
-  {
-    "id": "string",
-    "userAddress": "string",
-    "companyId": "string",
-    "role": "owner",
-    "status": "pending",
-    "joinedAt": 0,
-    "updatedAt": 0,
-    "txHash": "string",
-    "onchainJoinedAt": 0
-  }
-]
-```
-
-### 400 — Bad Request
-
-Returned when the provided company ID is invalid.
-
-```json
 {
-  "error": "Invalid company ID"
+  "success": true,
+  "data": [
+    {
+      "id": "uc-uuid-123",
+      "userAddress": "0x123abc...",
+      "companyId": "company_01",
+      "role": "admin",
+      "status": "active",
+      "joinedAt": 1699286400000,
+      "updatedAt": 1699372800000,
+      "txHash": "0xabc123...",
+      "onchainJoinedAt": 1699286500000
+    },
+    {
+      "id": "uc-uuid-124",
+      "userAddress": "0x456def...",
+      "companyId": "company_01",
+      "role": "staff",
+      "status": "pending",
+      "joinedAt": 1699286600000,
+      "updatedAt": 1699372900000,
+      "txHash": "0xdef456...",
+      "onchainJoinedAt": 1699286700000
+    }
+  ]
 }
 ```
 
@@ -52,7 +56,8 @@ Returned if the request is missing or contains an invalid authentication token.
 
 ```json
 {
-  "error": "Unauthorized"
+  "success": false,
+  "message": "Missing or invalid Authorization header"
 }
 ```
 
@@ -62,13 +67,36 @@ Returned if no user-company records are found for the given company ID.
 
 ```json
 {
-  "error": "No records found for the company"
+  "success": false,
+  "message": "No relations found for company"
+}
+```
+
+### 422 — Validation Error
+
+Returned if the `companyId` parameter is missing.
+
+```json
+{
+  "success": false,
+  "message": "Missing companyId parameter"
+}
+```
+
+### 500 — Server Error
+
+Returned if there is a server-side error while fetching the records.
+
+```json
+{
+  "success": false,
+  "message": "Failed to fetch company relations"
 }
 ```
 
 ## Authentication
 
-This endpoint requires a **Bearer Token** for authentication.
+This endpoint requires a **Bearer Token**.
 
 ## Example Request
 
@@ -80,17 +108,31 @@ curl -X GET "https://api.zephyra.dev/api/user-company/company/company_01" \
 ## Example Response
 
 ```json
-[
-  {
-    "id": "string",
-    "userAddress": "string",
-    "companyId": "string",
-    "role": "owner",
-    "status": "pending",
-    "joinedAt": 0,
-    "updatedAt": 0,
-    "txHash": "string",
-    "onchainJoinedAt": 0
-  }
-]
+{
+  "success": true,
+  "data": [
+    {
+      "id": "uc-uuid-123",
+      "userAddress": "0x123abc...",
+      "companyId": "company_01",
+      "role": "admin",
+      "status": "active",
+      "joinedAt": 1699286400000,
+      "updatedAt": 1699372800000,
+      "txHash": "0xabc123...",
+      "onchainJoinedAt": 1699286500000
+    },
+    {
+      "id": "uc-uuid-124",
+      "userAddress": "0x456def...",
+      "companyId": "company_01",
+      "role": "staff",
+      "status": "pending",
+      "joinedAt": 1699286600000,
+      "updatedAt": 1699372900000,
+      "txHash": "0xdef456...",
+      "onchainJoinedAt": 1699286700000
+    }
+  ]
+}
 ```

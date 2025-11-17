@@ -20,8 +20,8 @@ Assign or update a participant's role in a trade.
 
 ```json
 {
-  "participantAddress": "0xabc123...",
-  "role": "buyer"
+  "address": "0xabc123...",
+  "role": "importer"
 }
 ```
 
@@ -32,23 +32,33 @@ Assign or update a participant's role in a trade.
 Returns the updated list of participants with their roles.
 
 ```json
-[
-  {
-    "address": "0xabc123...",
-    "role": "exporter",
-    "kycVerified": false,
-    "walletConnected": true
-  }
-]
+{
+  "success": true,
+  "data": [
+    {
+      "address": "0x111...",
+      "role": "exporter",
+      "kycVerified": true,
+      "walletConnected": true
+    },
+    {
+      "address": "0xabc123...",
+      "role": "importer",
+      "kycVerified": false,
+      "walletConnected": true
+    }
+  ]
+}
 ```
 
 ### 400 — Bad Request
 
-Returned if the request body fails validation.
+Returned if the request body is missing `address` or `role`.
 
 ```json
 {
-  "error": "Validation error"
+  "success": false,
+  "message": "Participant address and role are required"
 }
 ```
 
@@ -58,7 +68,8 @@ Returned if the user is not authenticated.
 
 ```json
 {
-  "error": "Unauthorized"
+  "success": false,
+  "message": "Missing or invalid Authorization header"
 }
 ```
 
@@ -68,13 +79,36 @@ Returned if the trade or participant does not exist.
 
 ```json
 {
-  "error": "Trade or participant not found"
+  "success": false,
+  "message": "Trade not found"
+}
+```
+
+### 422 — Unprocessable Entity
+
+Returned if the `id` path parameter is missing.
+
+```json
+{
+  "success": false,
+  "message": "Missing trade id parameter"
+}
+```
+
+### 500 — Server Error
+
+Returned if there is a server error while assigning the role.
+
+```json
+{
+  "success": false,
+  "message": "Failed to assign role"
 }
 ```
 
 ## Authentication
 
-This endpoint requires a **Bearer Token** for authentication.
+This endpoint requires a **Bearer Token**.
 
 ## Example Request
 
@@ -83,20 +117,29 @@ curl -X PATCH "https://api.zephyra.dev/api/trade/trade-uuid-123/role" \
   -H "Authorization: Bearer <token>" \
   -H "Content-Type: application/json" \
   -d '{
-    "participantAddress": "0xabc123...",
-    "role": "buyer"
+    "address": "0xabc123...",
+    "role": "importer"
   }'
 ```
 
 ## Example Response
 
 ```json
-[
-  {
-    "address": "0xabc123...",
-    "role": "exporter",
-    "kycVerified": false,
-    "walletConnected": true
-  }
-]
+{
+  "success": true,
+  "data": [
+    {
+      "address": "0x111...",
+      "role": "exporter",
+      "kycVerified": true,
+      "walletConnected": true
+    },
+    {
+      "address": "0xabc123...",
+      "role": "importer",
+      "kycVerified": false,
+      "walletConnected": true
+    }
+  ]
+}
 ```

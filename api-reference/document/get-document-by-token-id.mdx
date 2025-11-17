@@ -10,9 +10,9 @@ Fetch detailed information about a document using its unique token ID.
 
 ## Path Parameters
 
-| Name | Type | Required | Description |
-|------|------|-----------|--------------|
-| `tokenId` | `integer` | yes | Document token ID |
+| Name      | Type    | Required | Description       |
+|-----------|---------|----------|-----------------|
+| `tokenId` | integer | yes      | Document token ID |
 
 ## Responses
 
@@ -23,21 +23,73 @@ Returns a single document object with full metadata.
 ```json
 {
   "tokenId": 123,
-  "owner": "0x123abc...",
+  "owner": "0xOwner1",
   "fileHash": "Qmabcdef...",
   "uri": "https://storage.example.com/docs/doc-123.pdf",
   "docType": "Invoice",
-  "linkedContracts": [
-    "0xcontract1",
-    "0xcontract2"
-  ],
+  "linkedContracts": ["0xContractAddress1"],
   "status": "Draft",
-  "signer": "0xsigner...",
-  "createdAt": 1699286400000,
-  "updatedAt": 1699372800000,
+  "signer": "0xSigner1",
   "name": "Invoice #123",
   "description": "Invoice for trade #456",
-  "metadataUrl": "https://metadata.example.com/doc-123.json"
+  "metadataUrl": "https://metadata.example.com/doc-123.json",
+  "createdAt": 1700000000000,
+  "updatedAt": 1700003600000
+}
+```
+
+### 400 — Bad Request
+
+Returned if the request is malformed.
+
+```json
+{
+  "success": false,
+  "message": "Bad request"
+}
+```
+
+### 401 — Unauthorized
+
+Returned if the request lacks a valid Bearer token.
+
+```json
+{
+  "success": false,
+  "message": "Missing or invalid Authorization header"
+}
+```
+
+### 404 — Not Found
+
+Returned if no document exists for the given `tokenId`.
+
+```json
+{
+  "success": false,
+  "message": "Document not found"
+}
+```
+
+### 422 — Unprocessable Entity
+
+Returned if the `tokenId` format is invalid (e.g., not an integer).
+
+```json
+{
+  "success": false,
+  "message": "Invalid tokenId format"
+}
+```
+
+### 500 — Server Error
+
+Returned if the server encounters an unexpected error while fetching the document.
+
+```json
+{
+  "success": false,
+  "message": "Failed to fetch document"
 }
 ```
 
@@ -51,3 +103,21 @@ This endpoint requires a **Bearer Token**.
 curl -X GET "https://api.zephyra.dev/api/document/123" \
   -H "Authorization: Bearer <token>"
 ```
+
+## Example Response
+
+{
+  "tokenId": 123,
+  "owner": "0xOwner1",
+  "fileHash": "Qmabcdef...",
+  "uri": "https://storage.example.com/docs/doc-123.pdf",
+  "docType": "Invoice",
+  "linkedContracts": ["0xContractAddress1"],
+  "status": "Draft",
+  "signer": "0xSigner1",
+  "name": "Invoice #123",
+  "description": "Invoice for trade #456",
+  "metadataUrl": "https://metadata.example.com/doc-123.json",
+  "createdAt": 1700000000000,
+  "updatedAt": 1700003600000
+}

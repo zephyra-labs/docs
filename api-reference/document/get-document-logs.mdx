@@ -10,9 +10,9 @@ Fetch all recorded activity logs related to a specific document identified by it
 
 ## Path Parameters
 
-| Name | Type | Required | Description |
-|------|------|-----------|--------------|
-| `tokenId` | `integer` | yes | Document token ID |
+| Name      | Type    | Required | Description       |
+|-----------|---------|----------|-----------------|
+| `tokenId` | integer | yes      | Document token ID |
 
 ## Responses
 
@@ -23,42 +23,81 @@ Returns a list of activity logs related to the document.
 ```json
 [
   {
-    "action": "UPDATED_STATUS",
-    "performedBy": "0xabc123...",
-    "timestamp": 1699372800000,
-    "details": {
-      "previousStatus": "Draft",
-      "newStatus": "Approved"
-    }
+    "action": "Created",
+    "account": "0xSigner1",
+    "timestamp": 1700000000000,
+    "txHash": "0xTransactionHash1"
   },
   {
-    "action": "SIGNED",
-    "performedBy": "0xsigner123...",
-    "timestamp": 1699459200000,
-    "details": {
-      "signatureHash": "Qmabcdef..."
-    }
+    "action": "Updated",
+    "account": "0xSigner2",
+    "timestamp": 1700003600000,
+    "txHash": "0xTransactionHash2"
   }
 ]
 ```
 
-### 404 — Not Found
+### 400 — Bad Request
 
-Returned if the document or its logs cannot be found.
+Returned if the request is malformed.
 
 ```json
 {
-  "error": "Document logs not found"
+  "success": false,
+  "message": "Bad request"
 }
 ```
 
 ### 401 — Unauthorized
 
-Returned if the request lacks valid authentication credentials.
+Returned if the request lacks a valid Bearer token.
 
 ```json
 {
-  "error": "Unauthorized"
+  "success": false,
+  "message": "Missing or invalid Authorization header"
+}
+```
+
+### 404 — Not Found
+
+Returned if the document does not exist.
+
+```json
+{
+  "success": false,
+  "message": "Document not found"
+}
+```
+
+Returned if the document has no logs.
+
+```json
+{
+  "success": false,
+  "message": "No logs found"
+}
+```
+
+### 422 — Unprocessable Entity
+
+Returned if the `tokenId` format is invalid (e.g., not an integer).
+
+```json
+{
+  "success": false,
+  "message": "Invalid tokenId format"
+}
+```
+
+### 500 — Server Error
+
+Returned if the server encounters an unexpected error while fetching the logs.
+
+```json
+{
+  "success": false,
+  "message": "Failed to fetch document logs"
 }
 ```
 
@@ -79,13 +118,27 @@ curl -X GET "https://api.zephyra.dev/api/document/123/logs" \
 ```json
 [
   {
-    "action": "UPDATED_STATUS",
-    "performedBy": "0xabc123...",
-    "timestamp": 1699372800000,
-    "details": {
-      "previousStatus": "Draft",
-      "newStatus": "Approved"
-    }
+    "action": "Created",
+    "account": "0xSigner1",
+    "timestamp": 1700000000000,
+    "txHash": "0xTransactionHash1"
   }
 ]
 ```
+
+## Example Response
+
+[
+  {
+    "action": "Created",
+    "account": "0xSigner1",
+    "timestamp": 1700000000000,
+    "txHash": "0xTransactionHash1"
+  },
+  {
+    "action": "Updated",
+    "account": "0xSigner2",
+    "timestamp": 1700003600000,
+    "txHash": "0xTransactionHash2"
+  }
+]

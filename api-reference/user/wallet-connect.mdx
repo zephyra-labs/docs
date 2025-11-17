@@ -9,10 +9,6 @@ description: "Connect a user's wallet and automatically register them if they do
 Connects a user's crypto wallet to the system.  
 If the wallet address is not registered, a new user record will be automatically created.
 
-## Parameters
-
-None.
-
 ## Request Body
 
 ### Content Type: `application/json`
@@ -25,16 +21,17 @@ None.
 
 | Field     | Type     | Required | Description                 |
 | --------- | -------- | -------- | --------------------------- |
-| `address` | `string` | ✅        | Wallet address of the user. |
+| `address` | `string` | yes        | Wallet address of the user. |
 
 ## Responses
 
-### 200 — OK
+### 201 — Created
 
-Returns user data and a JWT token upon successful wallet connection or registration.
+User successfully connected or registered. Returns user data and JWT token.
 
 ```json
 {
+  "success": true,
   "data": {
     "address": "0x123abc...",
     "role": "user",
@@ -46,7 +43,7 @@ Returns user data and a JWT token upon successful wallet connection or registrat
       "kycStatus": "pending"
     }
   },
-  "token": "string"
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
 }
 ```
 
@@ -56,19 +53,32 @@ Returned if the wallet address is missing or invalid.
 
 ```json
 {
-  "error": "Invalid wallet address"
+  "success": false,
+  "message": "Wallet connect failed: invalid address"
+}
+```
+
+### 401 — Unauthorized
+
+```json
+{
+  "success": false,
+  "message": "Missing or invalid Authorization header"
 }
 ```
 
 ### 500 — Internal Server Error
 
-Returned if the server fails to process the wallet connection.
-
 ```json
 {
-  "error": "Internal server error"
+  "success": false,
+  "message": "Internal server error"
 }
 ```
+
+## Authentication
+
+No prior authentication required for wallet connect. A JWT token is returned upon success.
 
 ## Example Request
 
@@ -84,6 +94,7 @@ curl -X POST "https://api.zephyra.dev/api/user/wallet-connect" \
 
 ```json
 {
+  "success": true,
   "data": {
     "address": "0x123abc...",
     "role": "user",
@@ -95,6 +106,6 @@ curl -X POST "https://api.zephyra.dev/api/user/wallet-connect" \
       "kycStatus": "pending"
     }
   },
-  "token": "string"
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
 }
 ```

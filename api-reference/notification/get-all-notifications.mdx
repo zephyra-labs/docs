@@ -6,7 +6,7 @@ description: "Retrieve a list of all notifications for the authenticated user."
 
 # GET `/api/notification`
 
-Get all notifications. No parameters required.
+Get all notifications for the authenticated user.
 
 ## Parameters
 
@@ -31,7 +31,7 @@ Returns a list of notifications for the user.
     "createdAt": 1699286400000,
     "updatedAt": 1699372800000,
     "extraData": {
-      "additionalProp1": {}
+      "tradeId": 123
     }
   }
 ]
@@ -43,13 +43,25 @@ Returned if the user is not authenticated.
 
 ```json
 {
-  "error": "Unauthorized"
+  "success": false,
+  "message": "Unauthorized"
+}
+```
+
+### 500 — Server Error
+
+Returned if there is a server error while fetching notifications.
+
+```json
+{
+  "success": false,
+  "message": "Failed to fetch notifications"
 }
 ```
 
 ## Authentication
 
-This endpoint requires a **Bearer Token** for authentication.
+This endpoint requires a **Bearer Token**.
 
 ## Example Request
 
@@ -74,7 +86,7 @@ curl -X GET "https://api.zephyra.dev/api/notification" \
     "createdAt": 1699286400000,
     "updatedAt": 1699372800000,
     "extraData": {
-      "additionalProp1": {}
+      "tradeId": 123
     }
   }
 ]

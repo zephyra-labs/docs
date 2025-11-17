@@ -18,20 +18,20 @@ None.
 
 ```json
 {
-  "id": "trade-uuid-123",
-  "contractAddress": "0xcontract...",
   "participants": [
     {
-      "address": "0xabc123...",
+      "address": "0x111...",
       "role": "exporter",
-      "kycVerified": false,
+      "kycVerified": true,
       "walletConnected": true
+    },
+    {
+      "address": "0x222...",
+      "role": "importer",
+      "kycVerified": false,
+      "walletConnected": false
     }
-  ],
-  "status": "draft",
-  "currentStage": 1,
-  "createdAt": 1699286400000,
-  "updatedAt": 1699372800000
+  ]
 }
 ```
 
@@ -43,30 +43,34 @@ Trade successfully created.
 
 ```json
 {
-  "id": "trade-uuid-123",
-  "contractAddress": "0xcontract...",
-  "participants": [
-    {
-      "address": "0xabc123...",
-      "role": "exporter",
-      "kycVerified": false,
-      "walletConnected": true
-    }
-  ],
-  "status": "draft",
-  "currentStage": 1,
-  "createdAt": 1699286400000,
-  "updatedAt": 1699372800000
+  "success": true,
+  "data": {
+    "id": "trade-uuid-789",
+    "contractAddress": null,
+    "participants": [
+      {
+        "address": "0x111...",
+        "role": "exporter",
+        "kycVerified": true,
+        "walletConnected": true
+      }
+    ],
+    "status": "draft",
+    "currentStage": 1,
+    "createdAt": 1699286400000,
+    "updatedAt": 1699286400000
+  }
 }
 ```
 
 ### 400 — Bad Request
 
-Returned if the request body fails validation.
+Returned if the request body fails validation (e.g., missing participants).
 
 ```json
 {
-  "error": "Validation error"
+  "success": false,
+  "message": "Participants are required"
 }
 ```
 
@@ -76,13 +80,25 @@ Returned if the user is not authenticated.
 
 ```json
 {
-  "error": "Unauthorized"
+  "success": false,
+  "message": "Missing or invalid Authorization header"
+}
+```
+
+### 500 — Server Error
+
+Returned if there is a server error while creating the trade.
+
+```json
+{
+  "success": false,
+  "message": "Failed to create trade"
 }
 ```
 
 ## Authentication
 
-This endpoint requires a **Bearer Token** for authentication.
+This endpoint requires a **Bearer Token**.
 
 ## Example Request
 
@@ -91,20 +107,20 @@ curl -X POST "https://api.zephyra.dev/api/trade" \
   -H "Authorization: Bearer <token>" \
   -H "Content-Type: application/json" \
   -d '{
-    "id": "trade-uuid-123",
-    "contractAddress": "0xcontract...",
     "participants": [
       {
-        "address": "0xabc123...",
+        "address": "0x111...",
         "role": "exporter",
-        "kycVerified": false,
+        "kycVerified": true,
         "walletConnected": true
+      },
+      {
+        "address": "0x222...",
+        "role": "importer",
+        "kycVerified": false,
+        "walletConnected": false
       }
-    ],
-    "status": "draft",
-    "currentStage": 1,
-    "createdAt": 1699286400000,
-    "updatedAt": 1699372800000
+    ]
   }'
 ```
 
@@ -112,19 +128,22 @@ curl -X POST "https://api.zephyra.dev/api/trade" \
 
 ```json
 {
-  "id": "trade-uuid-123",
-  "contractAddress": "0xcontract...",
-  "participants": [
-    {
-      "address": "0xabc123...",
-      "role": "exporter",
-      "kycVerified": false,
-      "walletConnected": true
-    }
-  ],
-  "status": "draft",
-  "currentStage": 1,
-  "createdAt": 1699286400000,
-  "updatedAt": 1699372800000
+  "success": true,
+  "data": {
+    "id": "trade-uuid-789",
+    "contractAddress": null,
+    "participants": [
+      {
+        "address": "0x111...",
+        "role": "exporter",
+        "kycVerified": true,
+        "walletConnected": true
+      }
+    ],
+    "status": "draft",
+    "currentStage": 1,
+    "createdAt": 1699286400000,
+    "updatedAt": 1699286400000
+  }
 }
 ```

@@ -6,7 +6,7 @@ description: "Retrieve the activity logs for a specific KYC (Know Your Customer)
 
 # GET `/api/kyc/{tokenId}/logs`
 
-Get KYC activity logs for a specific record.
+Retrieve the activity logs for a specific KYC record. Requires authentication.
 
 ## Parameters
 
@@ -22,7 +22,20 @@ Returns a list of activity logs for the specified KYC record.
 
 ```json
 [
-  {}
+  {
+    "action": "Created",
+    "executor": "admin@example.com",
+    "timestamp": 1699286400000,
+    "txHash": "0xabc123...",
+    "remarks": "Initial KYC upload"
+  },
+  {
+    "action": "Reviewed",
+    "executor": "admin@example.com",
+    "timestamp": 1699372800000,
+    "txHash": "0xdef456...",
+    "remarks": "Verified documents"
+  }
 ]
 ```
 
@@ -32,23 +45,47 @@ Returned if the user is not authenticated.
 
 ```json
 {
-  "error": "Unauthorized"
+  "success": false,
+  "message": "Missing or invalid Authorization header"
 }
 ```
 
 ### 404 — Not Found
 
-Returned if the KYC record with the specified token ID does not exist.
+Returned if no logs are found for the given KYC token.
 
 ```json
 {
-  "error": "KYC record not found"
+  "success": false,
+  "message": "No logs found"
+}
+```
+
+### 422 — Unprocessable Entity
+
+Returned if the `tokenId` parameter is missing.
+
+```json
+{
+  "success": false,
+  "message": "Missing tokenId parameter"
+}
+```
+
+### 500 — Server Error
+
+Returned if there is a server error while fetching KYC logs.
+
+```json
+{
+  "success": false,
+  "message": "Failed to fetch KYC logs"
 }
 ```
 
 ## Authentication
 
-This endpoint requires a **Bearer Token** for authentication.
+This endpoint requires a **Bearer Token**.
 
 ## Example Request
 
@@ -62,6 +99,19 @@ curl -X GET "https://api.zephyra.dev/api/kyc/kyc-uuid-123/logs" \
 
 ```json
 [
-  {}
+  {
+    "action": "Created",
+    "executor": "admin@example.com",
+    "timestamp": 1699286400000,
+    "txHash": "0xabc123...",
+    "remarks": "Initial KYC upload"
+  },
+  {
+    "action": "Reviewed",
+    "executor": "admin@example.com",
+    "timestamp": 1699372800000,
+    "txHash": "0xdef456...",
+    "remarks": "Verified documents"
+  }
 ]
 ```

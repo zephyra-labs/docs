@@ -18,18 +18,65 @@ Fetch the current lifecycle stage and status for a given contract address.
 
 ### 200 — OK
 
-Returns the current state of the contract.
+Returned if the current lifecycle step of the contract is successfully fetched.
 
 ```json
 {
-  "exporter": "string",
-  "importer": "string",
-  "logistics": ["string"],
-  "insurance": "string",
-  "inspector": "string",
-  "status": "string",
-  "currentStage": "string",
-  "lastUpdated": 0
+  "success": true,
+  "data": {
+    "exporter": "0xExporter1",
+    "importer": "0xImporter1",
+    "logistics": ["0xLogistics1", "0xLogistics2"],
+    "insurance": "0xInsurance1",
+    "inspector": "0xInspector1",
+    "status": "active",
+    "currentStage": "shipping",
+    "lastUpdated": 1699999999
+  }
+}
+```
+
+### 400 — Bad Request
+
+Returned if the `address` path parameter is missing or invalid.
+
+```json
+{
+  "success": false,
+  "message": "Contract address is required"
+}
+```
+
+### 401 — Unauthorized
+
+Returned if the request lacks a valid Bearer token.
+
+```json
+{
+  "success": false,
+  "message": "Missing or invalid Authorization header"
+}
+```
+
+### 404 — Not Found
+
+Returned if no contract exists with the specified address.
+
+```json
+{
+  "success": false,
+  "message": "Contract not found"
+}
+```
+
+### 500 — Server Error
+
+Returned if the server encounters an unexpected error while fetching the current step.
+
+```json
+{
+  "success": false,
+  "message": "Failed to fetch contract step"
 }
 ```
 
@@ -43,3 +90,19 @@ This endpoint requires a **Bearer Token**.
 curl -X GET "https://api.zephyra.dev/api/contract/0xABC123/step" \
   -H "Authorization: Bearer <token>"
 ```
+
+## Example Response
+
+{
+  "success": true,
+  "data": {
+    "exporter": "0xExporter1",
+    "importer": "0xImporter1",
+    "logistics": ["0xLogistics1", "0xLogistics2"],
+    "insurance": "0xInsurance1",
+    "inspector": "0xInspector1",
+    "status": "active",
+    "currentStage": "shipping",
+    "lastUpdated": 1699999999
+  }
+}

@@ -6,13 +6,33 @@ description: "Delete an existing KYC (Know Your Customer) record by token ID."
 
 # DELETE `/api/kyc/{tokenId}`
 
-Delete a KYC record.
+Delete a KYC record permanently from the system by providing its token ID. Requires `action` and `executor` fields for logging.
 
-## Parameters
+## Path Parameters
 
 | Name | Type | Required | Description |
 |------|------|----------|-------------|
-| `tokenId` | `string` | yes | KYC token ID (path parameter) |
+| `tokenId` | string | yes | KYC token ID |
+
+## Request Body
+
+> Content-Type: `application/json`
+
+| Name      | Type   | Required | Description |
+|-----------|--------|----------|-------------|
+| `action`  | string | yes      | Action performed for logging |
+| `executor`| string | yes      | User performing the action |
+| `txHash`  | string | no       | Optional transaction hash |
+
+### Example Request Body
+
+```json
+{
+  "action": "delete",
+  "executor": "admin@example.com",
+  "txHash": "0xabc123..."
+}
+```
 
 ## Responses
 
@@ -26,36 +46,75 @@ KYC record successfully deleted.
 }
 ```
 
-### 401 — Unauthorized
+### 400 — Bad Request
 
-Returned if the user is not authenticated.
+Returned if required fields (`action` or `executor`) are missing.
 
 ```json
 {
-  "error": "Unauthorized"
+  "success": false,
+  "message": "Missing action field"
+}
+```
+
+```json
+{
+  "success": false,
+  "message": "Missing executor field"
+}
+```
+
+### 401 — Unauthorized
+
+```json
+{
+  "success": false,
+  "message": "Missing or invalid Authorization header"
 }
 ```
 
 ### 404 — Not Found
 
-Returned if the KYC record with the specified token ID does not exist.
+```json
+{
+  "success": false,
+  "message": "KYC record not found"
+}
+```
+
+### 422 — Unprocessable Entity
 
 ```json
 {
-  "error": "KYC record not found"
+  "success": false,
+  "message": "Missing tokenId parameter"
+}
+```
+
+### 500 — Server Error
+
+```json
+{
+  "success": false,
+  "message": "Failed to delete KYC"
 }
 ```
 
 ## Authentication
 
-This endpoint requires a **Bearer Token** for authentication.
+This endpoint requires a **Bearer Token**.
 
 ## Example Request
 
 ```bash
 curl -X DELETE "https://api.zephyra.dev/api/kyc/kyc-uuid-123" \
   -H "Authorization: Bearer <token>" \
-  -H "Accept: application/json"
+  -H "Content-Type: application/json" \
+  -d '{
+    "action": "delete",
+    "executor": "admin@example.com",
+    "txHash": "0xabc123..."
+  }'
 ```
 
 ## Example Response

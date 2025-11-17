@@ -6,31 +6,43 @@ description: "Update an existing KYC (Know Your Customer) record by token ID."
 
 # PATCH `/api/kyc/{tokenId}`
 
-Update an existing KYC record.
+Update an existing KYC record including its status, name, description, and metadata. Requires `action` and `executor` fields for logging.
 
-## Parameters
+## Path Parameters
 
 | Name | Type | Required | Description |
 |------|------|----------|-------------|
-| `tokenId` | `string` | yes | KYC token ID (path parameter) |
+| `tokenId` | string | yes | KYC token ID |
 
 ## Request Body
 
 > Content-Type: `application/json`
 
+| Name         | Type   | Required | Description |
+|--------------|--------|----------|-------------|
+| `owner`      | string | no       | Wallet address of the KYC owner |
+| `fileHash`   | string | no       | IPFS hash of the KYC file |
+| `metadataUrl`| string | no       | URL pointing to KYC metadata JSON |
+| `name`       | string | no       | Optional name for the KYC |
+| `description`| string | no       | Optional description |
+| `status`     | string | no       | Status of KYC; one of `"Draft","Reviewed","Signed","Revoked"` |
+| `action`     | string | yes      | Action performed for logging |
+| `executor`   | string | yes      | User performing the action |
+| `txHash`     | string | no       | Optional transaction hash |
+
+### Example Request Body
+
 ```json
 {
-  "tokenId": "kyc-uuid-123",
   "owner": "0x123abc...",
   "fileHash": "Qmabcdef...",
   "metadataUrl": "https://ipfs.io/ipfs/Qmabcdef...",
-  "documentUrl": "https://storage.example.com/docs/kyc-123.pdf",
   "name": "NFT-123",
-  "description": "KYC for user 0x123abc...",
-  "txHash": "0xabc123...",
-  "createdAt": 1699286400000,
-  "updatedAt": 1699372800000,
-  "status": "Pending"
+  "description": "Updated KYC info",
+  "status": "Reviewed",
+  "action": "update",
+  "executor": "admin@example.com",
+  "txHash": "0xabc123..."
 }
 ```
 
@@ -38,7 +50,7 @@ Update an existing KYC record.
 
 ### 200 — OK
 
-KYC record successfully updated.
+Returns the updated KYC record.
 
 ```json
 {
@@ -48,37 +60,71 @@ KYC record successfully updated.
   "metadataUrl": "https://ipfs.io/ipfs/Qmabcdef...",
   "documentUrl": "https://storage.example.com/docs/kyc-123.pdf",
   "name": "NFT-123",
-  "description": "KYC for user 0x123abc...",
+  "description": "Updated KYC info",
   "txHash": "0xabc123...",
+  "status": "Reviewed",
   "createdAt": 1699286400000,
-  "updatedAt": 1699372800000,
-  "status": "Pending"
+  "updatedAt": 1699372800000
 }
 ```
 
 ### 400 — Bad Request
 
-Returned when the request body is invalid or missing required fields.
+Returned if required fields (`action` or `executor`) are missing.
 
 ```json
 {
-  "error": "Invalid KYC update data"
+  "success": false,
+  "message": "Missing action field"
+}
+```
+
+```json
+{
+  "success": false,
+  "message": "Missing executor field"
 }
 ```
 
 ### 401 — Unauthorized
 
-Returned if the user is not authenticated.
+```json
+{
+  "success": false,
+  "message": "Missing or invalid Authorization header"
+}
+```
+
+### 404 — Not Found
 
 ```json
 {
-  "error": "Unauthorized"
+  "success": false,
+  "message": "KYC not found"
+}
+```
+
+### 422 — Unprocessable Entity
+
+```json
+{
+  "success": false,
+  "message": "Missing tokenId parameter"
+}
+```
+
+### 500 — Server Error
+
+```json
+{
+  "success": false,
+  "message": "Failed to update KYC"
 }
 ```
 
 ## Authentication
 
-This endpoint requires a **Bearer Token** for authentication.
+This endpoint requires a **Bearer Token**.
 
 ## Example Request
 
@@ -90,11 +136,12 @@ curl -X PATCH "https://api.zephyra.dev/api/kyc/kyc-uuid-123" \
     "owner": "0x123abc...",
     "fileHash": "Qmabcdef...",
     "metadataUrl": "https://ipfs.io/ipfs/Qmabcdef...",
-    "documentUrl": "https://storage.example.com/docs/kyc-123.pdf",
     "name": "NFT-123",
-    "description": "KYC for user 0x123abc...",
-    "txHash": "0xabc123...",
-    "status": "Pending"
+    "description": "Updated KYC info",
+    "status": "Reviewed",
+    "action": "update",
+    "executor": "admin@example.com",
+    "txHash": "0xabc123..."
   }'
 ```
 
@@ -108,10 +155,10 @@ curl -X PATCH "https://api.zephyra.dev/api/kyc/kyc-uuid-123" \
   "metadataUrl": "https://ipfs.io/ipfs/Qmabcdef...",
   "documentUrl": "https://storage.example.com/docs/kyc-123.pdf",
   "name": "NFT-123",
-  "description": "KYC for user 0x123abc...",
+  "description": "Updated KYC info",
   "txHash": "0xabc123...",
+  "status": "Reviewed",
   "createdAt": 1699286400000,
-  "updatedAt": 1699372800000,
-  "status": "Pending"
+  "updatedAt": 1699372800000
 }
 ```

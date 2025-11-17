@@ -14,9 +14,9 @@ Fetch all user-company associations with optional pagination, search, and filter
 |------|------|-----------|-------------|
 | `page` | `integer` | no | Page number (default: 1) |
 | `limit` | `integer` | no | Number of records per page (default: 10) |
-| `search` | `string` | no | Search string to filter by user or company |
-| `role` | `string` | no | Filter by user role (`owner`, `staff`, etc.) |
-| `status` | `string` | no | Filter by status (`pending`, `approved`, etc.) |
+| `search` | `string` | no | Search string to filter by `userAddress` or `companyId` |
+| `role` | `string` | no | Filter by user role (`owner`, `admin`, `manager`, `staff`, `viewer`) |
+| `status` | `string` | no | Filter by status (`pending`, `active`, `rejected`) |
 | `companyId` | `string` | no | Filter by company ID |
 
 ## Responses
@@ -27,20 +27,34 @@ Returns a paginated list of user-company records.
 
 ```json
 {
+  "success": true,
   "data": [
     {
-      "id": "string",
-      "userAddress": "string",
-      "companyId": "string",
-      "role": "owner",
+      "id": "uc-uuid-123",
+      "userAddress": "0x123abc...",
+      "companyId": "company_01",
+      "role": "admin",
+      "status": "active",
+      "joinedAt": 1699286400000,
+      "updatedAt": 1699372800000,
+      "txHash": "0xabc123...",
+      "onchainJoinedAt": 1699286500000
+    },
+    {
+      "id": "uc-uuid-124",
+      "userAddress": "0x456def...",
+      "companyId": "company_01",
+      "role": "staff",
       "status": "pending",
-      "joinedAt": 0,
-      "updatedAt": 0,
-      "txHash": "string",
-      "onchainJoinedAt": 0
+      "joinedAt": 1699286600000,
+      "updatedAt": 1699372900000,
+      "txHash": "0xdef456...",
+      "onchainJoinedAt": 1699286700000
     }
   ],
-  "total": 0
+  "total": 2,
+  "page": 1,
+  "limit": 10
 }
 ```
 
@@ -50,7 +64,8 @@ Returned when query parameters are invalid.
 
 ```json
 {
-  "error": "Invalid query parameters"
+  "success": false,
+  "message": "Invalid query parameter: page must be a number"
 }
 ```
 
@@ -60,13 +75,25 @@ Returned if the request is missing or contains an invalid authentication token.
 
 ```json
 {
-  "error": "Unauthorized"
+  "success": false,
+  "message": "Missing or invalid Authorization header"
+}
+```
+
+### 500 — Server Error
+
+Returned if there is a server-side error while fetching the records.
+
+```json
+{
+  "success": false,
+  "message": "Failed to fetch user-company relations"
 }
 ```
 
 ## Authentication
 
-This endpoint requires a **Bearer Token** for authentication.
+This endpoint requires a **Bearer Token**.
 
 ## Example Request
 
@@ -79,19 +106,33 @@ curl -X GET "https://api.zephyra.dev/api/user-company?page=1&limit=10&search=sta
 
 ```json
 {
+  "success": true,
   "data": [
     {
-      "id": "string",
-      "userAddress": "string",
-      "companyId": "string",
-      "role": "owner",
+      "id": "uc-uuid-123",
+      "userAddress": "0x123abc...",
+      "companyId": "company_01",
+      "role": "admin",
+      "status": "active",
+      "joinedAt": 1699286400000,
+      "updatedAt": 1699372800000,
+      "txHash": "0xabc123...",
+      "onchainJoinedAt": 1699286500000
+    },
+    {
+      "id": "uc-uuid-124",
+      "userAddress": "0x456def...",
+      "companyId": "company_01",
+      "role": "staff",
       "status": "pending",
-      "joinedAt": 0,
-      "updatedAt": 0,
-      "txHash": "string",
-      "onchainJoinedAt": 0
+      "joinedAt": 1699286600000,
+      "updatedAt": 1699372900000,
+      "txHash": "0xdef456...",
+      "onchainJoinedAt": 1699286700000
     }
   ],
-  "total": 0
+  "total": 2,
+  "page": 1,
+  "limit": 10
 }
 ```

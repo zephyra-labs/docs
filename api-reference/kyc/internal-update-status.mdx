@@ -11,21 +11,31 @@ Only accessible by **administrative or system-level accounts**.
 
 ## Path Parameters
 
-| Name | Type | Required | Description |
-|------|------|-----------|--------------|
-| `tokenId` | `string` | yes | KYC token ID |
+| Name      | Type   | Required | Description |
+|-----------|--------|----------|-------------|
+| `tokenId` | string | yes      | KYC token ID |
 
 ## Request Body
 
-| Field | Type | Required | Description |
-|--------|--------|-----------|--------------|
-| `status` | `string` | yes | The new KYC status to set (e.g., `Approved`, `Rejected`, `Pending`). |
+Update the status and optionally provide audit information.
+
+| Field       | Type   | Required | Description |
+|------------ |-------|----------|-------------|
+| `status`    | string | yes      | New KYC status (`Draft`, `Reviewed`, `Signed`, `Revoked`) |
+| `reviewedBy`| string | no       | Internal reviewer name/email |
+| `signature` | string | no       | Optional signature hash |
+| `txHash`    | string | no       | Optional transaction hash |
+| `remarks`   | string | no       | Optional notes or remarks |
 
 ### Example Request Body
 
 ```json
 {
-  "status": "Approved"
+  "status": "Reviewed",
+  "reviewedBy": "admin@example.com",
+  "signature": "0xSignatureHash",
+  "txHash": "0xTransactionHash",
+  "remarks": "Verified and approved"
 }
 ```
 
@@ -45,9 +55,12 @@ Returns the updated KYC record.
   "name": "NFT-123",
   "description": "KYC for user 0x123abc...",
   "txHash": "0xabc123...",
+  "status": "Reviewed",
+  "reviewedBy": "admin@example.com",
+  "signature": "0xSignatureHash",
+  "remarks": "Verified and approved",
   "createdAt": 1699286400000,
-  "updatedAt": 1699372800000,
-  "status": "Approved"
+  "updatedAt": 1699372800000
 }
 ```
 
@@ -57,27 +70,52 @@ Returned if the request body is invalid or missing required fields.
 
 ```json
 {
-  "error": "Invalid status value"
+  "success": false,
+  "message": "Missing status field"
 }
 ```
 
-### 403 — Forbidden
+### 401 — Unauthorized
 
-Returned if a non-admin user attempts to access this endpoint.
+Returned if the internal bearer token is missing or invalid.
 
 ```json
 {
-  "error": "Access denied"
+  "success": false,
+  "message": "Internal authentication failed"
 }
 ```
 
 ### 404 — Not Found
 
-Returned if the specified KYC record could not be found.
+Returned if the KYC record does not exist.
 
 ```json
 {
-  "error": "KYC record not found"
+  "success": false,
+  "message": "KYC record not found"
+}
+```
+
+### 422 — Unprocessable Entity
+
+Returned if the path parameter is invalid or missing.
+
+```json
+{
+  "success": false,
+  "message": "Missing tokenId parameter"
+}
+```
+
+### 500 — Server Error
+
+Returned if the update operation fails on the server.
+
+```json
+{
+  "success": false,
+  "message": "Failed to update KYC status"
 }
 ```
 
@@ -92,7 +130,11 @@ curl -X PATCH "https://api.zephyra.dev/api/kyc/internal/kyc-uuid-123/status" \
   -H "Authorization: Bearer <admin-token>" \
   -H "Content-Type: application/json" \
   -d '{
-    "status": "Approved"
+    "status": "Reviewed",
+    "reviewedBy": "admin@example.com",
+    "signature": "0xSignatureHash",
+    "txHash": "0xTransactionHash",
+    "remarks": "Verified and approved"
   }'
 ```
 
@@ -102,7 +144,17 @@ curl -X PATCH "https://api.zephyra.dev/api/kyc/internal/kyc-uuid-123/status" \
 {
   "tokenId": "kyc-uuid-123",
   "owner": "0x123abc...",
-  "status": "Approved",
+  "fileHash": "Qmabcdef...",
+  "metadataUrl": "https://ipfs.io/ipfs/Qmabcdef...",
+  "documentUrl": "https://storage.example.com/docs/kyc-123.pdf",
+  "name": "NFT-123",
+  "description": "KYC for user 0x123abc...",
+  "txHash": "0xabc123...",
+  "status": "Reviewed",
+  "reviewedBy": "admin@example.com",
+  "signature": "0xSignatureHash",
+  "remarks": "Verified and approved",
+  "createdAt": 1699286400000,
   "updatedAt": 1699372800000
 }
 ```

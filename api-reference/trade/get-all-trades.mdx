@@ -21,20 +21,23 @@ Returns a list of trade records.
 ```json
 [
   {
-    "id": "trade-uuid-123",
-    "contractAddress": "0xcontract...",
-    "participants": [
-      {
-        "address": "0xabc123...",
-        "role": "exporter",
-        "kycVerified": false,
-        "walletConnected": true
-      }
-    ],
-    "status": "draft",
-    "currentStage": 1,
-    "createdAt": 1699286400000,
-    "updatedAt": 1699372800000
+    "success": true,
+    "data": {
+      "id": "trade-uuid-123",
+      "contractAddress": "0xabc123...",
+      "participants": [
+        {
+          "address": "0x111...",
+          "role": "exporter",
+          "kycVerified": true,
+          "walletConnected": true
+        }
+      ],
+      "status": "draft",
+      "currentStage": 1,
+      "createdAt": 1699286400000,
+      "updatedAt": 1699372800000
+    }
   }
 ]
 ```
@@ -45,13 +48,25 @@ Returned if the user is not authenticated.
 
 ```json
 {
-  "error": "Unauthorized"
+  "success": false,
+  "message": "Missing or invalid Authorization header"
+}
+```
+
+### 500 — Server Error
+
+Returned if there is a server error while fetching trades.
+
+```json
+{
+  "success": false,
+  "message": "Failed to fetch trade"
 }
 ```
 
 ## Authentication
 
-This endpoint requires a **Bearer Token** for authentication.
+This endpoint requires a **Bearer Token**.
 
 ## Example Request
 
@@ -66,20 +81,23 @@ curl -X GET "https://api.zephyra.dev/api/trade" \
 ```json
 [
   {
-    "id": "trade-uuid-123",
-    "contractAddress": "0xcontract...",
-    "participants": [
-      {
-        "address": "0xabc123...",
-        "role": "exporter",
-        "kycVerified": false,
-        "walletConnected": true
-      }
-    ],
-    "status": "draft",
-    "currentStage": 1,
-    "createdAt": 1699286400000,
-    "updatedAt": 1699372800000
+    "success": true,
+    "data": {
+      "id": "trade-uuid-123",
+      "contractAddress": "0xabc123...",
+      "participants": [
+        {
+          "address": "0x111...",
+          "role": "exporter",
+          "kycVerified": true,
+          "walletConnected": true
+        }
+      ],
+      "status": "draft",
+      "currentStage": 1,
+      "createdAt": 1699286400000,
+      "updatedAt": 1699372800000
+    }
   }
 ]
 ```

@@ -11,13 +11,13 @@ Create a new user-company record by linking a user wallet to a company.
 ## Request Body
 
 | Name | Type | Required | Description |
-|------|------|-----------|-------------|
+|------|------|----------|-------------|
 | `userAddress` | `string` | yes | Wallet address of the user |
 | `companyId` | `string` | yes | Identifier of the company |
-| `role` | `string` | yes | Role of the user in the company (`owner`, `staff`, etc.) |
-| `status` | `string` | yes | Status of the association (`pending`, `approved`, etc.) |
+| `role` | `string` | yes | Role of the user in the company (`owner`, `admin`, `manager`, `staff`, `viewer`) |
+| `status` | `string` | yes | Status of the association (`pending`, `active`, `rejected`) |
 | `txHash` | `string` | no | Transaction hash if the action is recorded on-chain |
-| `joinedAt` | `number` | no | Timestamp when the user joined the company |
+| `joinedAt` | `number` | yes | Timestamp when the user joined the company |
 | `onchainJoinedAt` | `number` | no | Timestamp when the association was recorded on-chain |
 
 > Content-Type: `application/json`
@@ -32,7 +32,7 @@ Create a new user-company record by linking a user wallet to a company.
   "status": "pending",
   "txHash": "0xabc123...",
   "joinedAt": 1699286400000,
-  "onchainJoinedAt": 0
+  "onchainJoinedAt": 1699286500000
 }
 ```
 
@@ -44,15 +44,18 @@ User-company record successfully created.
 
 ```json
 {
-  "id": "string",
-  "userAddress": "string",
-  "companyId": "string",
-  "role": "owner",
-  "status": "pending",
-  "joinedAt": 0,
-  "updatedAt": 0,
-  "txHash": "string",
-  "onchainJoinedAt": 0
+  "success": true,
+  "data": {
+    "id": "uc_001",
+    "userAddress": "0x123abc...",
+    "companyId": "company_01",
+    "role": "staff",
+    "status": "pending",
+    "joinedAt": 1699286400000,
+    "updatedAt": 1699286400000,
+    "txHash": "0xabc123...",
+    "onchainJoinedAt": 1699286500000
+  }
 }
 ```
 
@@ -62,13 +65,36 @@ Returned when validation fails or required fields are missing.
 
 ```json
 {
-  "error": "Validation error"
+  "success": false,
+  "message": "Invalid request body"
+}
+```
+
+### 401 — Unauthorized
+
+Returned if the user is not authenticated.
+
+```json
+{
+  "success": false,
+  "message": "Missing or invalid Authorization header"
+}
+```
+
+### 500 — Server Error
+
+Returned if there is a server-side error while creating the user-company record.
+
+```json
+{
+  "success": false,
+  "message": "Failed to create user-company relation"
 }
 ```
 
 ## Authentication
 
-This endpoint requires a **Bearer Token** for authentication.
+This endpoint requires a **Bearer Token**.
 
 ## Example Request
 
@@ -83,7 +109,7 @@ curl -X POST "https://api.zephyra.dev/api/user-company" \
     "status": "pending",
     "txHash": "0xabc123...",
     "joinedAt": 1699286400000,
-    "onchainJoinedAt": 0
+    "onchainJoinedAt": 1699286500000
   }'
 ```
 
@@ -91,14 +117,17 @@ curl -X POST "https://api.zephyra.dev/api/user-company" \
 
 ```json
 {
-  "id": "string",
-  "userAddress": "string",
-  "companyId": "string",
-  "role": "owner",
-  "status": "pending",
-  "joinedAt": 0,
-  "updatedAt": 0,
-  "txHash": "string",
-  "onchainJoinedAt": 0
+  "success": true,
+  "data": {
+    "id": "uc_001",
+    "userAddress": "0x123abc...",
+    "companyId": "company_01",
+    "role": "staff",
+    "status": "pending",
+    "joinedAt": 1699286400000,
+    "updatedAt": 1699286400000,
+    "txHash": "0xabc123...",
+    "onchainJoinedAt": 1699286500000
+  }
 }
 ```

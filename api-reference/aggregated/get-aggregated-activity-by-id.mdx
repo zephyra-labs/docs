@@ -9,47 +9,123 @@ description: "Retrieve a single aggregated activity entry using its unique ID."
 Fetch a specific aggregated activity by its unique ID.
 
 ## Path Parameters
-
-| Name | Type   | Required | Description                  |
-|------|--------|----------|------------------------------|
-| `id` | `string` | yes        | Aggregated activity ID       |
+| Name | Type | Required | Description |
+|------|------|----------|-------------|
+| `id` | `string` | Yes | Aggregated activity ID |
 
 ## Responses
 
-### 200 — OK
+### 200 — OK  
 
-Returns the aggregated activity object.
+Returned when the aggregated activity with the specified ID is successfully found.
 
 ```json
 {
-  "id": "string",
-  "timestamp": 0,
-  "type": "onChain",
-  "action": "string",
-  "account": "string",
-  "txHash": "string",
-  "contractAddress": "string",
-  "extra": {
-    "additionalProp1": {}
-  },
-  "onChainInfo": {
-    "status": "string",
-    "blockNumber": 0,
-    "confirmations": 0
-  },
-  "tags": [
-    "string"
-  ]
+  "success": true,
+  "data": {
+    "id": "agg-001",
+    "timestamp": 1731241234,
+    "type": "onChain",
+    "action": "Deployed Contract",
+    "account": "0xABC123",
+    "txHash": "0xDEF456",
+    "contractAddress": "0x789XYZ",
+    "extra": {
+      "note": "Smart contract deployment on testnet"
+    },
+    "onChainInfo": {
+      "status": "confirmed",
+      "blockNumber": 123456,
+      "confirmations": 5
+    },
+    "tags": ["deployment", "smart-contract"]
+  }
+}
+```
+
+### 400 — Bad Request  
+
+Returned when the `id` path parameter is missing or invalid.
+
+```json
+{
+  "success": false,
+  "message": "Missing ID parameter"
+}
+```
+
+### 401 — Unauthorized  
+
+Returned when the request lacks a valid Bearer token.
+
+```json
+{
+  "success": false,
+  "message": "Missing or invalid Authorization header"
+}
+```
+
+### 404 — Not Found  
+
+Returned when no aggregated activity exists for the specified ID.
+
+```json
+{
+  "success": false,
+  "message": "Aggregated activity log not found"
+}
+```
+
+### 500 — Server Error  
+
+Returned when an internal server error occurs during the lookup process.
+
+```json
+{
+  "success": false,
+  "message": "Failed to fetch aggregated activity"
 }
 ```
 
 ## Authentication
 
-This endpoint requires a **Bearer Token**.
+This endpoint requires a **Bearer Token**.  
+Admin permissions may be required.
 
-## Example Request
+## Notes
+* Returns exactly one aggregated activity entry matching `id`.  
+* `onChainInfo` appears only for `onChain` activity types.  
+* `tags` can be used for categorization, analytics, or filtering.
+
+## Example Request (cURL)
 
 ```bash
 curl -X GET "https://api.zephyra.dev/api/aggregated/agg-001" \
   -H "Authorization: Bearer <token>"
 ```
+
+## Example Response
+
+```json
+{
+  "success": true,
+  "data": {
+    "id": "agg-001",
+    "timestamp": 1731241234,
+    "type": "onChain",
+    "action": "Deployed Contract",
+    "account": "0xABC123",
+    "txHash": "0xDEF456",
+    "contractAddress": "0x789XYZ",
+    "extra": {
+      "note": "Smart contract deployment on testnet"
+    },
+    "onChainInfo": {
+      "status": "confirmed",
+      "blockNumber": 123456,
+      "confirmations": 5
+    },
+    "tags": ["deployment", "smart-contract"]
+  },
+  "message": "Aggregated activity retrieved successfully"
+}

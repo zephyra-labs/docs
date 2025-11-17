@@ -6,7 +6,7 @@ description: "Retrieve a list of all KYC (Know Your Customer) records stored in 
 
 # GET `/api/kyc`
 
-Get all KYC records. No parameters required.
+Retrieve all KYC records in the system. No parameters are required. Requires authentication.
 
 ## Parameters
 
@@ -42,13 +42,25 @@ Returned if the user is not authenticated.
 
 ```json
 {
-  "error": "Unauthorized"
+  "success": false,
+  "message": "Missing or invalid Authorization header"
+}
+```
+
+### 500 — Server Error
+
+Returned if there is a server error while fetching KYC records.
+
+```json
+{
+  "success": false,
+  "message": "Failed to fetch KYCs"
 }
 ```
 
 ## Authentication
 
-This endpoint requires a **Bearer Token** for authentication.
+This endpoint requires a **Bearer Token**.
 
 ## Example Request
 

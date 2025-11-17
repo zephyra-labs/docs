@@ -16,44 +16,69 @@ This endpoint does not accept any query parameters.
 
 ### 200 — OK
 
-Returns a list of all deployed contracts.
+Returned if all deployed contracts are successfully fetched. Each contract includes its current state and full history.
 
 ```json
-[
-  {
-    "contractAddress": "string",
-    "state": {
-      "exporter": "string",
-      "importer": "string",
-      "logistics": ["string"],
-      "insurance": "string",
-      "inspector": "string",
-      "status": "string",
-      "currentStage": "string",
-      "lastUpdated": 0
-    },
-    "history": [
-      {
-        "action": "string",
-        "txHash": "string",
-        "account": "string",
-        "exporter": "string",
-        "importer": "string",
-        "logistics": ["string"],
-        "insurance": "string",
-        "inspector": "string",
-        "requiredAmount": "string",
-        "extra": {"additionalProp1": {}},
-        "timestamp": 0,
-        "onChainInfo": {
-          "status": "string",
-          "blockNumber": 0,
-          "confirmations": 0
+{
+  "success": true,
+  "data": [
+    {
+      "contractAddress": "0xContractAddress1",
+      "state": {
+        "exporter": "0xExporter1",
+        "importer": "0xImporter1",
+        "logistics": ["0xLogistics1", "0xLogistics2"],
+        "insurance": "0xInsurance1",
+        "inspector": "0xInspector1",
+        "status": "active",
+        "currentStage": "shipping",
+        "lastUpdated": 1699999999
+      },
+      "history": [
+        {
+          "action": "created",
+          "txHash": "0xTxHash1",
+          "account": "0xExporter1",
+          "exporter": "0xExporter1",
+          "importer": "0xImporter1",
+          "logistics": ["0xLogistics1"],
+          "insurance": "0xInsurance1",
+          "inspector": "0xInspector1",
+          "requiredAmount": "1000",
+          "extra": { "notes": "Initial contract creation" },
+          "timestamp": 1699990000,
+          "onChainInfo": {
+            "status": "success",
+            "blockNumber": 123456,
+            "confirmations": 12
+          }
         }
-      }
-    ]
-  }
-]
+      ]
+    }
+  ]
+}
+```
+
+### 401 — Unauthorized
+
+Returned if the request does not include a valid Bearer token.
+
+```json
+{
+  "success": false,
+  "message": "Missing or invalid Authorization header"
+}
+```
+
+### 500 — Server Error
+
+Returned if the server fails to fetch the contracts.
+
+```json
+{
+  "success": false,
+  "message": "Failed to fetch deployed contracts"
+}
 ```
 
 ## Authentication
@@ -66,3 +91,44 @@ This endpoint requires a **Bearer Token**.
 curl -X GET "https://api.zephyra.dev/api/contract" \
   -H "Authorization: Bearer <token>"
 ```
+
+## Example Response
+
+{
+  "success": true,
+  "data": [
+    {
+      "contractAddress": "0xContractAddress1",
+      "state": {
+        "exporter": "0xExporter1",
+        "importer": "0xImporter1",
+        "logistics": ["0xLogistics1", "0xLogistics2"],
+        "insurance": "0xInsurance1",
+        "inspector": "0xInspector1",
+        "status": "active",
+        "currentStage": "shipping",
+        "lastUpdated": 1699999999
+      },
+      "history": [
+        {
+          "action": "created",
+          "txHash": "0xTxHash1",
+          "account": "0xExporter1",
+          "exporter": "0xExporter1",
+          "importer": "0xImporter1",
+          "logistics": ["0xLogistics1"],
+          "insurance": "0xInsurance1",
+          "inspector": "0xInspector1",
+          "requiredAmount": "1000",
+          "extra": { "notes": "Initial contract creation" },
+          "timestamp": 1699990000,
+          "onChainInfo": {
+            "status": "success",
+            "blockNumber": 123456,
+            "confirmations": 12
+          }
+        }
+      ]
+    }
+  ]
+}

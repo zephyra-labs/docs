@@ -6,7 +6,7 @@ description: "Remove an existing tag from an aggregated activity by ID."
 
 # DELETE `/api/aggregated/{id}/tag`
 
-Remove a tag from an existing aggregated activity.
+Remove a tag from an existing aggregated activity log.
 
 ## Path Parameters
 
@@ -24,21 +24,88 @@ Remove a tag from an existing aggregated activity.
 
 ### 200 — OK
 
-Tag removed successfully.
+Returned when the tag is successfully removed from the aggregated activity.
 
 ```json
 {
-  "message": "Tag removed successfully"
+  "success": true,
+  "data": {
+    "tag": "smart-contract",
+    "message": "Tag removed successfully"
+  }
+}
+```
+
+### 400 — Bad Request
+
+Returned if the tag query parameter is missing or not a string, or the id path parameter is missing.
+
+```json
+{
+  "success": false,
+  "message": "Tag is required and must be a string"
+}
+```
+
+```json
+{
+  "success": false,
+  "message": "Missing ID parameter"
+}
+```
+
+### 401 — Unauthorized
+
+Returned if the request does not include a valid Bearer token.
+
+```json
+{
+  "success": false,
+  "message": "Missing or invalid Authorization header"
+}
+```
+
+### 404 — Not Found
+
+Returned if the aggregated activity with the specified ID does not exist.
+
+```json
+{
+  "success": false,
+  "message": "Aggregated activity log not found"
+}
+```
+
+### 500 — Server Error
+
+Returned if the server encounters an unexpected error while attempting to remove the tag.
+
+```json
+{
+  "success": false,
+  "message": "Failed to remove tag from aggregated activity"
 }
 ```
 
 ## Authentication
 
 This endpoint requires a **Bearer Token**.
+Admin privileges may be required to remove tags.
 
-## Example Request
+## Example Request (cURL)
 
 ```bash
 curl -X DELETE "https://api.zephyra.dev/api/aggregated/agg-001/tag?tag=smart-contract" \
   -H "Authorization: Bearer <token>"
 ```
+
+## Example Response
+
+```json
+{
+  "success": true,
+  "data": {
+    "tag": "smart-contract",
+    "message": "Tag removed successfully"
+  }
+}

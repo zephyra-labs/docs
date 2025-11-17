@@ -13,48 +13,120 @@ Accessible by admin users only.
 
 ### 200 — OK
 
-Returns dashboard metrics including total wallets, contracts, documents, and recent activities.
+Returned if the admin dashboard metrics are successfully fetched.
 
 ```json
 {
-  "totalWallets": 0,
-  "totalContracts": 0,
-  "totalDocuments": 0,
-  "wallets": [
-    {
-      "address": "0xabc123...",
-      "balance": 1000000000
-    }
-  ],
-  "recentContracts": [
-    {
-      "address": "string",
-      "owner": "string",
-      "createdAt": "2025-11-10T22:48:01.974Z",
-      "lastAction": {
-        "action": "string",
-        "account": "string",
-        "timestamp": 0
+  "success": true,
+  "data": {
+    "totalWallets": 12,
+    "totalContracts": 8,
+    "totalDocuments": 25,
+    "wallets": [
+      {
+        "address": "0xabc123...",
+        "balance": 1000000000
+      },
+      {
+        "address": "0xdef456...",
+        "balance": 500000000
       }
-    }
-  ],
-  "recentDocuments": [
-    {
-      "id": "string",
-      "tokenId": 0,
-      "owner": "string",
-      "title": "string",
-      "docType": "string",
-      "status": "string",
-      "createdAt": 0,
-      "updatedAt": 0,
-      "lastAction": {
-        "action": "string",
-        "account": "string",
-        "timestamp": 0
+    ],
+    "recentContracts": [
+      {
+        "address": "0xContractAddress1",
+        "owner": "0xOwner1",
+        "createdAt": "2025-11-10T08:00:00Z",
+        "lastAction": {
+          "action": "created",
+          "account": "0xOwner1",
+          "timestamp": 1699603200000
+        }
+      },
+      {
+        "address": "0xContractAddress2",
+        "owner": "0xOwner2",
+        "createdAt": "2025-11-11T09:30:00Z",
+        "lastAction": {
+          "action": "shipped",
+          "account": "0xLogistics1",
+          "timestamp": 1699689600000
+        }
       }
-    }
-  ]
+    ],
+    "recentDocuments": [
+      {
+        "id": "doc-123",
+        "tokenId": 1,
+        "owner": "0xOwner1",
+        "title": "Contract Agreement",
+        "docType": "PDF",
+        "status": "active",
+        "createdAt": 1699599600000,
+        "updatedAt": 1699603200000,
+        "lastAction": {
+          "action": "uploaded",
+          "account": "0xOwner1",
+          "timestamp": 1699603200000
+        }
+      }
+    ]
+  }
+}
+```
+
+### 400 — Bad Request
+
+Returned if the request format is invalid.
+
+```json
+{
+  "success": false,
+  "message": "Invalid request format"
+}
+```
+
+### 401 — Unauthorized
+
+Returned if the request lacks a valid Bearer token or admin privileges.
+
+```json
+{
+  "success": false,
+  "message": "Missing or invalid Authorization header"
+}
+```
+
+### 404 — Not Found
+
+Returned if the dashboard data cannot be found.
+
+```json
+{
+  "success": false,
+  "message": "Dashboard data not found"
+}
+```
+
+### 422 — Validation Failed
+
+Returned if any query parameters fail validation (e.g., `limit` is not a number).
+
+```json
+{
+  "success": false,
+  "message": "Limit must be a number"
+}
+```
+
+### 500 — Server Error
+
+Returned if the server encounters an unexpected error while fetching the dashboard data.
+
+```json
+{
+  "success": false,
+  "message": "Failed to fetch admin dashboard"
 }
 ```
 
@@ -68,3 +140,63 @@ This endpoint requires a **Bearer Token** with admin privileges.
 curl -X GET "https://api.zephyra.dev/api/dashboard/admin" \
   -H "Authorization: Bearer <admin-token>"
 ```
+
+## Example Response
+
+{
+  "success": true,
+  "data": {
+    "totalWallets": 12,
+    "totalContracts": 8,
+    "totalDocuments": 25,
+    "wallets": [
+      {
+        "address": "0xabc123...",
+        "balance": 1000000000
+      },
+      {
+        "address": "0xdef456...",
+        "balance": 500000000
+      }
+    ],
+    "recentContracts": [
+      {
+        "address": "0xContractAddress1",
+        "owner": "0xOwner1",
+        "createdAt": "2025-11-10T08:00:00Z",
+        "lastAction": {
+          "action": "created",
+          "account": "0xOwner1",
+          "timestamp": 1699603200000
+        }
+      },
+      {
+        "address": "0xContractAddress2",
+        "owner": "0xOwner2",
+        "createdAt": "2025-11-11T09:30:00Z",
+        "lastAction": {
+          "action": "shipped",
+          "account": "0xLogistics1",
+          "timestamp": 1699689600000
+        }
+      }
+    ],
+    "recentDocuments": [
+      {
+        "id": "doc-123",
+        "tokenId": 1,
+        "owner": "0xOwner1",
+        "title": "Contract Agreement",
+        "docType": "PDF",
+        "status": "active",
+        "createdAt": 1699599600000,
+        "updatedAt": 1699603200000,
+        "lastAction": {
+          "action": "uploaded",
+          "account": "0xOwner1",
+          "timestamp": 1699603200000
+        }
+      }
+    ]
+  }
+}

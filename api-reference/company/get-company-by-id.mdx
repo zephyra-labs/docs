@@ -10,35 +10,82 @@ Fetch a specific company by its unique ID.
 
 ## Path Parameters
 
-| Name | Type   | Required | Description      |
-|------|--------|----------|----------------|
-| `id` | `string` | yes      | Company ID       |
+| Name | Type   | Required | Description  |
+|------|--------|----------|--------------|
+| `id` | `string` | yes    | Company ID   |
 
 ## Responses
 
 ### 200 — OK
 
-Returns the company object.
+Returned if the company with the specified ID is found.
 
 ```json
 {
-  "id": "string",
-  "name": "string",
-  "address": "string",
-  "city": "string",
-  "stateOrProvince": "string",
-  "postalCode": "string",
-  "country": "string",
-  "email": "string",
-  "phone": "string",
-  "taxId": "string",
-  "registrationNumber": "string",
-  "businessType": "string",
-  "website": "string",
-  "walletAddress": "string",
-  "verified": true,
-  "createdAt": 0,
-  "updatedAt": 0
+  "success": true,
+  "data": {
+    "id": "company-123",
+    "name": "Example Corp",
+    "address": "123 Main Street",
+    "city": "Bangkok",
+    "stateOrProvince": "Bangkok",
+    "postalCode": "10110",
+    "country": "Thailand",
+    "email": "contact@example.com",
+    "phone": "+66 2 123 4567",
+    "taxId": "1234567890",
+    "registrationNumber": "REG-987654",
+    "businessType": "IT Services",
+    "website": "https://example.com",
+    "walletAddress": "0x123abc...",
+    "verified": true,
+    "createdAt": 1699286400000,
+    "updatedAt": 1699286400000
+  }
+}
+```
+
+### 400 — Bad Request
+
+Returned if the id path parameter is missing or invalid.
+
+```json
+{
+  "success": false,
+  "message": "Company ID is required"
+}
+```
+
+### 401 — Unauthorized
+
+Returned if the request does not include a valid Bearer token.
+
+```json
+{
+  "success": false,
+  "message": "Missing or invalid Authorization header"
+}
+```
+
+### 404 — Not Found
+
+Returned if no company exists with the given ID.
+
+```json
+{
+  "success": false,
+  "message": "Company not found"
+}
+```
+
+### 500 — Server Error
+
+Returned if the server fails to fetch the company details.
+
+```json
+{
+  "success": false,
+  "message": "Failed to fetch company details"
 }
 ```
 
@@ -46,9 +93,34 @@ Returns the company object.
 
 This endpoint requires a **Bearer Token**.
 
-## Example Request
+## Example Request (cURL)
 
 ```bash
-curl -X GET "https://api.zephyra.dev/api/company/<companyId>" \
+curl -X GET "https://api.zephyra.dev/api/company/company-123" \
   -H "Authorization: Bearer <token>"
 ```
+
+## Example Response
+
+{
+  "success": true,
+  "data": {
+    "id": "company-123",
+    "name": "Example Corp",
+    "address": "123 Main Street",
+    "city": "Bangkok",
+    "stateOrProvince": "Bangkok",
+    "postalCode": "10110",
+    "country": "Thailand",
+    "email": "contact@example.com",
+    "phone": "+66 2 123 4567",
+    "taxId": "1234567890",
+    "registrationNumber": "REG-987654",
+    "businessType": "IT Services",
+    "website": "https://example.com",
+    "walletAddress": "0x123abc...",
+    "verified": true,
+    "createdAt": 1699286400000,
+    "updatedAt": 1699286400000
+  }
+}

@@ -46,66 +46,83 @@ User-company record successfully updated.
 
 ```json
 {
-  "id": "string",
-  "userAddress": "string",
-  "companyId": "string",
-  "role": "owner",
-  "status": "pending",
-  "joinedAt": 0,
-  "updatedAt": 0,
-  "txHash": "string",
-  "onchainJoinedAt": 0
+  "success": true,
+  "data": {
+    "id": "uc-uuid-123",
+    "userAddress": "0x123abc...",
+    "companyId": "company_01",
+    "role": "owner",
+    "status": "pending",
+    "joinedAt": 1699286400000,
+    "updatedAt": 1699372800000,
+    "txHash": "0xabc123...",
+    "onchainJoinedAt": 1699286500000
+  }
 }
 ```
 
 ### 400 — Bad Request
 
-Returned when the request body contains invalid fields.
-
 ```json
 {
-  "error": "Invalid update payload"
+  "success": false,
+  "message": "Failed to update relation"
 }
 ```
 
 ### 401 — Unauthorized
 
-Returned if the request is missing or contains an invalid authentication token.
-
 ```json
 {
-  "error": "Unauthorized"
+  "success": false,
+  "message": "Missing or invalid Authorization header"
 }
 ```
 
 ### 403 — Forbidden
 
-Returned if a non-admin user attempts to update the record.
-
 ```json
 {
-  "error": "Forbidden: Admin privileges required"
+  "success": false,
+  "message": "Access denied. Admins only."
 }
 ```
 
 ### 404 — Not Found
 
-Returned if no record exists with the specified ID.
+```json
+{
+  "success": false,
+  "message": "Relation not found"
+}
+```
+
+### 422 — Unprocessable Entity
 
 ```json
 {
-  "error": "User-company record not found"
+  "success": false,
+  "message": "Missing id parameter"
+}
+```
+
+### 500 — Server Error
+
+```json
+{
+  "success": false,
+  "message": "Failed to update relation"
 }
 ```
 
 ## Authentication
 
-This endpoint requires a **Bearer Token** for authentication (admin only).
+This endpoint requires a **Bearer Token** and admin privileges.
 
 ## Example Request
 
 ```bash
-curl -X PUT "https://api.zephyra.dev/api/user-company/record_123" \
+curl -X PUT "https://api.zephyra.dev/api/user-company/uc-uuid-123" \
   -H "Authorization: Bearer <token>" \
   -H "Content-Type: application/json" \
   -d '{
@@ -121,14 +138,17 @@ curl -X PUT "https://api.zephyra.dev/api/user-company/record_123" \
 
 ```json
 {
-  "id": "string",
-  "userAddress": "string",
-  "companyId": "string",
-  "role": "owner",
-  "status": "pending",
-  "joinedAt": 0,
-  "updatedAt": 0,
-  "txHash": "string",
-  "onchainJoinedAt": 0
+  "success": true,
+  "data": {
+    "id": "uc-uuid-123",
+    "userAddress": "0x123abc...",
+    "companyId": "company_01",
+    "role": "owner",
+    "status": "pending",
+    "joinedAt": 1699286400000,
+    "updatedAt": 1699372800000,
+    "txHash": "0xabc123...",
+    "onchainJoinedAt": 1699286500000
+  }
 }
 ```

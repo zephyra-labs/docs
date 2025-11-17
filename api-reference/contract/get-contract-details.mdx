@@ -10,51 +10,96 @@ Fetch detailed information for a specific contract, including its current state 
 
 ## Path Parameters
 
-| Name      | Type     | Required | Description        |
-|-----------|----------|----------|------------------|
-| `address` | `string` | yes      | Contract address  |
+| Name      | Type     | Required | Description       |
+|-----------|----------|----------|-----------------|
+| `address` | `string` | yes      | Contract address |
 
 ## Responses
 
 ### 200 — OK
 
-Returns the detailed contract object.
+Returned if the contract details are successfully fetched. Includes the current state and full history of the contract.
 
 ```json
 {
-  "contractAddress": "string",
-  "state": {
-    "exporter": "string",
-    "importer": "string",
-    "logistics": ["string"],
-    "insurance": "string",
-    "inspector": "string",
-    "status": "string",
-    "currentStage": "string",
-    "lastUpdated": 0
-  },
-  "history": [
-    {
-      "action": "string",
-      "txHash": "string",
-      "account": "string",
-      "exporter": "string",
-      "importer": "string",
-      "logistics": ["string"],
-      "insurance": "string",
-      "inspector": "string",
-      "requiredAmount": "string",
-      "extra": {
-        "additionalProp1": {}
-      },
-      "timestamp": 0,
-      "onChainInfo": {
-        "status": "string",
-        "blockNumber": 0,
-        "confirmations": 0
+  "success": true,
+  "data": {
+    "contractAddress": "0xContractAddress1",
+    "state": {
+      "exporter": "0xExporter1",
+      "importer": "0xImporter1",
+      "logistics": ["0xLogistics1", "0xLogistics2"],
+      "insurance": "0xInsurance1",
+      "inspector": "0xInspector1",
+      "status": "active",
+      "currentStage": "shipping",
+      "lastUpdated": 1699999999
+    },
+    "history": [
+      {
+        "action": "created",
+        "txHash": "0xTxHash1",
+        "account": "0xExporter1",
+        "exporter": "0xExporter1",
+        "importer": "0xImporter1",
+        "logistics": ["0xLogistics1"],
+        "insurance": "0xInsurance1",
+        "inspector": "0xInspector1",
+        "requiredAmount": "1000",
+        "extra": { "notes": "Initial contract creation" },
+        "timestamp": 1699990000,
+        "onChainInfo": {
+          "status": "success",
+          "blockNumber": 123456,
+          "confirmations": 12
+        }
       }
-    }
-  ]
+    ]
+  }
+}
+```
+
+### 400 — Bad Request
+
+Returned if the `address` path parameter is missing or invalid.
+
+```json
+{
+  "success": false,
+  "message": "Contract address is required"
+}
+```
+
+### 401 — Unauthorized
+
+Returned if the request lacks a valid Bearer token.
+
+```json
+{
+  "success": false,
+  "message": "Missing or invalid Authorization header"
+}
+```
+
+### 404 — Not Found
+
+Returned if no contract exists with the specified address.
+
+```json
+{
+  "success": false,
+  "message": "Contract not found"
+}
+```
+
+### 500 — Server Error
+
+Returned if the server encounters an unexpected error while fetching the contract details.
+
+```json
+{
+  "success": false,
+  "message": "Failed to fetch contract details"
 }
 ```
 
@@ -68,3 +113,42 @@ This endpoint requires a **Bearer Token**.
 curl -X GET "https://api.zephyra.dev/api/contract/0xABC123/details" \
   -H "Authorization: Bearer <token>"
 ```
+
+## Example Response
+
+{
+  "success": true,
+  "data": {
+    "contractAddress": "0xContractAddress1",
+    "state": {
+      "exporter": "0xExporter1",
+      "importer": "0xImporter1",
+      "logistics": ["0xLogistics1", "0xLogistics2"],
+      "insurance": "0xInsurance1",
+      "inspector": "0xInspector1",
+      "status": "active",
+      "currentStage": "shipping",
+      "lastUpdated": 1699999999
+    },
+    "history": [
+      {
+        "action": "created",
+        "txHash": "0xTxHash1",
+        "account": "0xExporter1",
+        "exporter": "0xExporter1",
+        "importer": "0xImporter1",
+        "logistics": ["0xLogistics1"],
+        "insurance": "0xInsurance1",
+        "inspector": "0xInspector1",
+        "requiredAmount": "1000",
+        "extra": { "notes": "Initial contract creation" },
+        "timestamp": 1699990000,
+        "onChainInfo": {
+          "status": "success",
+          "blockNumber": 123456,
+          "confirmations": 12
+        }
+      }
+    ]
+  }
+}

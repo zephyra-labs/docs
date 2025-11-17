@@ -31,34 +31,44 @@ Add a participant to a trade.
 
 ### 200 — OK
 
-Returns the updated trade record including the new participant.
+Participant added successfully, returns updated trade.
 
 ```json
 {
-  "id": "trade-uuid-123",
-  "contractAddress": "0xcontract...",
-  "participants": [
-    {
-      "address": "0xabc123...",
-      "role": "exporter",
-      "kycVerified": false,
-      "walletConnected": true
-    }
-  ],
-  "status": "draft",
-  "currentStage": 1,
-  "createdAt": 1699286400000,
-  "updatedAt": 1699372800000
+  "success": true,
+  "data": {
+    "id": "trade-uuid-123",
+    "contractAddress": "0xcontract...",
+    "participants": [
+      {
+        "address": "0x999...",
+        "role": "exporter",
+        "kycVerified": true,
+        "walletConnected": true
+      },
+      {
+        "address": "0xabc123...",
+        "role": "importer",
+        "kycVerified": false,
+        "walletConnected": true
+      }
+    ],
+    "status": "draft",
+    "currentStage": 1,
+    "createdAt": 1699286400000,
+    "updatedAt": 1699372800000
+  }
 }
 ```
 
 ### 400 — Bad Request
 
-Returned if the request body fails validation.
+Returned if participant data is missing.
 
 ```json
 {
-  "error": "Validation error"
+  "success": false,
+  "message": "Participant data is required"
 }
 ```
 
@@ -68,13 +78,47 @@ Returned if the user is not authenticated.
 
 ```json
 {
-  "error": "Unauthorized"
+  "success": false,
+  "message": "Missing or invalid Authorization header"
+}
+```
+
+### 404 — Not Found
+
+Returned if the trade with the specified ID does not exist.
+
+```json
+{
+  "success": false,
+  "message": "Trade not found"
+}
+```
+
+### 422 — Unprocessable Entity
+
+Returned if the `id` path parameter is missing.
+
+```json
+{
+  "success": false,
+  "message": "Missing trade id parameter"
+}
+```
+
+### 500 — Server Error
+
+Returned if there is a server error while adding the participant.
+
+```json
+{
+  "success": false,
+  "message": "Failed to add participant"
 }
 ```
 
 ## Authentication
 
-This endpoint requires a **Bearer Token** for authentication.
+This endpoint requires a **Bearer Token**.
 
 ## Example Request
 
@@ -94,19 +138,28 @@ curl -X POST "https://api.zephyra.dev/api/trade/trade-uuid-123/participant" \
 
 ```json
 {
-  "id": "trade-uuid-123",
-  "contractAddress": "0xcontract...",
-  "participants": [
-    {
-      "address": "0xabc123...",
-      "role": "exporter",
-      "kycVerified": false,
-      "walletConnected": true
-    }
-  ],
-  "status": "draft",
-  "currentStage": 1,
-  "createdAt": 1699286400000,
-  "updatedAt": 1699372800000
+  "success": true,
+  "data": {
+    "id": "trade-uuid-123",
+    "contractAddress": "0xcontract...",
+    "participants": [
+      {
+        "address": "0x999...",
+        "role": "exporter",
+        "kycVerified": true,
+        "walletConnected": true
+      },
+      {
+        "address": "0xabc123...",
+        "role": "importer",
+        "kycVerified": false,
+        "walletConnected": true
+      }
+    ],
+    "status": "draft",
+    "currentStage": 1,
+    "createdAt": 1699286400000,
+    "updatedAt": 1699372800000
+  }
 }
 ```

@@ -6,13 +6,13 @@ description: "Retrieve all documents linked to a specific contract."
 
 # GET `/api/document/contract/{addr}`
 
-Fetch all documents associated with a given contract address.
+Fetch all trade-related documents associated with a given contract address.
 
 ## Path Parameters
 
-| Name   | Type     | Required | Description         |
-|--------|----------|----------|-------------------|
-| `addr` | `string` | yes      | Contract address    |
+| Name   | Type     | Required | Description       |
+|--------|----------|----------|-----------------|
+| `addr` | `string` | yes      | Contract address |
 
 ## Responses
 
@@ -24,23 +24,90 @@ Returns a list of document objects linked to the contract.
 [
   {
     "tokenId": 123,
-    "owner": "0x123abc...",
+    "owner": "0xOwner1",
     "fileHash": "Qmabcdef...",
     "uri": "https://storage.example.com/docs/doc-123.pdf",
     "docType": "Invoice",
-    "linkedContracts": [
-      "0xcontract1",
-      "0xcontract2"
-    ],
+    "linkedContracts": ["0xContractAddress1"],
     "status": "Draft",
-    "signer": "0xsigner...",
-    "createdAt": 1699286400000,
-    "updatedAt": 1699372800000,
+    "signer": "0xSigner1",
     "name": "Invoice #123",
     "description": "Invoice for trade #456",
-    "metadataUrl": "https://metadata.example.com/doc-123.json"
+    "metadataUrl": "https://metadata.example.com/doc-123.json",
+    "createdAt": 1700000000000,
+    "updatedAt": 1700003600000
+  },
+  {
+    "tokenId": 124,
+    "owner": "0xOwner2",
+    "fileHash": "Qmghijkl...",
+    "uri": "https://storage.example.com/docs/doc-124.pdf",
+    "docType": "B/L",
+    "linkedContracts": ["0xContractAddress1"],
+    "status": "Reviewed",
+    "signer": "0xSigner2",
+    "name": "B/L #124",
+    "description": "Bill of Lading for trade #457",
+    "metadataUrl": "https://metadata.example.com/doc-124.json",
+    "createdAt": 1700007200000,
+    "updatedAt": 1700010800000
   }
 ]
+```
+
+### 400 — Bad Request
+
+Returned if the contract address format is invalid.
+
+```json
+{
+  "success": false,
+  "message": "Invalid contract address format"
+}
+```
+
+### 401 — Unauthorized
+
+Returned if the request lacks a valid Bearer token.
+
+```json
+{
+  "success": false,
+  "message": "Missing or invalid Authorization header"
+}
+```
+
+### 422 — Unprocessable Entity
+
+Returned if the contract address is missing.
+
+```json
+{
+  "success": false,
+  "message": "Missing contract address"
+}
+```
+
+### 404 — Not Found
+
+Returned if no documents are linked to the given contract.
+
+```json
+{
+  "success": false,
+  "message": "No documents found for this contract"
+}
+```
+
+### 500 — Server Error
+
+Returned if the server encounters an unexpected error while fetching documents.
+
+```json
+{
+  "success": false,
+  "message": "Failed to fetch documents by contract"
+}
 ```
 
 ## Authentication
@@ -50,6 +117,41 @@ This endpoint requires a **Bearer Token**.
 ## Example Request
 
 ```bash
-curl -X GET "https://api.zephyra.dev/api/document/contract/0xcontract1" \
+curl -X GET "https://api.zephyra.dev/api/document/contract/0xContractAddress1" \
   -H "Authorization: Bearer <token>"
 ```
+
+## Example Response
+
+[
+  {
+    "tokenId": 123,
+    "owner": "0xOwner1",
+    "fileHash": "Qmabcdef...",
+    "uri": "https://storage.example.com/docs/doc-123.pdf",
+    "docType": "Invoice",
+    "linkedContracts": ["0xContractAddress1"],
+    "status": "Draft",
+    "signer": "0xSigner1",
+    "name": "Invoice #123",
+    "description": "Invoice for trade #456",
+    "metadataUrl": "https://metadata.example.com/doc-123.json",
+    "createdAt": 1700000000000,
+    "updatedAt": 1700003600000
+  },
+  {
+    "tokenId": 124,
+    "owner": "0xOwner2",
+    "fileHash": "Qmghijkl...",
+    "uri": "https://storage.example.com/docs/doc-124.pdf",
+    "docType": "B/L",
+    "linkedContracts": ["0xContractAddress1"],
+    "status": "Reviewed",
+    "signer": "0xSigner2",
+    "name": "B/L #124",
+    "description": "Bill of Lading for trade #457",
+    "metadataUrl": "https://metadata.example.com/doc-124.json",
+    "createdAt": 1700007200000,
+    "updatedAt": 1700010800000
+  }
+]

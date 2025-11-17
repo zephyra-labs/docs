@@ -22,11 +22,14 @@ Returns the current state of the wallet account.
 
 ```json
 {
-  "account": "string",
-  "chainId": 0,
-  "provider": "string",
-  "sessionId": "string",
-  "lastActiveAt": 0
+  "success": true,
+  "data": {
+    "account": "0x123abc...",
+    "chainId": 31337,
+    "provider": "metamask",
+    "sessionId": "session_001",
+    "lastActiveAt": 1699372800000
+  }
 }
 ```
 
@@ -36,7 +39,8 @@ Returned if the request is missing or contains an invalid authentication token.
 
 ```json
 {
-  "error": "Unauthorized"
+  "success": false,
+  "message": "Missing or invalid Authorization header"
 }
 ```
 
@@ -46,7 +50,17 @@ Returned if the wallet state is not found for the given account.
 
 ```json
 {
-  "error": "State not found"
+  "success": false,
+  "message": "Wallet state not found"
+}
+```
+
+### 500 — Server Error
+
+```json
+{
+  "success": false,
+  "message": "Failed to fetch wallet state"
 }
 ```
 
@@ -65,10 +79,13 @@ curl -X GET "https://api.zephyra.dev/api/wallet/0x123abc/state" \
 
 ```json
 {
-  "account": "string",
-  "chainId": 0,
-  "provider": "string",
-  "sessionId": "string",
-  "lastActiveAt": 0
+  "success": true,
+  "data": {
+    "account": "0x123abc...",
+    "chainId": 31337,
+    "provider": "metamask",
+    "sessionId": "session_001",
+    "lastActiveAt": 1699372800000
+  }
 }
 ```

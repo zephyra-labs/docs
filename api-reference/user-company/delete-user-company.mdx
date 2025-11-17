@@ -22,58 +22,75 @@ User-company record successfully deleted.
 
 ```json
 {
-  "message": "Relation deleted successfully"
+  "success": true,
+  "data": {
+    "message": "Relation deleted successfully"
+  }
 }
 ```
 
 ### 400 — Bad Request
 
-Returned when the provided ID is invalid.
-
 ```json
 {
-  "error": "Invalid record ID"
+  "success": false,
+  "message": "Failed to delete relation"
 }
 ```
 
 ### 401 — Unauthorized
 
-Returned if the request is missing or contains an invalid authentication token.
-
 ```json
 {
-  "error": "Unauthorized"
+  "success": false,
+  "message": "Missing or invalid Authorization header"
 }
 ```
 
 ### 403 — Forbidden
 
-Returned if a non-admin user attempts to delete the record.
-
 ```json
 {
-  "error": "Forbidden: Admin privileges required"
+  "success": false,
+  "message": "Access denied. Admins only."
 }
 ```
 
 ### 404 — Not Found
 
-Returned if no record exists with the specified ID.
+```json
+{
+  "success": false,
+  "message": "Relation not found"
+}
+```
+
+### 422 — Unprocessable Entity
 
 ```json
 {
-  "error": "User-company record not found"
+  "success": false,
+  "message": "Missing id parameter"
+}
+```
+
+### 500 — Server Error
+
+```json
+{
+  "success": false,
+  "message": "Failed to delete relation"
 }
 ```
 
 ## Authentication
 
-This endpoint requires a **Bearer Token** for authentication (admin only).
+This endpoint requires a **Bearer Token** and admin privileges.
 
 ## Example Request
 
 ```bash
-curl -X DELETE "https://api.zephyra.dev/api/user-company/record_123" \
+curl -X DELETE "https://api.zephyra.dev/api/user-company/uc-uuid-123" \
   -H "Authorization: Bearer <token>"
 ```
 
@@ -81,6 +98,9 @@ curl -X DELETE "https://api.zephyra.dev/api/user-company/record_123" \
 
 ```json
 {
-  "message": "Relation deleted successfully"
+  "success": true,
+  "data": {
+    "message": "Relation deleted successfully"
+  }
 }
 ```

@@ -6,47 +6,107 @@ description: "Retrieve a list of all activity logs, optionally filtered by accou
 
 # GET `/api/activity`
 
-Fetch all activity logs recorded in the system.  
-Supports optional query filters for account, transaction hash, and pagination.
+Fetch all activity logs recorded in the system. Supports optional query filters for account, transaction hash, and pagination.
 
 ## Query Parameters
-
 | Name | Type | Required | Description |
-|------|------|-----------|-------------|
+|------|------|----------|-------------|
 | `account` | `string` | No | Filter results by account address |
 | `txHash` | `string` | No | Filter results by transaction hash |
-| `limit` | `integer` | No | Maximum number of results to return |
-| `startAfterTimestamp` | `integer` | No | Return results after this timestamp (for pagination) |
+| `limit` | `integer` | No | Maximum number of results to return (minimum 1) |
+| `startAfterTimestamp` | `integer` | No | Return results after this Unix timestamp (ms) — used for pagination |
 
 ## Responses
 
-### 200 — OK
-Returns a list of activity logs matching the filters.
+### 200 — OK  
+
+Returned when activity logs are successfully retrieved, with or without filters.
 
 ```json
-[
-  {
-    "timestamp": 0,
-    "type": "onChain",
-    "action": "string",
-    "account": "string",
-    "txHash": "string",
-    "contractAddress": "string",
-    "extra": {
-      "additionalProp1": {}
-    },
-    "onChainInfo": {
-      "status": "string",
-      "blockNumber": 0,
-      "confirmations": 0
-    }
+{
+  "success": true,
+  "data": {
+    "count": 2,
+    "items": [
+      {
+        "timestamp": 1699286400000,
+        "type": "onChain",
+        "action": "signed",
+        "account": "0x123abc...",
+        "txHash": "0xabc123...",
+        "contractAddress": "0x789ghi...",
+        "extra": {
+          "userAgent": "Mozilla/5.0"
+        },
+        "onChainInfo": {
+          "status": "success",
+          "blockNumber": 12345,
+          "confirmations": 10
+        }
+      },
+      {
+        "timestamp": 1699290000000,
+        "type": "backend",
+        "action": "logout",
+        "account": "0x456def...",
+        "extra": {
+          "ip": "192.168.1.10"
+        }
+      }
+    ]
   }
-]
+}
+```
+
+### 400 — Bad Request  
+
+Returned when query parameters contain invalid types.
+
+```json
+{
+  "success": false,
+  "message": "limit must be a number"
+}
+```
+
+```json
+{
+  "success": false,
+  "message": "startAfterTimestamp must be a number"
+}
+```
+
+### 401 — Unauthorized  
+
+Returned when the Authorization header is missing or invalid.
+
+```json
+{
+  "success": false,
+  "message": "Missing or invalid Authorization header"
+}
+```
+
+### 500 — Server Error  
+
+Returned when the server fails to fetch or process activity logs.
+
+```json
+{
+  "success": false,
+  "message": "Failed to fetch activities"
+}
 ```
 
 ## Authentication
 
 This endpoint requires authentication using a **Bearer Token**.
+
+## Notes
+* `limit` defaults to a server-defined value if not provided.  
+* `startAfterTimestamp` supports cursor-based pagination.  
+* `account` and `txHash` may be used together.  
+* `onChainInfo` only appears for `onChain` activities.
 
 ## Example Request
 
@@ -54,3 +114,41 @@ This endpoint requires authentication using a **Bearer Token**.
 curl -X GET "https://api.zephyra.dev/api/activity?account=0xabc123&limit=10" \
   -H "Authorization: Bearer <token>"
 ```
+
+## Example Response
+
+```json
+{
+  "success": true,
+  "data": {
+    "count": 2,
+    "items": [
+      {
+        "timestamp": 1699286400000,
+        "type": "onChain",
+        "action": "signed",
+        "account": "0x123abc...",
+        "txHash": "0xabc123...",
+        "contractAddress": "0x789ghi...",
+        "extra": {
+          "userAgent": "Mozilla/5.0"
+        },
+        "onChainInfo": {
+          "status": "success",
+          "blockNumber": 12345,
+          "confirmations": 10
+        }
+      },
+      {
+        "timestamp": 1699290000000,
+        "type": "backend",
+        "action": "logout",
+        "account": "0x456def...",
+        "extra": {
+          "ip": "192.168.1.10"
+        }
+      }
+    ]
+  },
+  "message": "Activities retrieved successfully"
+}

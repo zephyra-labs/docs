@@ -1,12 +1,12 @@
 ---
 title: "Get All Wallet Logs"
 openapi: GET `/api/wallet/logs`
-description: "Retrieve all wallet login and disconnect events for users."
+description: "Retrieve all wallet login and disconnect events for users. Admin-only endpoint."
 ---
 
 # GET `/api/wallet/logs`
 
-Fetch all wallet log entries, including login and disconnect events.
+Fetch all wallet log entries, including login and disconnect events. Only administrators can access this endpoint.
 
 ## Responses
 
@@ -15,16 +15,29 @@ Fetch all wallet log entries, including login and disconnect events.
 Returns a list of wallet log records.
 
 ```json
-[
-  {
-    "account": "0x123abc...",
-    "action": "connect",
-    "timestamp": 1699286400000,
-    "meta": {
-      "additionalProp1": {}
+{
+  "success": true,
+  "data": [
+    {
+      "account": "0x123abc...",
+      "action": "connect",
+      "timestamp": 1699286400000,
+      "meta": {
+        "ip": "192.168.1.1",
+        "device": "Chrome on Windows"
+      }
+    },
+    {
+      "account": "0x456def...",
+      "action": "disconnect",
+      "timestamp": 1699372800000,
+      "meta": {
+        "ip": "192.168.1.2",
+        "device": "MetaMask Mobile"
+      }
     }
-  }
-]
+  ]
+}
 ```
 
 ### 401 — Unauthorized
@@ -33,13 +46,23 @@ Returned if the request is missing or contains an invalid authentication token.
 
 ```json
 {
-  "error": "Unauthorized"
+  "success": false,
+  "message": "Missing or invalid Authorization header"
+}
+```
+
+### 500 — Server Error
+
+```json
+{
+  "success": false,
+  "message": "Failed to fetch wallet logs"
 }
 ```
 
 ## Authentication
 
-This endpoint requires a **Bearer Token** for authentication.
+This endpoint requires a **Bearer Token** for authentication (admin only).
 
 ## Example Request
 
@@ -51,14 +74,27 @@ curl -X GET "https://api.zephyra.dev/api/wallet/logs" \
 ## Example Response
 
 ```json
-[
-  {
-    "account": "0x123abc...",
-    "action": "connect",
-    "timestamp": 1699286400000,
-    "meta": {
-      "additionalProp1": {}
+{
+  "success": true,
+  "data": [
+    {
+      "account": "0x123abc...",
+      "action": "connect",
+      "timestamp": 1699286400000,
+      "meta": {
+        "ip": "192.168.1.1",
+        "device": "Chrome on Windows"
+      }
+    },
+    {
+      "account": "0x456def...",
+      "action": "disconnect",
+      "timestamp": 1699372800000,
+      "meta": {
+        "ip": "192.168.1.2",
+        "device": "MetaMask Mobile"
+      }
     }
-  }
-]
+  ]
+}
 ```

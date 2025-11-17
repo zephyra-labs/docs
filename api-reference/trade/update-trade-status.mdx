@@ -32,30 +32,34 @@ Returns the updated trade record with the new status.
 
 ```json
 {
-  "id": "trade-uuid-123",
-  "contractAddress": "0xcontract...",
-  "participants": [
-    {
-      "address": "0xabc123...",
-      "role": "exporter",
-      "kycVerified": false,
-      "walletConnected": true
-    }
-  ],
-  "status": "completed",
-  "currentStage": 1,
-  "createdAt": 1699286400000,
-  "updatedAt": 1699372800000
+  "success": true,
+  "data": {
+    "id": "trade-uuid-123",
+    "contractAddress": "0xabc123...",
+    "participants": [
+      {
+        "address": "0x111...",
+        "role": "exporter",
+        "kycVerified": true,
+        "walletConnected": true
+      }
+    ],
+    "status": "completed",
+    "currentStage": 3,
+    "createdAt": 1699286400000,
+    "updatedAt": 1699372800000
+  }
 }
 ```
 
 ### 400 — Bad Request
 
-Returned if the status value is invalid.
+Returned if the status value is missing or invalid.
 
 ```json
 {
-  "error": "Invalid status value"
+  "success": false,
+  "message": "Status is required"
 }
 ```
 
@@ -65,23 +69,47 @@ Returned if the user is not authenticated.
 
 ```json
 {
-  "error": "Unauthorized"
+  "success": false,
+  "message": "Missing or invalid Authorization header"
 }
 ```
 
 ### 404 — Not Found
 
-Returned if the trade with the specified ID does not exist.
+Returned if the trade does not exist.
 
 ```json
 {
-  "error": "Trade not found"
+  "success": false,
+  "message": "Trade not found"
+}
+```
+
+### 422 — Unprocessable Entity
+
+Returned if the `id` path parameter is missing.
+
+```json
+{
+  "success": false,
+  "message": "Missing trade id parameter"
+}
+```
+
+### 500 — Server Error
+
+Returned if there is a server error while updating the status.
+
+```json
+{
+  "success": false,
+  "message": "Failed to update trade status"
 }
 ```
 
 ## Authentication
 
-This endpoint requires a **Bearer Token** for authentication.
+This endpoint requires a **Bearer Token**.
 
 ## Example Request
 
@@ -98,19 +126,22 @@ curl -X PATCH "https://api.zephyra.dev/api/trade/trade-uuid-123/status" \
 
 ```json
 {
-  "id": "trade-uuid-123",
-  "contractAddress": "0xcontract...",
-  "participants": [
-    {
-      "address": "0xabc123...",
-      "role": "exporter",
-      "kycVerified": false,
-      "walletConnected": true
-    }
-  ],
-  "status": "completed",
-  "currentStage": 1,
-  "createdAt": 1699286400000,
-  "updatedAt": 1699372800000
+  "success": true,
+  "data": {
+    "id": "trade-uuid-123",
+    "contractAddress": "0xabc123...",
+    "participants": [
+      {
+        "address": "0x111...",
+        "role": "exporter",
+        "kycVerified": true,
+        "walletConnected": true
+      }
+    ],
+    "status": "completed",
+    "currentStage": 3,
+    "createdAt": 1699286400000,
+    "updatedAt": 1699372800000
+  }
 }
 ```

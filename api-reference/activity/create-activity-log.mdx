@@ -6,21 +6,20 @@ description: "Create a new user activity log entry in the system."
 
 # POST `/api/activity`
 
-Create a new activity log entry.  
-Used to record user or system activities related to blockchain events, contract interactions, or general application usage.
+Create a new activity log entry. Used to record user or system activities related to blockchain events, contract interactions, or general application usage.
 
 ## Request Body
 
-| Name              | Type   | Required | Description                                                       |
-| ----------------- | ------ | -------- | ----------------------------------------------------------------- |
-| `timestamp`       | `number` | Yes      | Unix timestamp when the activity occurred                         |
-| `type`            | `string` | Yes      | Type of activity (`onChain` or `offChain`)                        |
-| `action`          | `string` | Yes      | Action performed (e.g. `"CREATE_CONTRACT"`, `"UPDATE_PROFILE"`)   |
-| `account`         | `string` | Yes      | Wallet address of the user performing the action                  |
-| `txHash`          | `string` | No       | Related transaction hash if on-chain                              |
-| `contractAddress` | `string` | No       | Smart contract address involved                                   |
-| `extra`           | `object` | No       | Additional contextual data                                        |
-| `onChainInfo`     | `object` | No       | Optional blockchain metadata (status, blockNumber, confirmations) |
+| Name              | Type     | Required | Description                                              |
+| ----------------- | -------- | -------- | -------------------------------------------------------- |
+| `timestamp`       | `number` | Yes      | Unix timestamp when the activity occurred                |
+| `type`            | `string` | Yes      | Type of activity (`onChain` or `backend`)                |
+| `action`          | `string` | Yes      | Action performed (e.g. `"login"`, `"CREATE_CONTRACT"`)   |
+| `account`         | `string` | Yes      | Wallet address of the user performing the action         |
+| `txHash`          | `string` | No       | Related transaction hash if on-chain                     |
+| `contractAddress` | `string` | No       | Smart contract address involved                          |
+| `extra`           | `object` | No       | Additional contextual data                               |
+| `onChainInfo`     | `object` | No       | Blockchain metadata (status, blockNumber, confirmations) |
 
 ### Example Request Body
 
@@ -34,32 +33,91 @@ Used to record user or system activities related to blockchain events, contract 
   "contractAddress": "0x789ghi...",
   "extra": {
     "network": "Polygon"
+  },
+  "onChainInfo": {
+    "status": "success",
+    "blockNumber": 12345,
+    "confirmations": 10
   }
 }
 ```
 
 ## Responses
 
-### 201 — Created
+### 201 — Created  
 
-Activity log successfully created.
+Returned when the activity log is successfully stored.
 
 ```json
 {
-  "timestamp": 0,
-  "type": "onChain",
-  "action": "string",
-  "account": "string",
-  "txHash": "string",
-  "contractAddress": "string",
-  "extra": {
-    "additionalProp1": {}
-  },
-  "onChainInfo": {
-    "status": "string",
-    "blockNumber": 0,
-    "confirmations": 0
+  "success": true,
+  "data": {
+    "timestamp": 1731248583,
+    "type": "onChain",
+    "action": "CREATE_CONTRACT",
+    "account": "0xabc123...",
+    "txHash": "0xdef456...",
+    "contractAddress": "0x789ghi...",
+    "extra": {
+      "network": "Polygon"
+    },
+    "onChainInfo": {
+      "status": "success",
+      "blockNumber": 12345,
+      "confirmations": 10
+    }
   }
+}
+```
+
+### 400 — Bad Request  
+
+Returned if the body is empty or missing required JSON structure.
+
+```json
+{
+  "success": false,
+  "message": "Request body is required"
+}
+```
+
+### 401 — Unauthorized  
+
+Returned when the Authorization header is missing or invalid.
+
+```json
+{
+  "success": false,
+  "message": "Missing or invalid Authorization header"
+}
+```
+
+### 422 — Unprocessable Entity  
+
+Returned when required fields are missing or contain invalid data types.
+
+```json
+{
+  "success": false,
+  "message": "Missing required field: account"
+}
+```
+
+```json
+{
+  "success": false,
+  "message": "timestamp must be a number"
+}
+```
+
+### 500 — Server Error  
+
+Returned when an internal server error occurs while creating the activity log.
+
+```json
+{
+  "success": false,
+  "message": "Failed to create activity"
 }
 ```
 
@@ -67,7 +125,7 @@ Activity log successfully created.
 
 This endpoint requires authentication using a **Bearer Token**.
 
-## Example Request
+## Example Request (cURL)
 
 ```bash
 curl -X POST https://api.zephyra.dev/api/activity \
@@ -82,6 +140,36 @@ curl -X POST https://api.zephyra.dev/api/activity \
     "contractAddress": "0x789ghi...",
     "extra": {
       "network": "Polygon"
+    },
+    "onChainInfo": {
+      "status": "success",
+      "blockNumber": 12345,
+      "confirmations": 10
     }
   }'
+```
+
+## Example Response
+
+```json
+{
+  "success": true,
+  "data": {
+    "timestamp": 1731248583,
+    "type": "onChain",
+    "action": "CREATE_CONTRACT",
+    "account": "0xabc123...",
+    "txHash": "0xdef456...",
+    "contractAddress": "0x789ghi...",
+    "extra": {
+      "network": "Polygon"
+    },
+    "onChainInfo": {
+      "status": "success",
+      "blockNumber": 12345,
+      "confirmations": 10
+    }
+  },
+  "message": "Activity log created successfully"
+}
 ```

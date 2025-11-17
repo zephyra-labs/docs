@@ -10,20 +10,26 @@ Create a new KYC record by uploading a KYC document file and its related metadat
 
 ## Request Body
 
-| Name | Type | Required | Description |
-|------|------|-----------|--------------|
-| `owner` | `string` | yes | Wallet address of the KYC owner |
-| `file` | `string($binary)` | yes | KYC document file to upload |
-| `fileHash` | `string` | yes | Hash of the uploaded KYC file (e.g., IPFS CID) |
-| `metadataUrl` | `string` | yes | Metadata URL pointing to file details on IPFS or storage |
-
 > Content-Type: `multipart/form-data`
+
+| Name         | Type          | Required | Description |
+|--------------|---------------|----------|-------------|
+| `owner`      | string        | yes      | Wallet address of the KYC owner |
+| `file`       | string ($binary) | yes    | KYC document file to upload |
+| `fileHash`   | string        | yes      | IPFS hash of the uploaded file |
+| `metadataUrl`| string        | yes      | URL pointing to metadata JSON |
+| `name`       | string        | no       | Optional name for the KYC record |
+| `description`| string        | no       | Optional description of the KYC record |
+| `status`     | string        | no       | Status of KYC; one of `"Draft","Reviewed","Signed","Revoked"` |
+| `action`     | string        | yes      | Action performed for logging (required) |
+| `executor`   | string        | yes      | User performing the action (required) |
+| `txHash`     | string        | no       | Optional transaction hash |
 
 ## Responses
 
 ### 201 — Created
 
-KYC record successfully created and stored.
+KYC record successfully created.
 
 ```json
 {
@@ -35,35 +41,64 @@ KYC record successfully created and stored.
   "name": "NFT-123",
   "description": "KYC for user 0x123abc...",
   "txHash": "0xabc123...",
+  "status": "Draft",
   "createdAt": 1699286400000,
-  "updatedAt": 1699372800000,
-  "status": "Pending"
+  "updatedAt": 1699372800000
 }
 ```
 
 ### 400 — Bad Request
 
-Returned when the request is missing required fields or invalid file data.
+Returned if required fields are missing or invalid.
 
 ```json
 {
-  "error": "Invalid KYC submission data"
+  "success": false,
+  "message": "Missing required KYC fields"
+}
+```
+
+Or if logging fields are missing:
+
+```json
+{
+  "success": false,
+  "message": "Missing action field"
+}
+```
+
+```json
+{
+  "success": false,
+  "message": "Missing executor field"
 }
 ```
 
 ### 401 — Unauthorized
 
-Returned if the user is not authenticated.
+Returned if the request lacks a valid bearer token.
 
 ```json
 {
-  "error": "Unauthorized"
+  "success": false,
+  "message": "Missing or invalid Authorization header"
+}
+```
+
+### 500 — Server Error
+
+Returned if there is an error during KYC creation.
+
+```json
+{
+  "success": false,
+  "message": "Failed to create KYC"
 }
 ```
 
 ## Authentication
 
-This endpoint requires a **Bearer Token** for authentication.
+This endpoint requires a **Bearer Token**.
 
 ## Example Request
 
@@ -74,7 +109,12 @@ curl -X POST "https://api.zephyra.dev/api/kyc" \
   -F "owner=0x123abc..." \
   -F "file=@/path/to/kyc.pdf" \
   -F "fileHash=Qmabcdef..." \
-  -F "metadataUrl=https://ipfs.io/ipfs/Qmabcdef..."
+  -F "metadataUrl=https://ipfs.io/ipfs/Qmabcdef..." \
+  -F "name=NFT-123" \
+  -F "description=KYC for user 0x123abc..." \
+  -F "status=Draft" \
+  -F "action=create" \
+  -F "executor=admin@example.com"
 ```
 
 ## Example Response
@@ -89,8 +129,8 @@ curl -X POST "https://api.zephyra.dev/api/kyc" \
   "name": "NFT-123",
   "description": "KYC for user 0x123abc...",
   "txHash": "0xabc123...",
+  "status": "Draft",
   "createdAt": 1699286400000,
-  "updatedAt": 1699372800000,
-  "status": "Pending"
+  "updatedAt": 1699372800000
 }
 ```

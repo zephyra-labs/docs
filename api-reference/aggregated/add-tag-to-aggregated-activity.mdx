@@ -6,7 +6,7 @@ description: "Add a new tag to an existing aggregated activity by ID."
 
 # POST `/api/aggregated/{id}/tag`
 
-Add a tag to an existing aggregated activity.
+Add a tag to an existing aggregated activity log.
 
 ## Path Parameters
 
@@ -17,10 +17,10 @@ Add a tag to an existing aggregated activity.
 ## Request Body
 
 | Field | Type   | Required | Description       |
-|-------|--------|----------|-----------------|
-| `tag` | `string` | yes        | Tag to add       |
+|-------|--------|----------|------------------|
+| `tag` | `string` | yes      | Tag to add       |
 
-### Example
+### Example Request Body
 
 ```json
 {
@@ -30,21 +30,77 @@ Add a tag to an existing aggregated activity.
 
 ## Responses
 
-### 200 — OK
+### 200 — OK  
 
-Tag added successfully.
+Returned when the tag is successfully added to the aggregated activity.
 
 ```json
 {
-  "message": "Tag added successfully"
+  "success": true,
+  "data": {
+    "tag": "smart-contract",
+    "message": "Tag added successfully"
+  }
+}
+```
+
+### 400 — Bad Request  
+
+Returned when required fields are missing or invalid, or the `id` parameter is missing.
+
+```json
+{
+  "success": false,
+  "message": "Tag is required and must be a string"
+}
+```
+
+```json
+{
+  "success": false,
+  "message": "Missing ID parameter"
+}
+```
+
+### 401 — Unauthorized  
+
+Returned when the request is missing a valid authorization token.
+
+```json
+{
+  "success": false,
+  "message": "Missing or invalid Authorization header"
+}
+```
+
+### 404 — Not Found  
+
+Returned when the aggregated activity ID does not exist.
+
+```json
+{
+  "success": false,
+  "message": "Aggregated activity log not found"
+}
+```
+
+### 500 — Server Error  
+
+Returned when the system fails to add the tag due to a server-side issue.
+
+```json
+{
+  "success": false,
+  "message": "Failed to add tag to aggregated activity"
 }
 ```
 
 ## Authentication
 
-This endpoint requires a **Bearer Token**.
+This endpoint requires a **Bearer Token**.  
+Admin privileges may be required to add tags.
 
-## Example Request
+## Example Request (cURL)
 
 ```bash
 curl -X POST "https://api.zephyra.dev/api/aggregated/agg-001/tag" \
@@ -54,3 +110,14 @@ curl -X POST "https://api.zephyra.dev/api/aggregated/agg-001/tag" \
     "tag": "smart-contract"
   }'
 ```
+
+## Example Response
+
+```json
+{
+  "success": true,
+  "data": {
+    "tag": "smart-contract",
+    "message": "Tag added successfully"
+  }
+}

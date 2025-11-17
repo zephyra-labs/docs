@@ -12,48 +12,116 @@ Fetch personalized metrics and recent activities for the currently authenticated
 
 ### 200 — OK
 
-Returns dashboard metrics including total wallets, contracts, documents, and recent activities specific to the user.
+Returned if the user dashboard metrics are successfully fetched.
 
 ```json
 {
-  "totalWallets": 0,
-  "totalContracts": 0,
-  "totalDocuments": 0,
-  "wallets": [
-    {
-      "address": "0xabc123...",
-      "balance": 1000000000
-    }
-  ],
-  "recentContracts": [
-    {
-      "address": "string",
-      "owner": "string",
-      "createdAt": "2025-11-10T22:48:59.062Z",
-      "lastAction": {
-        "action": "string",
-        "account": "string",
-        "timestamp": 0
+  "success": true,
+  "data": {
+    "totalWallets": 3,
+    "totalContracts": 2,
+    "totalDocuments": 5,
+    "wallets": [
+      {
+        "address": "0xUserWallet1",
+        "balance": 500000000
+      },
+      {
+        "address": "0xUserWallet2",
+        "balance": 250000000
       }
-    }
-  ],
-  "recentDocuments": [
-    {
-      "id": "string",
-      "tokenId": 0,
-      "owner": "string",
-      "title": "string",
-      "docType": "string",
-      "status": "string",
-      "createdAt": 0,
-      "updatedAt": 0,
-      "lastAction": {
-        "action": "string",
-        "account": "string",
-        "timestamp": 0
+    ],
+    "recentContracts": [
+      {
+        "address": "0xContractUser1",
+        "owner": "0xUserWallet1",
+        "createdAt": "2025-11-12T10:00:00Z",
+        "lastAction": {
+          "action": "approved",
+          "account": "0xUserWallet1",
+          "timestamp": 1700000000000
+        }
       }
+    ],
+    "recentDocuments": [
+      {
+        "id": "doc-201",
+        "tokenId": 101,
+        "owner": "0xUserWallet1",
+        "title": "User Contract",
+        "docType": "PDF",
+        "status": "active",
+        "createdAt": 1700000000000,
+        "updatedAt": 1700003600000,
+        "lastAction": {
+          "action": "uploaded",
+          "account": "0xUserWallet1",
+          "timestamp": 1700003600000
+        }
+      }
+    ]
+  }
+}
+```
+
+### 400 — Bad Request
+
+Returned if the request format is invalid.
+
+```json
+{
+  "success": false,
+  "message": "Invalid request format"
+}
+```
+
+### 401 — Unauthorized
+
+Returned if the request lacks a valid Bearer token or the user address is missing.
+
+```json
+{
+  "success": false,
+  "message": "Unauthorized: missing user address"
+}
+```
+
+### 404 — Not Found
+
+Returned if the user dashboard data cannot be found.
+
+```json
+{
+  "success": false,
+  "message": "User dashboard data not found"
+}
+```
+
+### 422 — Validation Failed
+
+Returned if any input fails validation (e.g., wallet address format is incorrect).
+
+```json
+{
+  "success": false,
+  "message": "Validation error",
+  "errors": [
+    {
+      "field": "wallet",
+      "message": "Invalid wallet address format"
     }
   ]
+}
+```
+
+### 500 — Server Error
+
+Returned if the server encounters an unexpected error while fetching the user dashboard data.
+
+```json
+{
+  "success": false,
+  "message": "Failed to fetch user dashboard"
 }
 ```
 
@@ -67,3 +135,53 @@ This endpoint requires a **Bearer Token**.
 curl -X GET "https://api.zephyra.dev/api/dashboard/user" \
   -H "Authorization: Bearer <token>"
 ```
+
+## Example Response
+
+{
+  "success": true,
+  "data": {
+    "totalWallets": 3,
+    "totalContracts": 2,
+    "totalDocuments": 5,
+    "wallets": [
+      {
+        "address": "0xUserWallet1",
+        "balance": 500000000
+      },
+      {
+        "address": "0xUserWallet2",
+        "balance": 250000000
+      }
+    ],
+    "recentContracts": [
+      {
+        "address": "0xContractUser1",
+        "owner": "0xUserWallet1",
+        "createdAt": "2025-11-12T10:00:00Z",
+        "lastAction": {
+          "action": "approved",
+          "account": "0xUserWallet1",
+          "timestamp": 1700000000000
+        }
+      }
+    ],
+    "recentDocuments": [
+      {
+        "id": "doc-201",
+        "tokenId": 101,
+        "owner": "0xUserWallet1",
+        "title": "User Contract",
+        "docType": "PDF",
+        "status": "active",
+        "createdAt": 1700000000000,
+        "updatedAt": 1700003600000,
+        "lastAction": {
+          "action": "uploaded",
+          "account": "0xUserWallet1",
+          "timestamp": 1700003600000
+        }
+      }
+    ]
+  }
+}

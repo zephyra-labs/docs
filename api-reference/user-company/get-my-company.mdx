@@ -6,7 +6,8 @@ description: "Retrieve the company profile associated with the currently authent
 
 # GET `/api/user-company/my-company`
 
-Fetch the company profile of the currently authenticated user.
+Fetch the company profile of the currently authenticated user.  
+This endpoint allows any logged-in user to view the company record they are currently associated with.
 
 ## Responses
 
@@ -15,7 +16,18 @@ Fetch the company profile of the currently authenticated user.
 Returns the company profile of the current user.
 
 ```json
-{}
+{
+  "success": true,
+  "data": {
+    "id": "company_01",
+    "name": "Example Company",
+    "address": "123 Blockchain St.",
+    "website": "https://example.com",
+    "status": "active",
+    "createdAt": 1699286400000,
+    "updatedAt": 1699372800000
+  }
+}
 ```
 
 ### 401 — Unauthorized
@@ -24,7 +36,8 @@ Returned if the user is not authenticated.
 
 ```json
 {
-  "error": "Unauthorized"
+  "success": false,
+  "message": "Missing or invalid Authorization header"
 }
 ```
 
@@ -34,13 +47,34 @@ Returned if the current user does not have an associated company.
 
 ```json
 {
-  "error": "Company profile not found"
+  "success": false,
+  "message": "No company relation found"
+}
+```
+
+Or if the company record does not exist:
+
+```json
+{
+  "success": false,
+  "message": "Company not found"
+}
+```
+
+### 500 — Server Error
+
+Returned if there is a server-side error while fetching the company profile.
+
+```json
+{
+  "success": false,
+  "message": "Failed to fetch user's company"
 }
 ```
 
 ## Authentication
 
-This endpoint requires a **Bearer Token** for authentication.
+This endpoint requires a **Bearer Token**.
 
 ## Example Request
 
@@ -52,5 +86,16 @@ curl -X GET "https://api.zephyra.dev/api/user-company/my-company" \
 ## Example Response
 
 ```json
-{}
+{
+  "success": true,
+  "data": {
+    "id": "company_01",
+    "name": "Example Company",
+    "address": "123 Blockchain St.",
+    "website": "https://example.com",
+    "status": "active",
+    "createdAt": 1699286400000,
+    "updatedAt": 1699372800000
+  }
+}
 ```

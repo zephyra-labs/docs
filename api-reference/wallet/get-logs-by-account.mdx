@@ -21,16 +21,29 @@ Fetch all wallet log entries for a given wallet account.
 Returns a list of wallet log records for the specified account.
 
 ```json
-[
-  {
-    "account": "0x123abc...",
-    "action": "connect",
-    "timestamp": 1699286400000,
-    "meta": {
-      "additionalProp1": {}
+{
+  "success": true,
+  "data": [
+    {
+      "account": "0x123abc...",
+      "action": "connect",
+      "timestamp": 1699286400000,
+      "meta": {
+        "ip": "192.168.1.1",
+        "device": "Chrome on Windows"
+      }
+    },
+    {
+      "account": "0x123abc...",
+      "action": "disconnect",
+      "timestamp": 1699372800000,
+      "meta": {
+        "ip": "192.168.1.1",
+        "device": "Chrome on Windows"
+      }
     }
-  }
-]
+  ]
+}
 ```
 
 ### 401 — Unauthorized
@@ -39,7 +52,8 @@ Returned if the request is missing or contains an invalid authentication token.
 
 ```json
 {
-  "error": "Unauthorized"
+  "success": false,
+  "message": "Missing or invalid Authorization header"
 }
 ```
 
@@ -49,7 +63,17 @@ Returned if no wallet logs are found for the given account.
 
 ```json
 {
-  "error": "Account not found"
+  "success": false,
+  "message": "Wallet logs not found"
+}
+```
+
+### 500 — Server Error
+
+```json
+{
+  "success": false,
+  "message": "Failed to fetch wallet logs for account"
 }
 ```
 
@@ -67,14 +91,27 @@ curl -X GET "https://api.zephyra.dev/api/wallet/0x123abc/logs" \
 ## Example Response
 
 ```json
-[
-  {
-    "account": "0x123abc...",
-    "action": "connect",
-    "timestamp": 1699286400000,
-    "meta": {
-      "additionalProp1": {}
+{
+  "success": true,
+  "data": [
+    {
+      "account": "0x123abc...",
+      "action": "connect",
+      "timestamp": 1699286400000,
+      "meta": {
+        "ip": "192.168.1.1",
+        "device": "Chrome on Windows"
+      }
+    },
+    {
+      "account": "0x123abc...",
+      "action": "disconnect",
+      "timestamp": 1699372800000,
+      "meta": {
+        "ip": "192.168.1.1",
+        "device": "Chrome on Windows"
+      }
     }
-  }
-]
+  ]
+}
 ```

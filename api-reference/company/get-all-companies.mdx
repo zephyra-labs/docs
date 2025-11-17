@@ -13,39 +13,130 @@ No parameters are required.
 
 ### 200 — OK
 
-Returns a list of company objects.
+
+Returned if companies are successfully retrieved.
 
 ```json
-[
-  {
-    "id": "string",
-    "name": "string",
-    "address": "string",
-    "city": "string",
-    "stateOrProvince": "string",
-    "postalCode": "string",
-    "country": "string",
-    "email": "string",
-    "phone": "string",
-    "taxId": "string",
-    "registrationNumber": "string",
-    "businessType": "string",
-    "website": "string",
-    "walletAddress": "string",
-    "verified": true,
-    "createdAt": 0,
-    "updatedAt": 0
-  }
-]
+{
+  "success": true,
+  "data": [
+    {
+      "id": "company-123",
+      "name": "Example Corp",
+      "address": "123 Main Street",
+      "city": "New York",
+      "stateOrProvince": "NY",
+      "postalCode": "10001",
+      "country": "USA",
+      "email": "contact@example.com",
+      "phone": "+1-555-1234",
+      "taxId": "123456789",
+      "registrationNumber": "987654321",
+      "businessType": "IT Services",
+      "website": "https://example.com",
+      "walletAddress": "0xAdminWallet...",
+      "verified": false,
+      "createdAt": 1699999999,
+      "updatedAt": 1699999999
+    },
+    {
+      "id": "company-124",
+      "name": "Another Inc",
+      "address": "456 Side Avenue",
+      "city": "Los Angeles",
+      "stateOrProvince": "CA",
+      "postalCode": "90001",
+      "country": "USA",
+      "email": "info@another.com",
+      "phone": "+1-555-5678",
+      "taxId": "987654321",
+      "registrationNumber": "123456789",
+      "businessType": "Marketing",
+      "website": "https://another.com",
+      "walletAddress": "0xAnotherWallet...",
+      "verified": true,
+      "createdAt": 1699998888,
+      "updatedAt": 1699998888
+    }
+  ]
+}
+```
+
+### 401 — Unauthorized
+
+Returned if the request does not include a valid Bearer token.
+
+```json
+{
+  "success": false,
+  "message": "Missing or invalid Authorization header"
+}
+```
+
+### 500 — Server Error
+
+Returned if the server fails to fetch the companies.
+
+```json
+{
+  "success": false,
+  "message": "Failed to fetch companies"
+}
 ```
 
 ## Authentication
 
 This endpoint requires a **Bearer Token**.
 
-## Example Request
+## Example Request (cURL)
 
 ```bash
 curl -X GET "https://api.zephyra.dev/api/company" \
   -H "Authorization: Bearer <token>"
 ```
+
+## Example Response
+
+{
+  "success": true,
+  "data": [
+    {
+      "id": "company-123",
+      "name": "Example Corp",
+      "address": "123 Main Street",
+      "city": "New York",
+      "stateOrProvince": "NY",
+      "postalCode": "10001",
+      "country": "USA",
+      "email": "contact@example.com",
+      "phone": "+1-555-1234",
+      "taxId": "123456789",
+      "registrationNumber": "987654321",
+      "businessType": "IT Services",
+      "website": "https://example.com",
+      "walletAddress": "0xAdminWallet...",
+      "verified": false,
+      "createdAt": 1699999999,
+      "updatedAt": 1699999999
+    },
+    {
+      "id": "company-124",
+      "name": "Another Inc",
+      "address": "456 Side Avenue",
+      "city": "Los Angeles",
+      "stateOrProvince": "CA",
+      "postalCode": "90001",
+      "country": "USA",
+      "email": "info@another.com",
+      "phone": "+1-555-5678",
+      "taxId": "987654321",
+      "registrationNumber": "123456789",
+      "businessType": "Marketing",
+      "website": "https://another.com",
+      "walletAddress": "0xAnotherWallet...",
+      "verified": true,
+      "createdAt": 1699998888,
+      "updatedAt": 1699998888
+    }
+  ]
+}

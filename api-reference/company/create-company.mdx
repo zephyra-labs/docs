@@ -10,27 +10,27 @@ Create a new company. This endpoint is restricted to admin users.
 
 ## Request Body
 
-| Name                | Type     | Required | Description                    |
-|--------------------|---------|----------|--------------------------------|
-| `id`               | `string`  | no       | Optional unique company ID     |
-| `name`             | `string`  | yes      | Company name                   |
-| `address`          | `string`  | no       | Street address                 |
-| `city`             | `string`  | no       | City                           |
-| `stateOrProvince`  | `string`  | no       | State or province              |
-| `postalCode`       | `string`  | no       | Postal code                    |
-| `country`          | `string`  | no       | Country                        |
-| `email`            | `string`  | no       | Contact email                  |
-| `phone`            | `string`  | no       | Contact phone                  |
-| `taxId`            | `string`  | no       | Tax identification number      |
-| `registrationNumber` | `string` | no      | Business registration number   |
-| `businessType`     | `string`  | no       | Type of business               |
-| `website`          | `string`  | no       | Company website URL            |
-| `walletAddress`    | `string`  | no       | Associated blockchain wallet   |
-| `verified`         | `boolean` | no       | Verification status            |
-| `createdAt`        | `number`  | no       | Unix timestamp of creation     |
-| `updatedAt`        | `number`  | no       | Unix timestamp of last update  |
+| Name                  | Type      | Required | Description                    |
+|----------------------|-----------|----------|--------------------------------|
+| `id`                 | `string`  | no       | Optional unique company ID     |
+| `name`               | `string`  | yes      | Company name                   |
+| `address`            | `string`  | no       | Street address                 |
+| `city`               | `string`  | no       | City                           |
+| `stateOrProvince`    | `string`  | no       | State or province              |
+| `postalCode`         | `string`  | no       | Postal code                    |
+| `country`            | `string`  | no       | Country                        |
+| `email`              | `string`  | no       | Contact email                  |
+| `phone`              | `string`  | no       | Contact phone                  |
+| `taxId`              | `string`  | no       | Tax identification number      |
+| `registrationNumber` | `string`  | no       | Business registration number   |
+| `businessType`       | `string`  | no       | Type of business               |
+| `website`            | `string`  | no       | Company website URL            |
+| `walletAddress`      | `string`  | no       | Associated blockchain wallet   |
+| `verified`           | `boolean` | no       | Verification status            |
+| `createdAt`          | `number`  | no       | Unix timestamp of creation     |
+| `updatedAt`          | `number`  | no       | Unix timestamp of last update  |
 
-### Example
+### Example Request Body
 
 ```json
 {
@@ -58,27 +58,85 @@ Create a new company. This endpoint is restricted to admin users.
 
 ### 201 — Created
 
-Returns the newly created company object.
+Returned if the company is successfully created. Returns the newly created company object.
 
 ```json
 {
-  "id": "comp-001",
-  "name": "Zephyra Labs",
-  "address": "123 Blockchain Street",
-  "city": "Jakarta",
-  "stateOrProvince": "Jakarta",
-  "postalCode": "10110",
-  "country": "Indonesia",
-  "email": "info@zephyra.dev",
-  "phone": "+62 2 123 4567",
-  "taxId": "TAX123456",
-  "registrationNumber": "REG987654",
-  "businessType": "Technology",
-  "website": "https://zephyra.dev",
-  "walletAddress": "0xABC123...",
-  "verified": true,
-  "createdAt": 1731240000,
-  "updatedAt": 1731240000
+  "success": true,
+  "data": {
+    "id": "comp-001",
+    "name": "Zephyra Labs",
+    "address": "123 Blockchain Street",
+    "city": "Jakarta",
+    "stateOrProvince": "Jakarta",
+    "postalCode": "10110",
+    "country": "Indonesia",
+    "email": "info@zephyra.dev",
+    "phone": "+62 2 123 4567",
+    "taxId": "TAX123456",
+    "registrationNumber": "REG987654",
+    "businessType": "Technology",
+    "website": "https://zephyra.dev",
+    "walletAddress": "0xABC123...",
+    "verified": true,
+    "createdAt": 1731240000,
+    "updatedAt": 1731240000
+  }
+}
+```
+
+### 400 — Bad Request
+
+Returned if the request is missing required executor information or other invalid fields.
+
+```json
+{
+  "success": false,
+  "message": "Executor is required"
+}
+```
+
+### 422 — Unprocessable Entity
+
+Returned if required fields are missing or have invalid data types (e.g., name is missing or not a string).
+
+```json
+{
+  "success": false,
+  "message": "Company name is required and must be a string"
+}
+```
+
+### 401 — Unauthorized
+
+Returned if the request does not include a valid Bearer token.
+
+```json
+{
+  "success": false,
+  "message": "Missing or invalid Authorization header"
+}
+```
+
+### 403 — Forbidden
+
+Returned if the authenticated user does not have admin privileges.
+
+```json
+{
+  "success": false,
+  "message": "Forbidden: Admins only"
+}
+```
+
+### 500 — Server Error
+
+Returned if the server encounters an unexpected error while creating the company.
+
+```json
+{
+  "success": false,
+  "message": "Failed to create company"
 }
 ```
 
@@ -86,7 +144,7 @@ Returns the newly created company object.
 
 This endpoint requires a **Bearer Token** with admin privileges.
 
-## Example Request
+## Example Request (cURL)
 
 ```bash
 curl -X POST "https://api.zephyra.dev/api/company" \
@@ -98,3 +156,29 @@ curl -X POST "https://api.zephyra.dev/api/company" \
     "email": "info@zephyra.dev"
   }'
 ```
+
+## Example Response
+
+{
+  "success": true,
+  "data": {
+    "id": "comp-001",
+    "name": "Zephyra Labs",
+    "address": "123 Blockchain Street",
+    "city": "Jakarta",
+    "stateOrProvince": "Jakarta",
+    "postalCode": "10110",
+    "country": "Indonesia",
+    "email": "info@zephyra.dev",
+    "phone": "+62 2 123 4567",
+    "taxId": "TAX123456",
+    "registrationNumber": "REG987654",
+    "businessType": "Technology",
+    "website": "https://zephyra.dev",
+    "walletAddress": "0xABC123...",
+    "verified": true,
+    "createdAt": 1731240000,
+    "updatedAt": 1731240000
+  },
+  "message": "Company created successfully"
+}

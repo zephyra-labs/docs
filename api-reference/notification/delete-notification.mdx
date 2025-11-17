@@ -18,11 +18,22 @@ Delete a notification.
 
 ### 200 — OK
 
-Notification successfully deleted.
+Notification deleted successfully.
 
 ```json
 {
-  "message": "Notification deleted"
+  "message": "Notification deleted successfully"
+}
+```
+
+### 400 — Bad Request
+
+Returned if the `id` parameter is missing.
+
+```json
+{
+  "success": false,
+  "message": "Missing id parameter"
 }
 ```
 
@@ -32,7 +43,8 @@ Returned if the user is not authenticated.
 
 ```json
 {
-  "error": "Unauthorized"
+  "success": false,
+  "message": "Missing or invalid Authorization header"
 }
 ```
 
@@ -42,13 +54,25 @@ Returned if the notification with the specified ID does not exist.
 
 ```json
 {
-  "error": "Notification not found"
+  "success": false,
+  "message": "Notification not found"
+}
+```
+
+### 500 — Server Error
+
+Returned if there is a server error while deleting the notification.
+
+```json
+{
+  "success": false,
+  "message": "Failed to delete notification"
 }
 ```
 
 ## Authentication
 
-This endpoint requires a **Bearer Token** for authentication.
+This endpoint requires a **Bearer Token**.
 
 ## Example Request
 
@@ -62,6 +86,6 @@ curl -X DELETE "https://api.zephyra.dev/api/notification/notif-uuid-123" \
 
 ```json
 {
-  "message": "Notification deleted"
+  "message": "Notification deleted successfully"
 }
 ```

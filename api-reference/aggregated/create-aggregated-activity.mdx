@@ -11,10 +11,10 @@ Create a new aggregated activity record that groups related on-chain and off-cha
 ## Request Body
 
 | Field | Type | Required | Description |
-|--------|------|-----------|-------------|
+|--------|------|----------|-------------|
 | `id` | `string` | No | Optional unique ID for the aggregated entry |
 | `timestamp` | `number` | Yes | Unix timestamp for when the activity occurred |
-| `type` | `string` | Yes | Type of activity (e.g., `onChain`, `offChain`) |
+| `type` | `string` | Yes | Type of activity (`onChain` or `backend`) |
 | `action` | `string` | Yes | Description of the action performed |
 | `account` | `string` | Yes | Wallet address associated with the activity |
 | `txHash` | `string` | No | Transaction hash if applicable |
@@ -23,7 +23,7 @@ Create a new aggregated activity record that groups related on-chain and off-cha
 | `onChainInfo` | `object` | No | Blockchain transaction info (status, blockNumber, confirmations) |
 | `tags` | `array[string]` | No | Tags or labels for categorizing activities |
 
-### Example
+### Example Request Body
 
 ```json
 {
@@ -48,28 +48,75 @@ Create a new aggregated activity record that groups related on-chain and off-cha
 
 ## Responses
 
-### 201 — Created
+### 201 — Created  
 
-Returns the created aggregated activity object.
+Returned when the aggregated activity entry is successfully created.
 
 ```json
 {
-  "id": "agg-001",
-  "timestamp": 1731241234,
-  "type": "onChain",
-  "action": "Deployed Contract",
-  "account": "0xABC123",
-  "txHash": "0xDEF456",
-  "contractAddress": "0x789XYZ",
-  "extra": {
-    "note": "Smart contract deployment on testnet"
-  },
-  "onChainInfo": {
-    "status": "confirmed",
-    "blockNumber": 123456,
-    "confirmations": 5
-  },
-  "tags": ["deployment", "smart-contract"]
+  "success": true,
+  "data": {
+    "id": "agg-001",
+    "timestamp": 1731241234,
+    "type": "onChain",
+    "action": "Deployed Contract",
+    "account": "0xABC123",
+    "txHash": "0xDEF456",
+    "contractAddress": "0x789XYZ",
+    "extra": {
+      "note": "Smart contract deployment on testnet"
+    },
+    "onChainInfo": {
+      "status": "confirmed",
+      "blockNumber": 123456,
+      "confirmations": 5
+    },
+    "tags": ["deployment", "smart-contract"]
+  }
+}
+```
+
+### 400 — Bad Request  
+
+Returned if required fields are missing or the request body is invalid.
+
+```json
+{
+  "success": false,
+  "message": "Missing required field: account"
+}
+```
+
+### 401 — Unauthorized  
+
+Returned when the Authorization header is missing or invalid.
+
+```json
+{
+  "success": false,
+  "message": "Missing or invalid Authorization header"
+}
+```
+
+### 422 — Unprocessable Entity  
+
+Returned when field types are invalid or fail validation rules.
+
+```json
+{
+  "success": false,
+  "message": "Action must be a string"
+}
+```
+
+### 500 — Server Error  
+
+Returned when the server encounters an unexpected error during creation.
+
+```json
+{
+  "success": false,
+  "message": "Failed to create aggregated activity"
 }
 ```
 
@@ -77,7 +124,14 @@ Returns the created aggregated activity object.
 
 This endpoint requires authentication using a **Bearer Token**.
 
-## Example Request
+## Notes
+
+* `id` is optional; server auto-generates one if omitted.  
+* `tags` help categorize activity entries for analytics or filtering.  
+* `onChainInfo` should only be provided for `onChain` entries.  
+* Use aggregated logs to group multi-step workflows into a single activity entry.
+
+## Example Request (cURL)
 
 ```bash
 curl -X POST "https://api.zephyra.dev/api/aggregated" \
@@ -87,6 +141,37 @@ curl -X POST "https://api.zephyra.dev/api/aggregated" \
     "timestamp": 1731241234,
     "type": "onChain",
     "action": "Deployed Contract",
-    "account": "0xABC123"
+    "account": "0xABC123",
+    "txHash": "0xDEF456",
+    "contractAddress": "0x789XYZ",
+    "extra": { "note": "Smart contract deployment on testnet" },
+    "onChainInfo": { "status": "confirmed", "blockNumber": 123456, "confirmations": 5 },
+    "tags": ["deployment", "smart-contract"]
   }'
 ```
+
+## Example Response
+
+```json
+{
+  "success": true,
+  "data": {
+    "id": "agg-001",
+    "timestamp": 1731241234,
+    "type": "onChain",
+    "action": "Deployed Contract",
+    "account": "0xABC123",
+    "txHash": "0xDEF456",
+    "contractAddress": "0x789XYZ",
+    "extra": {
+      "note": "Smart contract deployment on testnet"
+    },
+    "onChainInfo": {
+      "status": "confirmed",
+      "blockNumber": 123456,
+      "confirmations": 5
+    },
+    "tags": ["deployment", "smart-contract"]
+  },
+  "message": "Aggregated activity created successfully"
+}

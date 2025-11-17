@@ -6,7 +6,7 @@ description: "Retrieve all KYC (Know Your Customer) records for a specific owner
 
 # GET `/api/kyc/owner/{owner}`
 
-Get all KYC records for a specific owner.
+Get all KYC records for a specific owner. Requires authentication.
 
 ## Parameters
 
@@ -34,6 +34,19 @@ Returns a list of KYC records for the specified owner.
     "createdAt": 1699286400000,
     "updatedAt": 1699372800000,
     "status": "Pending"
+  },
+  {
+    "tokenId": "kyc-uuid-124",
+    "owner": "0x123abc...",
+    "fileHash": "Qmghijkl...",
+    "metadataUrl": "https://ipfs.io/ipfs/Qmghijkl...",
+    "documentUrl": "https://storage.example.com/docs/kyc-124.pdf",
+    "name": "NFT-124",
+    "description": "KYC for user 0x123abc...",
+    "txHash": "0xdef456...",
+    "status": "Reviewed",
+    "createdAt": 1699386400000,
+    "updatedAt": 1699472800000
   }
 ]
 ```
@@ -44,7 +57,8 @@ Returned if the user is not authenticated.
 
 ```json
 {
-  "error": "Unauthorized"
+  "success": false,
+  "message": "Missing or invalid Authorization header"
 }
 ```
 
@@ -54,13 +68,36 @@ Returned if no KYC records are found for the specified owner.
 
 ```json
 {
-  "error": "No KYC records found for this owner"
+  "success": false,
+  "message": "No KYC records found for owner"
+}
+```
+
+### 422 — Unprocessable Entity
+
+Returned if the `owner` parameter is missing.
+
+```json
+{
+  "success": false,
+  "message": "Missing owner parameter"
+}
+```
+
+### 500 — Server Error
+
+Returned if there is a server error while fetching KYC records for the owner.
+
+```json
+{
+  "success": false,
+  "message": "Failed to fetch KYCs for owner"
 }
 ```
 
 ## Authentication
 
-This endpoint requires a **Bearer Token** for authentication.
+This endpoint requires a **Bearer Token**.
 
 ## Example Request
 
@@ -86,6 +123,19 @@ curl -X GET "https://api.zephyra.dev/api/kyc/owner/0x123abc..." \
     "createdAt": 1699286400000,
     "updatedAt": 1699372800000,
     "status": "Pending"
+  },
+  {
+    "tokenId": "kyc-uuid-124",
+    "owner": "0x123abc...",
+    "fileHash": "Qmghijkl...",
+    "metadataUrl": "https://ipfs.io/ipfs/Qmghijkl...",
+    "documentUrl": "https://storage.example.com/docs/kyc-124.pdf",
+    "name": "NFT-124",
+    "description": "KYC for user 0x123abc...",
+    "txHash": "0xdef456...",
+    "status": "Reviewed",
+    "createdAt": 1699386400000,
+    "updatedAt": 1699472800000
   }
 ]
 ```

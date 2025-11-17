@@ -22,7 +22,20 @@ Wallet logs and state successfully deleted.
 
 ```json
 {
+  "success": true,
+  "data": null,
   "message": "Wallet data deleted"
+}
+```
+
+### 400 — Bad Request
+
+Returned when the request body contains invalid fields or missing parameters.
+
+```json
+{
+  "success": false,
+  "message": "Account parameter is required"
 }
 ```
 
@@ -32,7 +45,8 @@ Returned if the request is missing or contains an invalid authentication token.
 
 ```json
 {
-  "error": "Unauthorized"
+  "success": false,
+  "message": "Missing or invalid Authorization header"
 }
 ```
 
@@ -42,7 +56,17 @@ Returned if no wallet data exists for the given account.
 
 ```json
 {
-  "error": "Account not found"
+  "success": false,
+  "message": "Account not found"
+}
+```
+
+### 500 — Server Error
+
+```json
+{
+  "success": false,
+  "message": "Failed to delete wallet data"
 }
 ```
 
@@ -61,6 +85,8 @@ curl -X DELETE "https://api.zephyra.dev/api/wallet/0x123abc" \
 
 ```json
 {
+  "success": true,
+  "data": null,
   "message": "Wallet data deleted"
 }
 ```
