@@ -94,19 +94,12 @@ Returned when the Authorization header is missing or invalid.
 
 ### 422 — Unprocessable Entity  
 
-Returned when required fields are missing or contain invalid data types.
+Returned when required fields are missing.
 
 ```json
 {
   "success": false,
   "message": "Missing required field: account"
-}
-```
-
-```json
-{
-  "success": false,
-  "message": "timestamp must be a number"
 }
 ```
 
